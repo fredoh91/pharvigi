@@ -9,3 +9,8 @@
 
 controllers:
     resource: routing.controllers
+
+controllers_cm:
+    resource: ../src/Controller/CM/
+    type: attribute
+    prefix: /CM

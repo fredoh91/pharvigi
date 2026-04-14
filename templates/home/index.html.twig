@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1>cas PV</h1>
+        </div>
+
+        <div class="row g-4">
+            {# Ligne 1 #}
+            <div class="col-md-6">
+                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFB3BA;">
+                    <span class="fs-4 fw-bold text-dark">CM / EMM</span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFDFBA;">
+                    <span class="fs-4 fw-bold text-dark">SIMAD</span>
+                </a>
+            </div>
+
+
+            {# Ligne 2 #}
+            <div class="col-md-6">
+                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #BAFFC9;">
+                    <span class="fs-4 fw-bold text-dark">Biblio</span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #BAE1FF;">
+                    <span class="fs-4 fw-bold text-dark">UNC</span>
+                </a>
+            </div>
+
+
+
+
+            {# Ligne 3 #}
+            <div class="col-md-6">
+                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFFFBA;">
+                    <span class="fs-4 fw-bold text-dark">Faits marquants</span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #E0BBE4;">
+                    <span class="fs-4 fw-bold text-dark">Autres signaux</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .custom-btn {
+            transition: transform 0.2s, filter 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+        }
+        .custom-btn:hover {
+            transform: translateY(-5px);
+            filter: brightness(0.95);
+        }
+    </style>
+{% endblock %}
