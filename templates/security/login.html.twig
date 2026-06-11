@@ -1,0 +1,31 @@
+{# templates\security\login.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+        {# {% include 'security/connexionClassique.html.twig' %} #}
+        {% include 'ux_packages/toggle_password.html.twig' with {'form': form} %}
+
+            {# {% include 'ux_packages/toggle_password_pure_html.html.twig' %} #}
+        </div>
+    </div>
+    
+    {# <a class="" href="{{ asset('guide_utilisateur/guide_utilisateur.html') }}">Guide utilisateur</a> #}
+</div>            
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+

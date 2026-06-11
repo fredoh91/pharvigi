@@ -13,6 +13,8 @@ doctrine:
                 url: '%env(resolve:DATABASE_CODEX_URL)%'
             bnpv:
                 url: '%env(resolve:DATABASE_BNPV_URL)%'
+            meddra:
+                url: '%env(resolve:DATABASE_MEDDRA_URL)%'
 
     orm:
         default_entity_manager: default
