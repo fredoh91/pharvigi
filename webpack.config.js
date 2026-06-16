@@ -22,6 +22,9 @@ Encore
      */
     .addEntry('app', './assets/app.js')
 
+
+    .addStyleEntry('navbar', './assets/styles/navbar.scss')
+
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
@@ -65,7 +68,11 @@ Encore
         // Les options pour le compilateur Sass doivent être dans la clé "sassOptions".
         options.sassOptions = {
             // On demande à Sass d'ignorer l'avertissement de dépréciation pour les fonctions globales comme `mix()`.
-            silenceDeprecations: ['global-built-ins']
+            // 'global-builtin' est le nom correct.
+            // 'quietDeps: true' s'occupe des dépendances (node_modules).
+            quietDeps: true,
+            // On silence également 'import' pour éviter les avertissements dans app.scss
+            silenceDeprecations: ['import', 'global-builtin']
         };
         // Spécifiez explicitement d'utiliser Dart Sass
         options.implementation = require('sass');

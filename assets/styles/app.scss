@@ -25,19 +25,20 @@
 // // @use est fait pour les modules Sass (.scss).
 // @import "~bootstrap-icons/font/bootstrap-icons.css";
 
-// 1. Importez les fonctions et variables de Bootstrap avec @import.
-// C'est l'étape CRUCIALE qui rend les variables disponibles globalement
-// pour les autres fichiers qui seront importés ensuite.
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
+@use "sass:color";
 
-// 2. Importez tom-select (qui n'est pas un module) avec @import.
-// Il va maintenant trouver les variables globales de Bootstrap.
-// @import '~tom-select/dist/scss/tom-select.bootstrap5.scss';
+// 1. Configuration des variables Bootstrap
+// On peut surcharger les variables avant d'importer Bootstrap
+$primary: color.adjust(#428bca, $lightness: -20%);
 
-// 3. Importez le reste de Bootstrap.
+// 2. Importez Bootstrap.
+// Note: Pour que les variables personnalisées comme $primary soient prises en compte 
+// par les autres modules (comme Tom Select) via @use, il faudrait utiliser @forward 
+// ou importer les variables séparément. Pour rester simple et fonctionnel :
 @import "~bootstrap/scss/bootstrap";
+
+// 3. Importez tom-select
+@import "~tom-select/dist/scss/tom-select.bootstrap5.scss";
 
 // 4. Importez les icônes.
 @import "~bootstrap-icons/font/bootstrap-icons.css";

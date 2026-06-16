@@ -1,0 +1,27 @@
+@use '_variables' as *;
+
+/**
+ * Gestion des sous-menus (nested dropdowns)
+ * Permet d'afficher le menu de second niveau au survol de la souris.
+ */
+.dropdown-menu .dropend {
+    position: relative;
+
+    // Affiche le sous-menu au survol du parent
+    &:hover > .dropdown-menu {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 100%; // Positionne à droite du menu parent
+        margin-top: -1px;
+    }
+
+    // Oriente la petite flèche (caret) vers la droite pour indiquer un sous-menu
+    .dropdown-toggle::after {
+        vertical-align: middle;
+        border-top: .3em solid transparent;
+        border-right: 0;
+        border-bottom: .3em solid transparent;
+        border-left: .3em solid;
+    }
+}
