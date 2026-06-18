@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\CM;
+namespace App\Form\SIMAD;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -8,14 +8,14 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UploadFicheRecueilCMType extends AbstractType
+class UploadFicheRecueilSIMADType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             // ->add('field_name')
-            ->add('FicWordRecueilCM', FileType::class, [
-                'label' => 'Fichier Word "Fiche de recueil CM" : ',
+            ->add('FicWordRecueilSIMAD', FileType::class, [
+                'label' => 'Fichier Word "Fiche de recueil SIMAD" : ',
                 'mapped' => false,
                 'required' => true,
 

@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Controller\CM;
+namespace App\Controller\SIMAD;
 
-use App\Form\CM\UploadFicheRecueilCMType;
+use App\Form\SIMAD\UploadFicheRecueilSIMADType;
 use App\Service\FicheRecueilAnalyseurService;
-use App\Service\ImportFicheRecueilCMService;
-use App\Service\ImportFicheRecueilEMMService;
+use App\Service\ImportFicheRecueilSIMADService;
 use App\Service\RequetesBnpvCMService;
 use App\Service\RequetesMeddraService;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-final class CreationCasController extends AbstractController
+final class CreationCasSIMADController extends AbstractController
 {
-    #[Route('/creation_cas', name: 'app_cm_creation_cas')]
-    public function uploadFicheRecueilCM(
+    #[Route('/creation_cas', name: 'app_simad_creation_cas')]
+    public function uploadFicheRecueilSIMAD(
         Request $request, 
         FicheRecueilAnalyseurService $analyseurService,
-        ImportFicheRecueilCMService $importCMService, 
-        ImportFicheRecueilEMMService $importEMMService,
+        ImportFicheRecueilSIMADService $importSIMADService, 
         RequetesBnpvCMService $requetesBnpvService, 
         RequetesMeddraService $requetesMeddraService, 
         ManagerRegistry $doctrine,
@@ -32,78 +29,67 @@ final class CreationCasController extends AbstractController
         AuthenticationUtils $authenticationUtils
         ): Response
     {
-        $form = $this->createForm(UploadFicheRecueilCMType::class);
+        $form = $this->createForm(UploadFicheRecueilSIMADType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             
-            $FicWordRecueilCM = $form->get('FicWordRecueilCM')->getData();
+            $FicWordRecueilSIMAD = $form->get('FicWordRecueilSIMAD')->getData();
             
-            if ($FicWordRecueilCM) {
+            if ($FicWordRecueilSIMAD) {
                 
                 // --- ÉTAPE 1 : PRÉ-ANALYSE DU FICHIER ---
-                $analyseResult = $analyseurService->analyserFichier($FicWordRecueilCM);
+                $analyseResult = $analyseurService->analyserFichier($FicWordRecueilSIMAD);
 
                 if (!$analyseResult['valide']) {
                     $this->addFlash('error', $analyseResult['error']);
-                    return $this->redirectToRoute('app_cm_creation_cas');
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
 
                 $typeFiche = $analyseResult['type'];
 
                 // --- ÉTAPE 2 : AIGUILLAGE & SÉCURITÉ CONTEXTUELLE ---
-                if ($typeFiche === FicheRecueilAnalyseurService::TYPE_SIMAD) {
-                    $this->addFlash('warning', 'Vous tentez d\'importer une fiche de type SIMAD. Ce module gère uniquement les fiches CM et EMM. Veuillez utiliser l\'espace dédié au traitement SIMAD de l\'application.');
-                    return $this->redirectToRoute('app_cm_creation_cas');
-                }
+                // Le contrôleur est dédié aux fiches SIMAD, donc cette vérification n'est plus nécessaire ici.
+                // Le type de fiche est déjà confirmé par $analyseResult['type'] === FicheRecueilAnalyseurService::TYPE_SIMAD.
 
                 dump($typeFiche);
 
                 $ficRec = [];
 
-                if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
-                    $result = $importCMService->TraitementFichierWord($FicWordRecueilCM);
-                    if (isset($result['error'])) {
-                        $this->addFlash('error', $result['error']);
-                        return $this->redirectToRoute('app_cm_creation_cas');
-                    }
-                    $ficRec = $result['Data_FicheRecueilCM'] ?? null;
-
-                } elseif ($typeFiche === FicheRecueilAnalyseurService::TYPE_EMM) {
-                    $result = $importEMMService->traitementFichierWord($FicWordRecueilCM);
-                    if (isset($result['error'])) {
-                        $this->addFlash('error', $result['error']);
-                        return $this->redirectToRoute('app_cm_creation_cas');
-                    }
-                    $ficRec = $result['Data_FicheRecueilEMM'] ?? null;
+                // Le type de fiche est déjà SIMAD à ce point, donc on peut directement appeler le service SIMAD
+                $result = $importSIMADService->TraitementFichierWord($FicWordRecueilSIMAD);
+                if (isset($result['error'])) {
+                    $this->addFlash('error', $result['error']);
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
+                $ficRec = $result['Data_FicheRecueilSIMAD'] ?? null;
 
                 dump($ficRec);
 
                 // --- ÉTAPE 3 : VALIDATION DES DONNÉES EXTRAITES ---
                 if (!$ficRec) {
                     $this->addFlash('error', 'Aucun champ n\'a pu être extrait du document Word.');
-                    return $this->redirectToRoute('app_cm_creation_cas');
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
 
                 $numCas = $ficRec['Num_Cas'] ?? $analyseResult['num_cas'];
 
                 if (empty($numCas)) {
                     $this->addFlash('error', 'Numéro de cas absent ou illisible dans le document Word.');
-                    return $this->redirectToRoute('app_cm_creation_cas');
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
 
                 $NumBNPV = trim($numCas);
                 
                 if (strlen($NumBNPV) > 14) {
                     $this->addFlash('error', 'Le numéro du cas ne doit pas comprendre plus de 14 caractères.');
-                    return $this->redirectToRoute('app_cm_creation_cas');
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
 
                 $CasPV = $doctrine->getRepository('App\Entity\CasPV')->findOneBy(['numeroBNPV' => $NumBNPV]);
                 if ($CasPV) {
                     $this->addFlash('error', sprintf('Le numéro du cas "%s" existe déjà dans la base de données.', $NumBNPV));
-                    return $this->redirectToRoute('app_cm_creation_cas');
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
 
                 // --- ÉTAPE 4 : REQUÊTES BNPV & RÉCUPÉRATION ---
@@ -112,7 +98,7 @@ final class CreationCasController extends AbstractController
                     if (!$requetesBnpvService->hasError()) {
                         $this->addFlash('error', sprintf('Le numéro de cas "%s" n\'existe pas dans la BNPV.', $NumBNPV));
                     }
-                    return $this->redirectToRoute('app_cm_creation_cas');
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
 
                 $mainDataRows = $requetesBnpvService->DonneMainData($aerId);
@@ -120,7 +106,7 @@ final class CreationCasController extends AbstractController
                     if (!$requetesBnpvService->hasError()) {
                         $this->addFlash('error', 'Aucune donnée détaillée trouvée pour ce cas dans la BNPV.');
                     }
-                    return $this->redirectToRoute('app_cm_creation_cas');
+                    return $this->redirectToRoute('app_simad_creation_cas');
                 }
                 $mainData = $mainDataRows[0];
 
@@ -134,19 +120,16 @@ final class CreationCasController extends AbstractController
                 dd($medicDataRows);
 
                 // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
-                if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
-                    $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
-                    $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
-                } elseif ($typeFiche === FicheRecueilAnalyseurService::TYPE_EMM) {
-                    $emm = $importEMMService->CreationCasEMM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
-                    $this->addFlash('success', sprintf('Fiche EMM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
+                if ($typeFiche === FicheRecueilAnalyseurService::TYPE_SIMAD) {
+                    $simad = $importSIMADService->CreationCasSIMAD($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
+                    $this->addFlash('success', sprintf('Fiche SIMAD détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
                 }
 
-                return $this->redirectToRoute('app_cm_creation_cas');
+                return $this->redirectToRoute('app_simad_creation_cas');
             }
         }
 
-        return $this->render('cm/creation_cas/creation_cas.html.twig', [
+        return $this->render('simad/creation_cas/creation_cas.html.twig', [
             'form' => $form->createView(),
         ]);
     }

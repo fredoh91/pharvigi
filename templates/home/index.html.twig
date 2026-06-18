@@ -11,27 +11,35 @@
         <div class="row g-4">
             {# Ligne 1 #}
             <div class="col-md-6">
-                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFB3BA;">
-                    <span class="fs-4 fw-bold text-dark">CM / EMM</span>
-                </a>
+                {% if is_granted('ROLE_PHARVIGI_DMM_EVAL') or is_granted('ROLE_PHARVIGI_SURV_EVAL')  or is_granted('ROLE_PHARVIGI_SURV_GEST') %}
+                    <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFB3BA;">
+                        <span class="fs-4 fw-bold text-dark">CM / EMM</span>
+                    </a>
+                {% endif %}
             </div>
             <div class="col-md-6">
-                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFDFBA;">
-                    <span class="fs-4 fw-bold text-dark">SIMAD</span>
-                </a>
+                {% if is_granted('ROLE_PHARVIGI_ADMIN') %}
+                    <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFDFBA;">
+                        <span class="fs-4 fw-bold text-dark">SIMAD</span>
+                    </a>
+                {% endif %}
             </div>
 
 
             {# Ligne 2 #}
             <div class="col-md-6">
-                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #BAFFC9;">
-                    <span class="fs-4 fw-bold text-dark">Biblio</span>
-                </a>
+                {% if is_granted('ROLE_PHARVIGI_ADMIN') %}
+                    <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #BAFFC9;">
+                        <span class="fs-4 fw-bold text-dark">Biblio</span>
+                    </a>
+                {% endif %}
             </div>
             <div class="col-md-6">
-                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #BAE1FF;">
-                    <span class="fs-4 fw-bold text-dark">UNC</span>
-                </a>
+                {% if is_granted('ROLE_PHARVIGI_ADMIN') %}
+                    <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #BAE1FF;">
+                        <span class="fs-4 fw-bold text-dark">UNC</span>
+                    </a>
+                {% endif %}
             </div>
 
 
@@ -39,14 +47,18 @@
 
             {# Ligne 3 #}
             <div class="col-md-6">
-                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFFFBA;">
-                    <span class="fs-4 fw-bold text-dark">Faits marquants</span>
-                </a>
+                {% if is_granted('ROLE_PHARVIGI_ADMIN') %}
+                    <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #FFFFBA;">
+                        <span class="fs-4 fw-bold text-dark">Faits marquants</span>
+                    </a>
+                {% endif %}
             </div>
             <div class="col-md-6">
-                <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #E0BBE4;">
-                    <span class="fs-4 fw-bold text-dark">Autres signaux</span>
-                </a>
+                {% if is_granted('ROLE_PHARVIGI_ADMIN') %}
+                    <a href="#" class="btn btn-lg w-100 py-5 shadow-sm border-0 custom-btn" style="background-color: #E0BBE4;">
+                        <span class="fs-4 fw-bold text-dark">Autres signaux</span>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

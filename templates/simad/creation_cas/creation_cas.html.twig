@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un cas marquant{% endblock %}
+
+{% block body %}
+
+	{% include "_partials/_affichage_msg_flash.html.twig" %}
+
+
+	<div class="container-fluid p-5" data-controller="import-fiche-recueil-cm">
+		{{form_start(form, {'attr': {'data-action': 'submit->import-fiche-recueil-cm#showSpinner'}})}}
+
+		{{form_end(form)}}
+
+		<div id="wordImportSpinner" data-import-fiche-recueil-cm-target="spinner" class="text-center d-none my-3">
+			<div class="spinner-border" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<div>Import en cours...</div>
+		</div>
+
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+{% endblock %}

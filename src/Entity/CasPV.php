@@ -12,12 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 #[ORM\DiscriminatorMap([
-    'cas_pv' => CasPV::class, 
     'cm' => CM::class, 
     'simad' => SIMAD::class,
     'emm' => EMM::class,
     ])]
-class CasPV
+abstract class CasPV
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

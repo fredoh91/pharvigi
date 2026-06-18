@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
@@ -161,7 +161,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_PHARVIGI_USER')]
     #[Route('/modif_user_password', name: 'app_modif_user_password')]
     public function modif_user_password(Request $request, 
                                         UserPasswordHasherInterface $userPasswordHasher, 
@@ -213,7 +213,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_REUSI_USER')]
+    #[IsGranted('ROLE_PHARVIGI_USER')]
     #[Route('/modif_user_my_password', name: 'app_modif_user_my_password')]
     public function modif_user_my_password(Request $request, 
                                         UserPasswordHasherInterface $userPasswordHasher, 

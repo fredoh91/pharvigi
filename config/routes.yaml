@@ -14,3 +14,8 @@ controllers_cm:
     resource: ../src/Controller/CM/
     type: attribute
     prefix: /CM
+
+controllers_simad:
+    resource: ../src/Controller/SIMAD/
+    type: attribute
+    prefix: /SIMAD

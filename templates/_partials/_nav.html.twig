@@ -18,9 +18,15 @@
               Cas Marquants / Erreurs Médicamenteuses Marquantes
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
-              {% if is_granted('ROLE_PHARVIGI_SURV_GEST') %}
-                <li><a class="dropdown-item" href="#">Création d'un cas</a></li>
-              {% endif %}
+                {% if is_granted('ROLE_PHARVIGI_SURV_GEST') %}
+                  <li class="dropend">
+                    <a class="dropdown-item dropdown-toggle" href="#">Création d'un cas</a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li><a class="dropdown-item" href="{{ path ('app_cm_creation_cas') }}">Import d'une fiche de recueil</a></li>
+                      <li><a class="dropdown-item" href="#">Création manuelle d'un cas</a></li>
+                    </ul>
+                  </li>
+                {% endif %}
               {% if is_granted('ROLE_PHARVIGI_SURV_EVAL') %}
                 <li><a class="dropdown-item" href="#">Réception des CM/EMM</a></li>
               {% endif %}
@@ -64,6 +70,56 @@
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               SIMAD
             </a>
+
+
+              <ul class="dropdown-menu dropdown-menu-dark">
+                {% if is_granted('ROLE_PHARVIGI_SURV_GEST') %}
+                  <li class="dropend">
+                    <a class="dropdown-item dropdown-toggle" href="#">Création d'un cas</a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li><a class="dropdown-item" href="{{ path ('app_simad_creation_cas') }}">Import d'une fiche de recueil</a></li>
+                      <li><a class="dropdown-item" href="#">Création manuelle d'un cas</a></li>
+                    </ul>
+                  </li>
+                {% endif %}
+              {% if is_granted('ROLE_PHARVIGI_SURV_EVAL') %}
+                <li><a class="dropdown-item" href="#">Réception des CM/EMM</a></li>
+              {% endif %}
+              {% if is_granted('ROLE_PHARVIGI_DMM_EVAL') %}
+                <li><a class="dropdown-item" href="#">Recevabilité DMM</a></li>
+              {% endif %}
+
+              <li><a class="dropdown-item" href="#">Évaluation des SIMAD</a></li>
+
+              {% if is_granted('ROLE_PHARVIGI_SURV_EVAL') %}
+                <li class="dropend">
+                  <a class="dropdown-item dropdown-toggle" href="#">Préparations des CSP</a>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" href="#">Exports Excel et PDF</a></li>
+                    <li><a class="dropdown-item" href="#">Import des fichiers d'avis d'experts</a></li>
+                    <li><a class="dropdown-item" href="#">Import des fichiers d'avis d'experts compilé</a></li>
+                    <li><a class="dropdown-item" href="#">Import des fichier de prise de note</a></li>
+                  </ul>
+                </li>
+              {% endif %}
+              {% if is_granted('ROLE_PHARVIGI_SURV_EVAL') %}              
+                <li><a class="dropdown-item" href="#">Prise de notes durant CSP</a></li>
+              {% endif %}
+              {% if is_granted('ROLE_PHARVIGI_SURV_EVAL') %}
+                <li class="dropend">
+                  <a class="dropdown-item dropdown-toggle" href="#">Exports Excels divers</a>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" href="#">Exports pilotage</a></li>
+                    <li><a class="dropdown-item" href="#">Exports plénier</a></li>
+                  </ul>
+                </li>
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+
+
+
 
           </li>
         </ul>
@@ -146,16 +202,17 @@
 			{% endif %}
 
       {# Liens pour la connexion/deconnexion #}
+      {# {% if is_granted('ROLE_USER') %}       #}
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         {% if app.user %}
           <li class="nav-item">
             {# <a class="nav-link" href="{{ path ('app_logout') }}">Deconnexion</a> #}
             <a class="nav-link" href="{{ path ('app_logout') }}">Deconnexion</a>
           </li>
-          {% if is_granted('ROLE_PHARVIGI_ADMIN') == false %}
+          {% if is_granted('ROLE_PHARVIGI_USER') == false %}
             <li class="nav-item">
               {# <a class="nav-link" href="{{ path ('app_modif_user_password') }}">Modification de mon mot de passe</a> #}
-              <a class="nav-link" href="#">Modification de mon mot de passe</a>
+              <a class="nav-link" href="{{ path ('app_modif_user_my_password') }}">Modification de mon mot de passe</a>
             </li>
           {% endif %}
         {% else %}
@@ -169,6 +226,7 @@
           </li>
         {% endif %}
       </ul>
+			{# {% endif %} #}
     </div>
   </div>
 </nav>
