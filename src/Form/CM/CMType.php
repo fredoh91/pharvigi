@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\CM;
 
 use App\Entity\CM;
 use App\Entity\DonneesComplementairesCM;

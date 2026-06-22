@@ -2,13 +2,22 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use ZipArchive;
+use App\Entity\CM;
 use DOMDocument;
 use DOMXPath;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use ZipArchive;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ImportFicheRecueilCMService
 {
+    private Security $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     public function TraitementFichierWord(UploadedFile $file): array
     {
         $zip = new ZipArchive();
@@ -87,6 +96,79 @@ class ImportFicheRecueilCMService
             'Data_FicheRecueilCM' => $data
         ];
     }
+
+    /**
+     * Création d'un objet CM (CasPV JTI CM) et hydratation avec les données extraites de la fiche de recueil et de la BNPV
+     *
+     * @param array $ficRec : Données extraites de la fiche de recueil CM
+     * @param array $mainData : Données principales issues de la BNPV
+     * @param array $eiDataRows : Données des événements indésirables issus de la BNPV
+     * @param array $medicDataRows : Données des médicaments issus de la BNPV
+     * @param RequetesMeddraService $requetesMeddraService
+     * @return CM
+     */
+    public function CreationCasCM(array $ficRec, array $mainData, array $eiDataRows, array $medicDataRows, RequetesMeddraService $requetesMeddraService): CM
+    {
+        
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Utilisateur non connecté.');
+        }
+        if (method_exists($user, 'getUserIdentifier')) {
+            $userName = $user->getUserIdentifier();
+        } elseif (method_exists($user, 'getUserName')) {
+            $userName = $user->getUserName();
+        } elseif (method_exists($user, 'getUsername')) {
+            $userName = $user->getUsername();
+        } else {
+            $userName = (string) $user;
+        }
+        $now = new \DateTimeImmutable();
+
+        $cm = new CM();
+        dump($ficRec, $mainData, $eiDataRows, $medicDataRows);
+        // 1. Données issues de l'extraction Word
+        $cm->setTypeCasPV('CM');
+        // $cm->setTypologie('Effet indésirable');
+        $cm->setNumeroBNPV($ficRec['Num_Cas'] ?? null);
+        
+        $cm->setEffetIndesirable($ficRec['EIs'] ?? null);
+        $cm->setLettre($ficRec['LettreLogi'] ?? null);
+
+        $cm->setProblematique($ficRec['Resume'] ?? null);
+        $cm->setCluster($ficRec['Cluster'] ?? false);
+        
+        $cm->setCreatedAt($now);
+        $cm->setUpdatedAt($now);
+        $cm->setUserCreate($userName);
+        $cm->setUserModif($userName);
+        
+
+        // 2. Données issues de la BNPV
+        if (!empty($mainData)) {
+            $cm->setSexe($mainData['Sexe'] ?? null);
+            $cm->setAge(isset($mainData['patientonsetage']) ? (int)$mainData['patientonsetage'] : null);
+            $cm->setUniteAge($mainData['UNITE_AGE'] ?? null);
+            $cm->setGravite($mainData['Gravite'] ?? null);
+            $cm->setDeces($mainData['DC'] ?? null);
+            $cm->setMiseEnJeuPronostic($mainData['MPV'] ?? null);
+            $cm->setHospitalisation($mainData['Hospi'] ?? null);
+            $cm->setIncapacite($mainData['Handi'] ?? null);
+            $cm->setAnomalieCongenitale($mainData['AnoCong'] ?? null);
+            $cm->setAutreSituation($mainData['AutresGrav'] ?? null);
+            // if (isset($mainData['AGE_YEARS'])) {
+            //     $cm->setAge((int)$mainData['AGE_YEARS']);
+            //     $cm->setUniteAge('ans');
+            // }
+            // if (isset($mainData['GENDER_CODE'])) {
+            //     $cm->setSexe($mainData['GENDER_CODE']);
+            // }
+            // Autres mappings possibles selon votre structure BNPV
+        }
+        dd($cm);
+        return $cm;
+    }
+
 
     private function extractTextStrict(\DOMNode $node): string
     {

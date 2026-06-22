@@ -192,19 +192,26 @@ class ImportFicheRecueilEMMService
     }
 
     /**
-     * Crée l'objet entité métier EMM pré-rempli à partir des données extraites et de la BNPV
+     * Création d'un objet EMM (CasPV JTI EMM) et hydratation avec les données extraites de la fiche de recueil et de la BNPV
+     *
+     * @param array $ficRec : Données extraites de la fiche de recueil EMM
+     * @param array $mainData : Données principales issues de la BNPV
+     * @param array $eiDataRows : Données des événements indésirables issus de la BNPV
+     * @param array $medicDataRows : Données des médicaments issus de la BNPV
+     * @param RequetesMeddraService $requetesMeddraService
+     * @return EMM
      */
     public function CreationCasEMM(array $ficRec, array $mainData, array $eiDataRows, array $medicDataRows, RequetesMeddraService $requetesMeddraService): EMM
     {
         $emm = new EMM();
         
         // 1. Données issues de l'extraction Word
+        $emm->setTypeCasPV('EMM');
         $emm->setNumeroBNPV($ficRec['Num_Cas'] ?? null);
         $emm->setSexe($ficRec['Sexe'] ?? null);
         $emm->setAge(isset($ficRec['Age']) ? (int)$ficRec['Age'] : null);
         $emm->setProblematique($ficRec['Resume'] ?? null);
         $emm->setCluster($ficRec['Cluster'] ?? false);
-        $emm->setTypeCasPV('EMM');
 
         // 2. Données issues de la BNPV (prioritaires si disponibles)
         if (!empty($mainData)) {

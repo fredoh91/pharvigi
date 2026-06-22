@@ -24,6 +24,9 @@ class EMM extends CasPV
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $MaitriseRisque_Commentaire = null;
 
+    #[ORM\OneToOne(inversedBy: 'eMM', cascade: ['persist', 'remove'])]
+    private ?DonneesComplementairesEMM $DonneesComplementairesEMM = null;
+
     public function getAvisCRPV(): ?string
     {
         return $this->avisCRPV;
@@ -80,6 +83,18 @@ class EMM extends CasPV
     public function setMaitriseRisqueCommentaire(?string $MaitriseRisque_Commentaire): static
     {
         $this->MaitriseRisque_Commentaire = $MaitriseRisque_Commentaire;
+
+        return $this;
+    }
+
+    public function getDonneesComplementairesEMM(): ?DonneesComplementairesEMM
+    {
+        return $this->DonneesComplementairesEMM;
+    }
+
+    public function setDonneesComplementairesEMM(?DonneesComplementairesEMM $DonneesComplementairesEMM): static
+    {
+        $this->DonneesComplementairesEMM = $DonneesComplementairesEMM;
 
         return $this;
     }

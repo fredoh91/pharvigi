@@ -57,7 +57,7 @@ final class CreationCasController extends AbstractController
                     return $this->redirectToRoute('app_cm_creation_cas');
                 }
 
-                dump($typeFiche);
+                // dump($typeFiche);
 
                 $ficRec = [];
 
@@ -78,7 +78,7 @@ final class CreationCasController extends AbstractController
                     $ficRec = $result['Data_FicheRecueilEMM'] ?? null;
                 }
 
-                dump($ficRec);
+                // dump($ficRec);
 
                 // --- ÉTAPE 3 : VALIDATION DES DONNÉES EXTRAITES ---
                 if (!$ficRec) {
@@ -124,22 +124,33 @@ final class CreationCasController extends AbstractController
                 }
                 $mainData = $mainDataRows[0];
 
-                dump($mainData);
+                // dump($mainData);
 
                 $eiDataRows = $requetesBnpvService->DonneEIData($aerId);
                 $medicDataRows = $requetesBnpvService->DonneMedicamentData($aerId);
 
                 // --- ÉTAPE DE DÉBOGAGE (DUMP & DD) ---
-                dump($eiDataRows);
-                dd($medicDataRows);
+                // dump($eiDataRows);
+                // dump($medicDataRows);
 
                 // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
                 if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
                     $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
+                    dd($cm);
+                    $form = $this->createForm(\App\Form\CM\CMType::class, $cm);
                     $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
+                    return $this->render('cm/creation_cas/form_creation_cas_cm.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+
                 } elseif ($typeFiche === FicheRecueilAnalyseurService::TYPE_EMM) {
                     $emm = $importEMMService->CreationCasEMM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
+                    dd($emm);
+                    $form = $this->createForm(\App\Form\CM\EMMType::class, $emm);
                     $this->addFlash('success', sprintf('Fiche EMM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
+                    return $this->render('cm/creation_cas/form_creation_cas_emm.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
                 }
 
                 return $this->redirectToRoute('app_cm_creation_cas');

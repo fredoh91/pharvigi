@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SIMADRepository;
+// use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SIMADRepository::class)]
@@ -19,6 +20,9 @@ class SIMAD extends CasPV
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Date_notification = null;
+
+    #[ORM\OneToOne(inversedBy: 'sIMAD', cascade: ['persist', 'remove'])]
+    private ?DonneesComplementairesSIMAD $DonneesComplementairesSIMAD = null;
 
     public function isCasImportDepuisExcel(): ?bool
     {
@@ -64,6 +68,18 @@ class SIMAD extends CasPV
     public function setDateNotification(?string $Date_notification): static
     {
         $this->Date_notification = $Date_notification;
+
+        return $this;
+    }
+
+    public function getDonneesComplementairesSIMAD(): ?DonneesComplementairesSIMAD
+    {
+        return $this->DonneesComplementairesSIMAD;
+    }
+
+    public function setDonneesComplementairesSIMAD(?DonneesComplementairesSIMAD $DonneesComplementairesSIMAD): static
+    {
+        $this->DonneesComplementairesSIMAD = $DonneesComplementairesSIMAD;
 
         return $this;
     }
