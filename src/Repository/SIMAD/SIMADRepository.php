@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\SIMAD;
 
-use App\Entity\EMM;
+use App\Entity\SIMAD;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<EMM>
+ * @extends ServiceEntityRepository<SIMAD>
  */
-class EMMRepository extends ServiceEntityRepository
+class SIMADRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, EMM::class);
+        parent::__construct($registry, SIMAD::class);
     }
 
     //    /**
-    //     * @return EMM[] Returns an array of EMM objects
+    //     * @return SIMAD[] Returns an array of SIMAD objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
+    //            ->orderBy('s.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?EMM
+    //    public function findOneBySomeField($value): ?SIMAD
     //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\CasPV;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,21 +14,74 @@ class CasPVType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('TypeCasPV')
-            ->add('numeroBNPV')
+            ->add('TypeCasPV', null, [
+                'disabled' => true,
+            ])
+            ->add('numeroBNPV', null, [
+                'disabled' => true,
+            ])
             ->add('problematique')
             ->add('propositionCRPV')
             ->add('conclusions')
             ->add('presentation')
             ->add('CRPV')
             ->add('codeCRPV')
-            ->add('gravite')
-            ->add('deces')
-            ->add('miseEnJeuPronostic')
-            ->add('hospitalisation')
-            ->add('incapacite')
-            ->add('anomalieCongenitale')
-            ->add('autreSituation')
+            ->add('gravite', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'placeholder' => false
+            ])
+            ->add('deces', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'placeholder' => false
+            ])
+            ->add('miseEnJeuPronostic', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'placeholder' => false
+            ])
+            ->add('hospitalisation', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'placeholder' => false
+            ])
+            ->add('incapacite', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'placeholder' => false
+            ])
+            ->add('anomalieCongenitale', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'placeholder' => false
+            ])
+            ->add('autreSituation', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'placeholder' => false
+            ])
             ->add('typologie')
             ->add('dateArrivee', null, [
                 'widget' => 'single_text',
@@ -45,14 +100,14 @@ class CasPVType extends AbstractType
             ->add('lettre')
             ->add('motifQualificationDMM')
             ->add('SRE')
-            ->add('UserCreate')
-            ->add('UserModif')
-            ->add('CreatedAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('UpdatedAt', null, [
-                'widget' => 'single_text',
-            ])
+            // ->add('UserCreate')
+            // ->add('UserModif')
+            // ->add('CreatedAt', null, [
+            //     'widget' => 'single_text',
+            // ])
+            // ->add('UpdatedAt', null, [
+            //     'widget' => 'single_text',
+            // ])
             ->add('niveauRisqueFinal')
             ->add('niveauRisquePGS')
         ;

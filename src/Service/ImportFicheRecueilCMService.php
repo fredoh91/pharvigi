@@ -2,13 +2,14 @@
 
 namespace App\Service;
 
-use App\Entity\CM;
+use App\Entity\CM\CM;
+use App\Entity\CM\DonneesComplementairesCM;
 use DOMDocument;
 use DOMXPath;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use ZipArchive;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use ZipArchive;
 
 class ImportFicheRecueilCMService
 {
@@ -165,10 +166,57 @@ class ImportFicheRecueilCMService
             // }
             // Autres mappings possibles selon votre structure BNPV
         }
-        dd($cm);
         return $cm;
     }
+/**
+     * Création d'un objet CM (CasPV JTI CM) et hydratation avec les données extraites de la fiche de recueil et de la BNPV
+     *
+     * @param array $ficRec : Données extraites de la fiche de recueil CM
+     * @param array $mainData : Données principales issues de la BNPV
+     * @param array $eiDataRows : Données des événements indésirables issus de la BNPV
+     * @param array $medicDataRows : Données des médicaments issus de la BNPV
+     * @param CM $cm
+     * @return DonneesComplementairesCM
+     */
+    public function CreationDonneesComplementairesCM(array $ficRec, array $mainData, array $eiDataRows, array $medicDataRows, CM $cm): DonneesComplementairesCM
+    {
+        
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Utilisateur non connecté.');
+        }
+        if (method_exists($user, 'getUserIdentifier')) {
+            $userName = $user->getUserIdentifier();
+        } elseif (method_exists($user, 'getUserName')) {
+            $userName = $user->getUserName();
+        } elseif (method_exists($user, 'getUsername')) {
+            $userName = $user->getUsername();
+        } else {
+            $userName = (string) $user;
+        }
+        $now = new \DateTimeImmutable();
 
+        $donComplCM = new DonneesComplementairesCM();
+
+        $donComplCM->setCm($cm);
+        // $donComplCM->setCreatedAt($now);
+        // $donComplCM->setUpdatedAt($now);
+        // $donComplCM->setUserCreate($userName);
+        // $donComplCM->setUserModif($userName);
+        $donComplCM->setEIAttendu($ficRec['EI_Attendu'] ?? null);
+        $donComplCM->setEIInattendu($ficRec['EI_Inattendu'] ?? null);
+        $donComplCM->setPlausibilitePharma($ficRec['Plausib_Pharma'] ?? null);
+        $donComplCM->setTabCliniInhab($ficRec['Tab_Clinique_Inhab'] ?? null);
+        $donComplCM->setTabCliniInhabComment($ficRec['Tab_Clin_Inhab_Txt'] ?? null);
+        $donComplCM->setChronoEvo($ficRec['Chrono_Evoc'] ?? null);
+        $donComplCM->setSemioEvo($ficRec['Semio_Evoc'] ?? null);
+        $donComplCM->setSemioEvoComment($ficRec['Semio_Evoc_Txt'] ?? null);
+        
+        $donComplCM->setContexPriseMedic($ficRec['Context_Part'] ?? null);
+        $donComplCM->setContexPriseMedicComment($ficRec['Context_Part_Txt'] ?? null);
+
+        return $donComplCM;
+    }
 
     private function extractTextStrict(\DOMNode $node): string
     {

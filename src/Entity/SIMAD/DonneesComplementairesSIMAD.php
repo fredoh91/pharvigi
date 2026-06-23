@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\SIMAD;
 
-use App\Repository\DonneesComplementairesSIMADRepository;
+use App\Repository\SIMAD\DonneesComplementairesSIMADRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 

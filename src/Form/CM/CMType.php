@@ -2,8 +2,8 @@
 
 namespace App\Form\CM;
 
-use App\Entity\CM;
-use App\Entity\DonneesComplementairesCM;
+use App\Entity\CM\CM;
+use App\Entity\CM\DonneesComplementairesCM;
 use App\Form\CasPVType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -63,10 +63,10 @@ class CMType extends CasPVType
             ->add('suiviEnquete')
             ->add('ListeCRPV')
             ->add('MaitriseRisque_Commentaire')
-            ->add('DonneesComplementairesCM', EntityType::class, [
-                'class' => DonneesComplementairesCM::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('DonneesComplementairesCM', EntityType::class, [
+            //     'class' => DonneesComplementairesCM::class,
+            //     'choice_label' => 'id',
+            // ])
         ;
     }
 

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un cas marquant{% endblock %}
+
+{% block body %}
+
+	{% include "_partials/_affichage_msg_flash.html.twig" %}
+
+	<div class="container-fluid p-5">
+		
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" id="donnees_principales-tab" data-bs-toggle="tab" data-bs-target="#donnees_principales" type="button" role="tab">Données principales</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="donnees_complementaires-tab" data-bs-toggle="tab" data-bs-target="#donnees_complementaires" type="button" role="tab">Données complémentaires</button>
+			</li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="donnees_principales" role="tabpanel">
+				{% include 'cm/creation_cas/form_creation_cas_cm_donnees_principales.html.twig' %}
+			</div>
+			
+			<div class="tab-pane fade" id="donnees_complementaires" role="tabpanel">
+				{% include 'cm/creation_cas/form_creation_cas_cm_donnees_complementaires.html.twig' %}
+			</div>
+		</div>
+		
+		<div class="mt-4 text-center">
+			<button type="submit" class="btn btn-success btn-lg me-2">Enregistrer le cas marquant</button>
+			<a href="{{ path('app_cm_creation_cas') }}" class="btn btn-secondary btn-lg">Annuler</a>
+		</div>
+
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+{% endblock %}

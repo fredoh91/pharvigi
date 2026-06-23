@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\DonneesComplementairesSIMAD;
+use App\Entity\CM\DonneesComplementairesEMM;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<DonneesComplementairesSIMAD>
+ * @extends ServiceEntityRepository<DonneesComplementairesEMM>
  */
-class DonneesComplementairesSIMADRepository extends ServiceEntityRepository
+class DonneesComplementairesEMMRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, DonneesComplementairesSIMAD::class);
+        parent::__construct($registry, DonneesComplementairesEMM::class);
     }
 
     //    /**
-    //     * @return DonneesComplementairesSIMAD[] Returns an array of DonneesComplementairesSIMAD objects
+    //     * @return DonneesComplementairesEMM[] Returns an array of DonneesComplementairesEMM objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class DonneesComplementairesSIMADRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?DonneesComplementairesSIMAD
+    //    public function findOneBySomeField($value): ?DonneesComplementairesEMM
     //    {
     //        return $this->createQueryBuilder('d')
     //            ->andWhere('d.exampleField = :val')

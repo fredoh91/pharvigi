@@ -24,6 +24,8 @@ Encore
 
 
     .addStyleEntry('navbar', './assets/styles/navbar.scss')
+    .addStyleEntry('form_creation_cas_cm_donnees_principales', './assets/styles/cm/form_creation_cas_cm_donnees_principales.scss')
+    .addStyleEntry('form_creation_cas_cm_donnees_complementaires', './assets/styles/cm/form_creation_cas_cm_donnees_complementaires.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

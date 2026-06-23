@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 #[ORM\DiscriminatorMap([
-    'cm' => CM::class, 
-    'simad' => SIMAD::class,
-    'emm' => EMM::class,
+    'cm' => \App\Entity\CM\CM::class,
+    'emm' => \App\Entity\CM\EMM::class,
+    'simad' => \App\Entity\SIMAD\SIMAD::class,
     ])]
 abstract class CasPV
 {

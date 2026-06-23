@@ -136,11 +136,15 @@ final class CreationCasController extends AbstractController
                 // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
                 if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
                     $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
-                    dd($cm);
-                    $form = $this->createForm(\App\Form\CM\CMType::class, $cm);
+                    $donComplCM = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $cm);
+                    // Ne pas associer l'entité dans le formulaire principal pour éviter l'erreur
+                    // On laisse l'association pour la validation finale
+                    $formCM = $this->createForm(\App\Form\CM\CMType::class, $cm);
+                    $formDonneesComplementaires = $this->createForm(\App\Form\CM\DonneesComplementairesCMType::class, $donComplCM);
                     $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
                     return $this->render('cm/creation_cas/form_creation_cas_cm.html.twig', [
-                        'form' => $form->createView(),
+                        'formCM' => $formCM->createView(),
+                        'formDonneesComplementaires' => $formDonneesComplementaires->createView(),
                     ]);
 
                 } elseif ($typeFiche === FicheRecueilAnalyseurService::TYPE_EMM) {

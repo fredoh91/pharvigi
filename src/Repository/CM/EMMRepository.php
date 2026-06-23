@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\CM;
 
-use App\Entity\RecueilCM;
+use App\Entity\CM\EMM;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<RecueilCM>
+ * @extends ServiceEntityRepository<EMM>
  */
-class RecueilCMRepository extends ServiceEntityRepository
+class EMMRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, RecueilCM::class);
+        parent::__construct($registry, EMM::class);
     }
 
     //    /**
-    //     * @return RecueilCM[] Returns an array of RecueilCM objects
+    //     * @return EMM[] Returns an array of EMM objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
+    //        return $this->createQueryBuilder('e')
+    //            ->andWhere('e.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
+    //            ->orderBy('e.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?RecueilCM
+    //    public function findOneBySomeField($value): ?EMM
     //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
+    //        return $this->createQueryBuilder('e')
+    //            ->andWhere('e.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\CM;
 
-use App\Repository\DonneesComplementairesCMRepository;
+use App\Repository\CM\DonneesComplementairesCMRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 

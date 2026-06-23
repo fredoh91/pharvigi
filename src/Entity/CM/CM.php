@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\CM;
 
-use App\Repository\CMRepository;
+use App\Repository\CM\CMRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CMRepository::class)]
-class CM extends CasPV
+class CM extends \App\Entity\CasPV
 {
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $avisCRPV = null;
