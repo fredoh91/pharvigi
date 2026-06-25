@@ -140,9 +140,16 @@ abstract class CasPV
     #[ORM\OneToMany(targetEntity: AttributionCSPCasPV::class, mappedBy: 'CasPV')]
     private Collection $attributionCSPs;
 
+    /**
+     * @var Collection<int, StatutCasPV>
+     */
+    #[ORM\OneToMany(targetEntity: StatutCasPV::class, mappedBy: 'statutCasPV')]
+    private Collection $statutCasPVs;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
+        $this->statutCasPVs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -618,6 +625,36 @@ abstract class CasPV
             // set the owning side to null (unless already changed)
             if ($attributionCSP->getCasPV() === $this) {
                 $attributionCSP->setCasPV(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StatutCasPV>
+     */
+    public function getStatutCasPVs(): Collection
+    {
+        return $this->statutCasPVs;
+    }
+
+    public function addStatutCasPV(StatutCasPV $statutCasPV): static
+    {
+        if (!$this->statutCasPVs->contains($statutCasPV)) {
+            $this->statutCasPVs->add($statutCasPV);
+            $statutCasPV->setStatutCasPV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatutCasPV(StatutCasPV $statutCasPV): static
+    {
+        if ($this->statutCasPVs->removeElement($statutCasPV)) {
+            // set the owning side to null (unless already changed)
+            if ($statutCasPV->getStatutCasPV() === $this) {
+                $statutCasPV->setStatutCasPV(null);
             }
         }
 

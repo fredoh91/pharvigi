@@ -3,6 +3,7 @@
 namespace App\Form\CM;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,6 +31,11 @@ class UploadFicheRecueilCMType extends AbstractType
                 //         'mimeTypesMessage' => 'Merci de sélectionner un fichier Excel valide.',
                 //     ])
                 // ],
+            ])
+            ->add('DateArriveeFicheRecueilCM', DateType::class, [
+                'label' => 'Date d\'arrivée du mail : ',
+                'widget' => 'single_text',
+                'required' => true,
             ])
             ->add('ImportFile', SubmitType::class, [
                 'label' => 'Importer le fichier',

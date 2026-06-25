@@ -4,6 +4,9 @@ namespace App\Service;
 
 use App\Entity\CM\CM;
 use App\Entity\CM\DonneesComplementairesCM;
+use App\Entity\StatutCasPV;
+// use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMXPath;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -14,10 +17,12 @@ use ZipArchive;
 class ImportFicheRecueilCMService
 {
     private Security $security;
+    private EntityManagerInterface $em;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, EntityManagerInterface $em)
     {
         $this->security = $security;
+        $this->em = $em;
     }
     public function TraitementFichierWord(UploadedFile $file): array
     {
@@ -127,6 +132,7 @@ class ImportFicheRecueilCMService
         $now = new \DateTimeImmutable();
 
         $cm = new CM();
+        
         dump($ficRec, $mainData, $eiDataRows, $medicDataRows);
         // 1. Données issues de l'extraction Word
         $cm->setTypeCasPV('CM');
@@ -135,7 +141,7 @@ class ImportFicheRecueilCMService
         
         $cm->setEffetIndesirable($ficRec['EIs'] ?? null);
         $cm->setLettre($ficRec['LettreLogi'] ?? null);
-
+        
         $cm->setProblematique($ficRec['Resume'] ?? null);
         $cm->setCluster($ficRec['Cluster'] ?? false);
         
@@ -144,6 +150,17 @@ class ImportFicheRecueilCMService
         $cm->setUserCreate($userName);
         $cm->setUserModif($userName);
         
+        $statutCas = new StatutCasPV();
+
+        $statutCas->setStatutActif(true);
+        $statutCas->setLibStatut('brouillon');
+        $statutCas->setDateMiseEnPlace(new \DateTimeImmutable());
+        $statutCas->setCreatedAt($now);
+        $statutCas->setUpdatedAt($now);
+        $statutCas->setUserCreate($userName);
+        $statutCas->setUserModif($userName);        
+        
+        $cm->addStatutCasPV($statutCas);
 
         // 2. Données issues de la BNPV
         if (!empty($mainData)) {
@@ -166,6 +183,9 @@ class ImportFicheRecueilCMService
             // }
             // Autres mappings possibles selon votre structure BNPV
         }
+        $this->em->persist($cm);
+        $this->em->persist($statutCas);
+        $this->em->flush();
         return $cm;
     }
 /**
@@ -214,7 +234,8 @@ class ImportFicheRecueilCMService
         
         $donComplCM->setContexPriseMedic($ficRec['Context_Part'] ?? null);
         $donComplCM->setContexPriseMedicComment($ficRec['Context_Part_Txt'] ?? null);
-
+        $this->em->persist($donComplCM);
+        $this->em->flush();
         return $donComplCM;
     }
 

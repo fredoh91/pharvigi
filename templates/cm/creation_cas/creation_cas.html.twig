@@ -9,6 +9,21 @@
 
 	<div class="container-fluid p-5" data-controller="import-fiche-recueil-cm">
 		{{form_start(form, {'attr': {'data-action': 'submit->import-fiche-recueil-cm#showSpinner'}})}}
+		
+		<div class="row">
+			<div class="col-md-2">
+				{{ form_row(form.DateArriveeFicheRecueilCM) }}
+			</div>
+			<div class="col-md-10">
+				{{ form_row(form.FicWordRecueilCM) }}
+			</div>
+		</div>
+		
+		<div class="row mt-3">
+			<div class="col-md-12">
+				{{ form_row(form.ImportFile) }}
+			</div>
+		</div>
 
 		{{form_end(form)}}
 
