@@ -3,40 +3,45 @@
 {% endblock %}
 
 {# Formulaire des données principales #}
-{{ form_start(formCM) }}
 <div class="form-container">
-    {{ form_row(formCM.TypeCasPV) }}
-    {{ form_row(formCM.numeroBNPV) }}
-    {{ form_row(formCM.problematique) }}
-    {{ form_row(formCM.propositionCRPV) }}
-    {{ form_row(formCM.conclusions) }}
-    {{ form_row(formCM.presentation) }}
-    {{ form_row(formCM.CRPV) }}
-    {{ form_row(formCM.codeCRPV) }}
-    {{ form_row(formCM.gravite) }}
-    {{ form_row(formCM.deces) }}
-    {{ form_row(formCM.miseEnJeuPronostic) }}
-    {{ form_row(formCM.hospitalisation) }}
-    {{ form_row(formCM.incapacite) }}
-    {{ form_row(formCM.anomalieCongenitale) }}
-    {{ form_row(formCM.autreSituation) }}
-    {{ form_row(formCM.typologie) }}
-    {{ form_row(formCM.dateArrivee) }}
-    {{ form_row(formCM.age) }}
-    {{ form_row(formCM.sexe) }}
-    {{ form_row(formCM.uniteAge) }}
-    {{ form_row(formCM.effetIndesirable) }}
-    {{ form_row(formCM.prequalificationDSURV) }}
-    {{ form_row(formCM.motifPrequalification) }}
-    {{ form_row(formCM.investigationDP) }}
-    {{ form_row(formCM.echangeDMM_CRPV) }}
-    {{ form_row(formCM.cluster) }}
-    {{ form_row(formCM.finalise) }}
-    {{ form_row(formCM.casPere) }}
-    {{ form_row(formCM.lettre) }}
-    {{ form_row(formCM.motifQualificationDMM) }}
-    {{ form_row(formCM.SRE) }}
-    {{ form_row(formCM.niveauRisqueFinal) }}
-    {{ form_row(formCM.niveauRisquePGS) }}
+    {{ form_row(form.TypeCasPV) }}
+    {{ form_row(form.numeroBNPV) }}
+    {{ form_row(form.problematique) }}
+    {{ form_row(form.propositionCRPV) }}
+    {{ form_row(form.conclusions) }}
+    {{ form_row(form.presentation) }}
+    {{ form_row(form.CRPV) }}
+    {{ form_row(form.codeCRPV) }}
+    {{ form_row(form.gravite) }}
+    {{ form_row(form.deces) }}
+    {{ form_row(form.miseEnJeuPronostic) }}
+    {{ form_row(form.hospitalisation) }}
+    {{ form_row(form.incapacite) }}
+    {{ form_row(form.anomalieCongenitale) }}
+    {{ form_row(form.autreSituation) }}
+    {{ form_row(form.typologie) }}
+    {{ form_row(form.dateArrivee) }}
+    {{ form_row(form.age) }}
+    {{ form_row(form.sexe) }}
+    {{ form_row(form.uniteAge) }}
+    {{ form_row(form.effetIndesirable) }}
+    {{ form_row(form.prequalificationDSURV) }}
+    {{ form_row(form.motifPrequalification) }}
+    {{ form_row(form.investigationDP) }}
+    {{ form_row(form.echangeDMM_CRPV) }}
+    {{ form_row(form.cluster) }}
+    {{ form_row(form.finalise) }}
+    {{ form_row(form.casPere) }}
+    {{ form_row(form.lettre) }}
+    {{ form_row(form.motifQualificationDMM) }}
+    {{ form_row(form.SRE) }}
+    {{ form_row(form.niveauRisqueFinal) }}
+    {{ form_row(form.niveauRisquePGS) }}
+    {# champs spécifiques aux cas marquants #}
+    {{ form_row(form.avisCRPV) }}
+    {{ form_row(form.MotifNonPresentation) }}
+    {{ form_row(form.suiviEnquete) }}
+    {{ form_row(form.ListeCRPV) }}
+    {{ form_row(form.MaitriseRisque_Commentaire) }}
+
 </div>
-{{ form_end(formCM) }}

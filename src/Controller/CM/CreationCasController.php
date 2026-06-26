@@ -131,6 +131,12 @@ final class CreationCasController extends AbstractController
 
                 $eiDataRows = $requetesBnpvService->DonneEIData($aerId);
                 $medicDataRows = $requetesBnpvService->DonneMedicamentData($aerId);
+                 $antecedentsMedicaux = $requetesBnpvService->DonneAntecedentsData($aerId);
+                 $indications = $requetesBnpvService->DonneIndicationsData($aerId);
+
+                 // dd($antecedentsMedicaux, $indications);
+
+                // dd($antecedentsMedicaux, $indications);
 
                 // --- ÉTAPE DE DÉBOGAGE (DUMP & DD) ---
                 // dump($eiDataRows);
@@ -138,8 +144,9 @@ final class CreationCasController extends AbstractController
 
                 // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
                 if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
-                    $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
-                    $donComplCM = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $cm);
+                    // $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService, $antecedentsMedicaux, $indications);
+                    $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows);
+                    [$donComplCM, $cm] = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $indications, $antecedentsMedicaux, $cm);
                     // Ne pas associer l'entité dans le formulaire principal pour éviter l'erreur
                     // On laisse l'association pour la validation finale
                     $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
@@ -172,6 +179,15 @@ final class CreationCasController extends AbstractController
         if (!$user) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
+        if (method_exists($user, 'getUserIdentifier')) {
+            $userName = $user->getUserIdentifier();
+        } elseif (method_exists($user, 'getUserName')) {
+            $userName = $user->getUserName();
+        } elseif (method_exists($user, 'getUsername')) {
+            $userName = $user->getUsername();
+        } else {
+            $userName = (string) $user;
+        }
         
         // Vérification que l'utilisateur est le créateur du cas ou a les droits nécessaires
         if ($cas->getUserCreate() !== $user->getUserIdentifier() && 
@@ -187,31 +203,64 @@ final class CreationCasController extends AbstractController
             return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
         }
 
+        $now = new \DateTimeImmutable();
+
         // Création du formulaire en fonction du type d'entité
         if ($cas instanceof CM) {
-            $formCM = $this->createForm(\App\Form\CM\CMType::class, $cas);
-            $formDonneesComplementaires = $this->createForm(\App\Form\CM\DonneesComplementairesCMType::class, $cas->getDonneesComplementairesCM());
+            $form = $this->createForm(\App\Form\CM\CMOngletsCreationType::class, $cas);
             
-            $formCM->handleRequest($request);
-            $formDonneesComplementaires->handleRequest($request);
+            $form->handleRequest($request);
             
-            if ($formCM->isSubmitted() && $formCM->isValid()) {
-                // Validation du formulaire CM
-                $em->flush();
-                $this->addFlash('success', 'Les modifications du cas CM ont été enregistrées avec succès.');
-                return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
-            }
-            
-            if ($formDonneesComplementaires->isSubmitted() && $formDonneesComplementaires->isValid()) {
-                // Validation du formulaire Données Complémentaires
-                $em->flush();
-                $this->addFlash('success', 'Les modifications des données complémentaires du cas CM ont été enregistrées avec succès.');
-                return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
+            // Vérifier quelle action a été choisie
+            if ($form->isSubmitted()) {
+                $requestData = $request->request->all();
+                
+                // Si le bouton "Enregistrer le cas marquant" a été cliqué
+                if (isset($requestData['save'])) {
+                    // Vérifier si le formulaire est valide
+                    if ($form->isValid()) {
+                        // recupération du statut brouillon
+                        $statutBrouillon = $statutCasPVRepository->findOneBy([
+                            'casPV' => $cas,
+                            'StatutActif' => true,
+                            'LibStatut' => 'brouillon',
+                        ]);
+
+                        // on le duplique pour le mettre en statut "creation"
+                        if ($statutBrouillon) {
+
+                            $statutBrouillon->setStatutActif(false);
+                            $statutBrouillon->setDateDesactivation($now);
+                            $statutBrouillon->setUserModif($userName);
+                            $statutBrouillon->setUpdatedAt($now);
+                            $em->persist($statutBrouillon);
+
+                            $statutEnCours = new \App\Entity\StatutCasPV();
+                            $statutEnCours->setCasPV($cas);
+                            $statutEnCours->setLibStatut('creation');
+                            $statutEnCours->setStatutActif(true);
+                            $statutEnCours->setDateMiseEnPlace($now);
+                            $statutEnCours->setUserCreate($userName);
+                            $statutEnCours->setUserModif($userName);
+                            $statutEnCours->setCreatedAt($now);
+                            $statutEnCours->setUpdatedAt($now);
+
+                            $em->persist($statutEnCours);   
+                        }
+                        // Validation du formulaire
+                        $em->flush();
+                        $this->addFlash('success', 'Les modifications du cas CM ont été enregistrées avec succès.');
+                        return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
+                    }
+                }
+                // Si le bouton "Annuler" a été cliqué
+                elseif (isset($requestData['cancel'])) {
+                    return $this->redirectToRoute('app_cm_creation_cas_annulation', ['cas' => $cas->getId()]);
+                }
             }
             
             return $this->render('cm/creation_cas/form_creation_cas_cm.html.twig', [
-                'formCM' => $formCM->createView(),
-                'formDonneesComplementaires' => $formDonneesComplementaires->createView(),
+                'form' => $form->createView(),
                 'cas' => $cas,
             ]);
             
@@ -263,6 +312,8 @@ final class CreationCasController extends AbstractController
             return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
         }
 
+        $numBNPV = $cas->getNumeroBNPV();
+
         // Logique d'annulation : suppression des entités associées
         try {
             // Vérification du type d'entité pour gérer CM ou EMM
@@ -287,9 +338,9 @@ final class CreationCasController extends AbstractController
             $em->remove($cas);
             $em->flush();
             
-            $this->addFlash('success', 'Le cas a été annulé avec succès.');
+            $this->addFlash('success', 'La création du cas ' . $numBNPV . ' a été annulée avec succès.');
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de l\'annulation du cas.');
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'annulation du cas' . $numBNPV . '.');
         }
         
         return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');

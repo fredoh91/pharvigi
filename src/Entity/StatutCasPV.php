@@ -24,7 +24,7 @@ class StatutCasPV
     private ?\DateTimeImmutable $DateDesactivation = null;
 
     #[ORM\ManyToOne(inversedBy: 'statutCasPVs')]
-    private ?CasPV $statutCasPV = null;
+    private ?CasPV $casPV = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $StatutActif = null;
@@ -84,12 +84,12 @@ class StatutCasPV
 
     public function getStatutCasPV(): ?CasPV
     {
-        return $this->statutCasPV;
+        return $this->casPV;
     }
 
-    public function setStatutCasPV(?CasPV $statutCasPV): static
+    public function setCasPV(?CasPV $casPV): static
     {
-        $this->statutCasPV = $statutCasPV;
+        $this->casPV = $casPV;
 
         return $this;
     }

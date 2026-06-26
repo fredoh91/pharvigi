@@ -8,6 +8,8 @@
 
 	<div class="container-fluid p-5">
 		
+		{{ form_start(form) }}
+
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 			<li class="nav-item" role="presentation">
@@ -30,11 +32,11 @@
 		</div>
 		
 		<div class="mt-4 text-center">
-			<button type="submit" class="btn btn-success btn-lg me-2">Enregistrer le cas marquant</button>
-			<a href="{{ path('app_cm_creation_cas_annulation', {'cas': cas.id}) }}" 
-				class="btn btn-secondary btn-lg" 
-				onclick="return confirm('Êtes-vous sûr de vouloir annuler ce cas ?')">Annuler</a>
+			<button type="submit" class="btn btn-success btn-lg me-2" name="save">Enregistrer le cas marquant</button>
+			<button type="submit" class="btn btn-secondary btn-lg" name="cancel" onclick="return confirm('Êtes-vous sûr de vouloir annuler ce cas ?')">Annuler</button>
 		</div>
+
+		{{ form_end(form) }}
 
 	</div>
 {% endblock %}

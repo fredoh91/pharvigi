@@ -3,38 +3,36 @@
 {% endblock %}
 
 {# Formulaire des données complémentaires #}
-{{ form_start(formDonneesComplementaires) }}
 <div class="form-container">
-    {{ form_row(formDonneesComplementaires.EI_Attendu) }}
-    {{ form_row(formDonneesComplementaires.EI_Inattendu) }}
-    {{ form_row(formDonneesComplementaires.PlausibilitePharma) }}
-    {{ form_row(formDonneesComplementaires.TabCliniInhab) }}
-    {{ form_row(formDonneesComplementaires.TabCliniInhab_comment) }}
-    {{ form_row(formDonneesComplementaires.ChronoEvo) }}
-    {{ form_row(formDonneesComplementaires.SemioEvo) }}
-    {{ form_row(formDonneesComplementaires.SemioEvo_comment) }}
-    {{ form_row(formDonneesComplementaires.ContexPriseMedic) }}
-    {{ form_row(formDonneesComplementaires.ContexPriseMedic_comment) }}
-    {{ form_row(formDonneesComplementaires.SeulMedicSusp) }}
-    {{ form_row(formDonneesComplementaires.RisqueRecu) }}
-    {{ form_row(formDonneesComplementaires.RisqueRecu_comment) }}
-    {{ form_row(formDonneesComplementaires.AutreCasBNPV) }}
-    {{ form_row(formDonneesComplementaires.AutreCasBNPV_comment) }}
-    {{ form_row(formDonneesComplementaires.AutreCasVigylise) }}
-    {{ form_row(formDonneesComplementaires.AutreCasVigylise_comment) }}
-    {{ form_row(formDonneesComplementaires.ParticulaMedic) }}
-    {{ form_row(formDonneesComplementaires.ParticulaMedic_comment) }}
-    {{ form_row(formDonneesComplementaires.RisqueDocuLitt) }}
-    {{ form_row(formDonneesComplementaires.RisqueDocuLitt_comment) }}
-    {{ form_row(formDonneesComplementaires.ContextMedia) }}
-    {{ form_row(formDonneesComplementaires.ContextMedia_comment) }}
-    {{ form_row(formDonneesComplementaires.PersistProb) }}
-    {{ form_row(formDonneesComplementaires.PersistProb_comment) }}
-    {{ form_row(formDonneesComplementaires.ASMR_SMR) }}
-    {{ form_row(formDonneesComplementaires.ASMR_SMR_comment) }}
-    {{ form_row(formDonneesComplementaires.UtilHorsAMM_RTU_ATU) }}
-    {{ form_row(formDonneesComplementaires.UtilHorsAMM_RTU_ATU_Choix) }}
-    {{ form_row(formDonneesComplementaires.Autre) }}
-    {{ form_row(formDonneesComplementaires.Autre_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.EI_Attendu) }}
+    {{ form_row(form.DonneesComplementairesCM.EI_Inattendu) }}
+    {{ form_row(form.DonneesComplementairesCM.PlausibilitePharma) }}
+    {{ form_row(form.DonneesComplementairesCM.TabCliniInhab) }}
+    {{ form_row(form.DonneesComplementairesCM.TabCliniInhab_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.ChronoEvo) }}
+    {{ form_row(form.DonneesComplementairesCM.SemioEvo) }}
+    {{ form_row(form.DonneesComplementairesCM.SemioEvo_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.ContexPriseMedic) }}
+    {{ form_row(form.DonneesComplementairesCM.ContexPriseMedic_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.SeulMedicSusp) }}
+    {{ form_row(form.DonneesComplementairesCM.RisqueRecu) }}
+    {{ form_row(form.DonneesComplementairesCM.RisqueRecu_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.AutreCasBNPV) }}
+    {{ form_row(form.DonneesComplementairesCM.AutreCasBNPV_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.AutreCasVigylise) }}
+    {{ form_row(form.DonneesComplementairesCM.AutreCasVigylise_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.ParticulaMedic) }}
+    {{ form_row(form.DonneesComplementairesCM.ParticulaMedic_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.RisqueDocuLitt) }}
+    {{ form_row(form.DonneesComplementairesCM.RisqueDocuLitt_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.ContextMedia) }}
+    {{ form_row(form.DonneesComplementairesCM.ContextMedia_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.PersistProb) }}
+    {{ form_row(form.DonneesComplementairesCM.PersistProb_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.ASMR_SMR) }}
+    {{ form_row(form.DonneesComplementairesCM.ASMR_SMR_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.UtilHorsAMM_RTU_ATU) }}
+    {{ form_row(form.DonneesComplementairesCM.UtilHorsAMM_RTU_ATU_Choix) }}
+    {{ form_row(form.DonneesComplementairesCM.Autre) }}
+    {{ form_row(form.DonneesComplementairesCM.Autre_comment) }}
 </div>
-{{ form_end(formDonneesComplementaires) }}

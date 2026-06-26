@@ -143,7 +143,7 @@ abstract class CasPV
     /**
      * @var Collection<int, StatutCasPV>
      */
-    #[ORM\OneToMany(targetEntity: StatutCasPV::class, mappedBy: 'statutCasPV')]
+    #[ORM\OneToMany(targetEntity: StatutCasPV::class, mappedBy: 'casPV')]
     private Collection $statutCasPVs;
 
     public function __construct()
@@ -643,7 +643,7 @@ abstract class CasPV
     {
         if (!$this->statutCasPVs->contains($statutCasPV)) {
             $this->statutCasPVs->add($statutCasPV);
-            $statutCasPV->setStatutCasPV($this);
+            $statutCasPV->setCasPV($this);
         }
 
         return $this;
@@ -654,7 +654,7 @@ abstract class CasPV
         if ($this->statutCasPVs->removeElement($statutCasPV)) {
             // set the owning side to null (unless already changed)
             if ($statutCasPV->getStatutCasPV() === $this) {
-                $statutCasPV->setStatutCasPV(null);
+                $statutCasPV->setCasPV(null);
             }
         }
 

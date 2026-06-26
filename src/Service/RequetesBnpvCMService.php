@@ -159,6 +159,92 @@ class RequetesBnpvCMService
     }
 
     /**
+     * Retourne les antécédents médicaux d'un cas à partir de son masterId dans la BNPV.
+     *
+     * @param integer $masterId
+     * @return string|null
+     */
+    public function DonneAntecedentsData(int $masterId): string|null
+    {
+
+
+        $sql = <<<SQL
+            SELECT DISTINCT mh.patientepisodename
+            FROM master_versions mv
+            LEFT JOIN bi_medhistory mh ON mv.id = mh.master_id
+            WHERE mv.id = :masterId;
+        SQL;
+
+
+
+        $result = $this->executeQuerySafe($sql, ['masterId' => $masterId]);
+        
+        if (!$result) {
+            return null;
+        }
+        
+        $rows = $result->fetchAllAssociative();
+        
+        // Extraire les valeurs de patientepisodename et les concaténer avec des virgules
+         $values = [];
+         foreach ($rows as $row) {
+             if (isset($row['patientepisodename']) && $row['patientepisodename'] !== null) {
+                 $values[] = $row['patientepisodename'];
+             }
+         }
+         
+         // Vérification de l'encodage des caractères
+         $result = !empty($values) ? implode(', ', $values) : null;
+         if ($result) {
+             $result = mb_convert_encoding($result, 'UTF-8', 'Windows-1252');
+         }
+         
+         return $result;
+    }
+
+    /**
+     * Retourne les indications du/des médicament(s) d'un cas à partir de son masterId dans la BNPV.
+     *
+     * @param integer $masterId
+     * @return string|null
+     */
+    public function DonneIndicationsData(int $masterId): string|null
+    {
+
+
+        $sql = <<<SQL
+            SELECT DISTINCT id.productindication
+            FROM master_versions mv
+            INNER JOIN bi_product pr ON mv.id = pr.master_id
+            LEFT JOIN bi_product_indication id ON pr.master_id = id.master_id AND pr.NBBlock = id.NBBlock
+            WHERE pr.master_id = :masterId ; 
+        SQL;
+        $result = $this->executeQuerySafe($sql, ['masterId' => $masterId]);
+        
+        if (!$result) {
+            return null;
+        }
+        
+        $rows = $result->fetchAllAssociative();
+        
+        // Extraire les valeurs de productindication et les concaténer avec des virgules
+        $values = [];
+        foreach ($rows as $row) {
+            if (isset($row['productindication']) && $row['productindication'] !== null && trim($row['productindication']) !== '') {
+                $values[] = trim($row['productindication']);
+            }
+        }
+        
+        // Vérification de l'encodage des caractères
+        $result = !empty($values) ? implode(', ', $values) : null;
+        if ($result) {
+            $result = mb_convert_encoding($result, 'UTF-8', 'Windows-1252');
+        }
+        
+        return $result;
+    }
+
+    /**
      * Retourne les données médicament d'un cas à partir de son masterId dans la BNPV.
      *
      * @param integer $masterId

@@ -110,10 +110,15 @@ class ImportFicheRecueilCMService
      * @param array $mainData : Données principales issues de la BNPV
      * @param array $eiDataRows : Données des événements indésirables issus de la BNPV
      * @param array $medicDataRows : Données des médicaments issus de la BNPV
-     * @param RequetesMeddraService $requetesMeddraService
+
      * @return CM
      */
-    public function CreationCasCM(array $ficRec, array $mainData, array $eiDataRows, array $medicDataRows, RequetesMeddraService $requetesMeddraService): CM
+    public function CreationCasCM(array $ficRec, 
+                                    array $mainData, 
+                                    array $eiDataRows, 
+                                    array $medicDataRows,
+                                    // RequetesMeddraService $requetesMeddraService
+                                    ): CM
     {
         
         $user = $this->security->getUser();
@@ -141,8 +146,7 @@ class ImportFicheRecueilCMService
         
         $cm->setEffetIndesirable($ficRec['EIs'] ?? null);
         $cm->setLettre($ficRec['LettreLogi'] ?? null);
-        
-        $cm->setProblematique($ficRec['Resume'] ?? null);
+
         $cm->setCluster($ficRec['Cluster'] ?? false);
         
         $cm->setCreatedAt($now);
@@ -195,12 +199,20 @@ class ImportFicheRecueilCMService
      * @param array $mainData : Données principales issues de la BNPV
      * @param array $eiDataRows : Données des événements indésirables issus de la BNPV
      * @param array $medicDataRows : Données des médicaments issus de la BNPV
+     * @param string $antecedentsMedicaux
+     * @param string $indications
      * @param CM $cm
-     * @return DonneesComplementairesCM
+     * @return array : Retourne un tableau contenant l'objet DonneesComplementairesCM et l'objet CM mis à jour   
      */
-    public function CreationDonneesComplementairesCM(array $ficRec, array $mainData, array $eiDataRows, array $medicDataRows, CM $cm): DonneesComplementairesCM
+    public function CreationDonneesComplementairesCM(array $ficRec, 
+                                                    array $mainData, 
+                                                    array $eiDataRows, 
+                                                    array $medicDataRows, 
+                                                    string $indications,
+                                                    string $antecedentsMedicaux,
+                                                    CM $cm): array
     {
-        
+
         $user = $this->security->getUser();
         if (!$user) {
             throw new AccessDeniedException('Utilisateur non connecté.');
@@ -234,9 +246,32 @@ class ImportFicheRecueilCMService
         
         $donComplCM->setContexPriseMedic($ficRec['Context_Part'] ?? null);
         $donComplCM->setContexPriseMedicComment($ficRec['Context_Part_Txt'] ?? null);
+        
+        $champProblematique = '';
+        // dd($indications, $antecedentsMedicaux, $ficRec['Prob_Raison_Qualif']);
+        if (!empty($indications)) {
+            $champProblematique .= 'Indication(s) : ' . $indications . "\n\n";
+        }
+        
+        if (!empty($ficRec['Prob_Raison_Qualif'])) {
+            $champProblematique .= 'Problématique : ' . $ficRec['Prob_Raison_Qualif'] . "\n\n";
+        }
+        
+        if (!empty($antecedentsMedicaux)) {
+            $champProblematique .= 'Antécédent(s) : ' . $antecedentsMedicaux;
+        }
+
+        // Vérification de l'encodage des caractères (ne convertit que si ce n'est pas déjà de l'UTF-8)
+        if (!mb_check_encoding($champProblematique, 'UTF-8')) {
+            $champProblematique = mb_convert_encoding($champProblematique, 'UTF-8', 'Windows-1252');
+        }
+
+        $cm->setProblematique(empty($champProblematique) ? null : $champProblematique);
+
         $this->em->persist($donComplCM);
+        $this->em->persist($cm);
         $this->em->flush();
-        return $donComplCM;
+        return [$donComplCM, $cm];
     }
 
     private function extractTextStrict(\DOMNode $node): string

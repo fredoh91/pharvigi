@@ -19,7 +19,7 @@ class StatutCasPVRepository extends ServiceEntityRepository
     public function isStatutActifIsBrouillon(\App\Entity\CasPV $casPV): bool
     {
         $result = $this->createQueryBuilder('s')
-            ->andWhere('s.statutCasPV = :casPV')
+            ->andWhere('s.casPV = :casPV')
             ->setParameter('casPV', $casPV)
             ->andWhere('s.StatutActif = :statutActif')
             ->setParameter('statutActif', true)
