@@ -146,6 +146,9 @@ abstract class CasPV
     #[ORM\OneToMany(targetEntity: StatutCasPV::class, mappedBy: 'casPV')]
     private Collection $statutCasPVs;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $FlConfirmMedicale = null;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
@@ -657,6 +660,18 @@ abstract class CasPV
                 $statutCasPV->setCasPV(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isFlConfirmMedicale(): ?bool
+    {
+        return $this->FlConfirmMedicale;
+    }
+
+    public function setFlConfirmMedicale(?bool $FlConfirmMedicale): static
+    {
+        $this->FlConfirmMedicale = $FlConfirmMedicale;
 
         return $this;
     }

@@ -82,7 +82,25 @@ class CasPVType extends AbstractType
                 ],
                 'placeholder' => false
             ])
-            ->add('typologie')
+            ->add('typologie', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Effet indésirable' => 'Effet indésirable',
+                    'Interaction' => 'Interaction',
+                    'Surdosage' => 'Surdosage',
+                    'Grossesse' => 'Grossesse',
+                    'Allaitement' => 'Allaitement',
+                    'Sevrage' => 'Sevrage',
+                    'Surdosage volontaire' => 'Surdosage volontaire',
+                    'Surdosage accidentel' => 'Surdosage accidentel',
+                    'Erreur médicamenteuse' => 'Erreur médicamenteuse',
+                    'Erreur médicamenteuse sans effet indésirable' => 'Erreur médicamenteuse sans effet indésirable',
+                    'Pharmacodépendance' => 'Pharmacodépendance',
+                    'Autre' => 'Autre',
+                    'Exposition professionnelle' => 'Exposition professionnelle',
+                ],
+                'placeholder' => false
+            ])
             ->add('dateArrivee', null, [
                 'widget' => 'single_text',
             ])
@@ -110,6 +128,7 @@ class CasPVType extends AbstractType
             // ])
             ->add('niveauRisqueFinal')
             ->add('niveauRisquePGS')
+            ->add('FlConfirmMedicale', CheckboxType::class, ['required' => false])
         ;
     }
 

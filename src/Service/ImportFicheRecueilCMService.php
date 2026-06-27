@@ -73,7 +73,9 @@ class ImportFicheRecueilCMService
                 }
 
                 if ($isPlaceholder) {
-                    $data[$tagName] = '';
+                    if (!isset($data[$tagName])) {
+                        $data[$tagName] = '';
+                    }
                     continue;
                 }
 
@@ -91,7 +93,11 @@ class ImportFicheRecueilCMService
                 
                 // Gestion des doublons de tags (concaténation avec saut de ligne si différent)
                 if (isset($data[$tagName]) && $data[$tagName] !== $value && $value !== '') {
-                    $data[$tagName] .= "\n" . $value;
+                    if ($data[$tagName] === '') {
+                        $data[$tagName] = $value;
+                    } else {
+                        $data[$tagName] .= "\n" . $value;
+                    }
                 } elseif (!isset($data[$tagName])) {
                     $data[$tagName] = $value;
                 }
@@ -110,14 +116,13 @@ class ImportFicheRecueilCMService
      * @param array $mainData : Données principales issues de la BNPV
      * @param array $eiDataRows : Données des événements indésirables issus de la BNPV
      * @param array $medicDataRows : Données des médicaments issus de la BNPV
-
      * @return CM
      */
     public function CreationCasCM(array $ficRec, 
                                     array $mainData, 
                                     array $eiDataRows, 
                                     array $medicDataRows,
-                                    // RequetesMeddraService $requetesMeddraService
+                                    \DateTimeImmutable $dateArriveeFicheRecueilCM
                                     ): CM
     {
         
@@ -138,7 +143,7 @@ class ImportFicheRecueilCMService
 
         $cm = new CM();
         
-        dump($ficRec, $mainData, $eiDataRows, $medicDataRows);
+        // dump($ficRec, $mainData, $eiDataRows, $medicDataRows);
         // 1. Données issues de l'extraction Word
         $cm->setTypeCasPV('CM');
         // $cm->setTypologie('Effet indésirable');
@@ -146,8 +151,8 @@ class ImportFicheRecueilCMService
         
         $cm->setEffetIndesirable($ficRec['EIs'] ?? null);
         $cm->setLettre($ficRec['LettreLogi'] ?? null);
-
         $cm->setCluster($ficRec['Cluster'] ?? false);
+        $cm->setDateArrivee($dateArriveeFicheRecueilCM);
         
         $cm->setCreatedAt($now);
         $cm->setUpdatedAt($now);
@@ -155,7 +160,7 @@ class ImportFicheRecueilCMService
         $cm->setUserModif($userName);
         
         $statutCas = new StatutCasPV();
-
+        
         $statutCas->setStatutActif(true);
         $statutCas->setLibStatut('brouillon');
         $statutCas->setDateMiseEnPlace(new \DateTimeImmutable());
@@ -165,7 +170,7 @@ class ImportFicheRecueilCMService
         $statutCas->setUserModif($userName);        
         
         $cm->addStatutCasPV($statutCas);
-
+        
         // 2. Données issues de la BNPV
         if (!empty($mainData)) {
             $cm->setSexe($mainData['Sexe'] ?? null);
@@ -178,6 +183,12 @@ class ImportFicheRecueilCMService
             $cm->setIncapacite($mainData['Handi'] ?? null);
             $cm->setAnomalieCongenitale($mainData['AnoCong'] ?? null);
             $cm->setAutreSituation($mainData['AutresGrav'] ?? null);
+            $cm->setTypologie($mainData['TYP_EFFET'] ?? null);
+            $cm->setCRPV($mainData['Centre'] ?? null);
+            $cm->setCodeCRPV($mainData['CentreAbrev'] ?? null);
+            $cm->setFlConfirmMedicale($mainData['MEDICALLY_CONFIRMED'] === 'Oui' ? true : false);
+
+
             // if (isset($mainData['AGE_YEARS'])) {
             //     $cm->setAge((int)$mainData['AGE_YEARS']);
             //     $cm->setUniteAge('ans');
@@ -187,29 +198,31 @@ class ImportFicheRecueilCMService
             // }
             // Autres mappings possibles selon votre structure BNPV
         }
+        // dd('avant flush()');
         $this->em->persist($cm);
         $this->em->persist($statutCas);
         $this->em->flush();
         return $cm;
     }
-/**
+
+    /**
      * Création d'un objet CM (CasPV JTI CM) et hydratation avec les données extraites de la fiche de recueil et de la BNPV
      *
      * @param array $ficRec : Données extraites de la fiche de recueil CM
      * @param array $mainData : Données principales issues de la BNPV
-     * @param array $eiDataRows : Données des événements indésirables issus de la BNPV
-     * @param array $medicDataRows : Données des médicaments issus de la BNPV
-     * @param string $antecedentsMedicaux
+     * @param array $eiDataRows : 
+     * @param array $medicDataRows : 
      * @param string $indications
+     * @param string $antecedentsMedicaux
      * @param CM $cm
-     * @return array : Retourne un tableau contenant l'objet DonneesComplementairesCM et l'objet CM mis à jour   
+     * @return array : Retourne un tableau contenant l'objet DonneesComplementairesCM et l'objet CM mis à jour
      */
-    public function CreationDonneesComplementairesCM(array $ficRec, 
+    public function CreationDonneesComplementairesCM(array $ficRec,
                                                     array $mainData, 
                                                     array $eiDataRows, 
                                                     array $medicDataRows, 
-                                                    string $indications,
-                                                    string $antecedentsMedicaux,
+                                                    ?string $indications,
+                                                    ?string $antecedentsMedicaux,
                                                     CM $cm): array
     {
 
@@ -267,6 +280,7 @@ class ImportFicheRecueilCMService
         }
 
         $cm->setProblematique(empty($champProblematique) ? null : $champProblematique);
+        $cm->setPropositionCRPV($ficRec['Sign_Potentiel_Txt']  ?? null);
 
         $this->em->persist($donComplCM);
         $this->em->persist($cm);
@@ -278,13 +292,16 @@ class ImportFicheRecueilCMService
     {
         $text = '';
         foreach ($node->childNodes as $child) {
-            if ($child->nodeName === 'w:sdt') continue;
+            $localName = $child->localName;
+            $nodeName = $child->nodeName;
+
+            if ($localName === 'sdt' || $nodeName === 'w:sdt') continue;
             
-            if ($child->nodeName === 'w:t') {
+            if ($localName === 't' || $nodeName === 'w:t') {
                 $text .= $child->nodeValue;
-            } elseif ($child->nodeName === 'w:br' || $child->nodeName === 'w:cr') {
+            } elseif ($localName === 'br' || $localName === 'cr' || $nodeName === 'w:br' || $nodeName === 'w:cr') {
                 $text .= "\n";
-            } elseif ($child->nodeName === 'w:p') {
+            } elseif ($localName === 'p' || $nodeName === 'w:p') {
                 $subText = trim($this->extractTextStrict($child));
                 if ($subText !== '') {
                     $text .= $subText . "\n";

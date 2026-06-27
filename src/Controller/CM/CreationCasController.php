@@ -41,9 +41,16 @@ final class CreationCasController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $FicWordRecueilCM = $form->get('FicWordRecueilCM')->getData();
-            
+            $dateArriveeFicheRecueilCM = $form->get('DateArriveeFicheRecueilCM')->getData();
             if ($FicWordRecueilCM) {
-                
+                // dump($form);
+                // dump($dateArriveeFicheRecueilCM);
+                if (!$dateArriveeFicheRecueilCM) {
+                    $this->addFlash('error', 'Merci de renseigner la date d\'arrivée de la fiche de recueil.');
+                    return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
+                }
+                $dateArriveeFicheRecueilCM = \DateTimeImmutable::createFromFormat('Y-m-d', $dateArriveeFicheRecueilCM->format('Y-m-d'));
+
                 // --- ÉTAPE 1 : PRÉ-ANALYSE DU FICHIER ---
                 $analyseResult = $analyseurService->analyserFichier($FicWordRecueilCM);
 
@@ -60,7 +67,7 @@ final class CreationCasController extends AbstractController
                     return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
                 }
 
-                // dump($typeFiche);
+                dump($typeFiche);
 
                 $ficRec = [];
 
@@ -81,7 +88,7 @@ final class CreationCasController extends AbstractController
                     $ficRec = $result['Data_FicheRecueilEMM'] ?? null;
                 }
 
-                // dump($ficRec);
+                dump($ficRec);
 
                 // --- ÉTAPE 3 : VALIDATION DES DONNÉES EXTRAITES ---
                 if (!$ficRec) {
@@ -127,25 +134,25 @@ final class CreationCasController extends AbstractController
                 }
                 $mainData = $mainDataRows[0];
 
-                // dump($mainData);
+                dump($mainData);
 
                 $eiDataRows = $requetesBnpvService->DonneEIData($aerId);
                 $medicDataRows = $requetesBnpvService->DonneMedicamentData($aerId);
-                 $antecedentsMedicaux = $requetesBnpvService->DonneAntecedentsData($aerId);
-                 $indications = $requetesBnpvService->DonneIndicationsData($aerId);
+                $antecedentsMedicaux = $requetesBnpvService->DonneAntecedentsData($aerId);
+                $indications = $requetesBnpvService->DonneIndicationsData($aerId);
 
                  // dd($antecedentsMedicaux, $indications);
 
-                // dd($antecedentsMedicaux, $indications);
+
 
                 // --- ÉTAPE DE DÉBOGAGE (DUMP & DD) ---
-                // dump($eiDataRows);
-                // dump($medicDataRows);
-
+                dump($eiDataRows);
+                dump($medicDataRows);
+                dump($antecedentsMedicaux, $indications);
                 // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
                 if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
                     // $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService, $antecedentsMedicaux, $indications);
-                    $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows);
+                    $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $dateArriveeFicheRecueilCM);
                     [$donComplCM, $cm] = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $indications, $antecedentsMedicaux, $cm);
                     // Ne pas associer l'entité dans le formulaire principal pour éviter l'erreur
                     // On laisse l'association pour la validation finale
@@ -205,6 +212,8 @@ final class CreationCasController extends AbstractController
 
         $now = new \DateTimeImmutable();
 
+        $numBNPV = $cas->getNumeroBNPV();
+
         // Création du formulaire en fonction du type d'entité
         if ($cas instanceof CM) {
             $form = $this->createForm(\App\Form\CM\CMOngletsCreationType::class, $cas);
@@ -249,7 +258,7 @@ final class CreationCasController extends AbstractController
                         }
                         // Validation du formulaire
                         $em->flush();
-                        $this->addFlash('success', 'Les modifications du cas CM ont été enregistrées avec succès.');
+                        $this->addFlash('success', 'Les modifications du cas ' . $numBNPV . ' ont été enregistrées avec succès.');
                         return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
                     }
                 }
@@ -271,7 +280,7 @@ final class CreationCasController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 // Validation du formulaire EMM
                 $em->flush();
-                $this->addFlash('success', 'Les modifications du cas EMM ont été enregistrées avec succès.');
+                $this->addFlash('success', 'Les modifications du cas ' . $numBNPV . ' ont été enregistrées avec succès.');
                 return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
             }
             
@@ -340,7 +349,7 @@ final class CreationCasController extends AbstractController
             
             $this->addFlash('success', 'La création du cas ' . $numBNPV . ' a été annulée avec succès.');
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de l\'annulation du cas' . $numBNPV . '.');
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'annulation du cas ' . $numBNPV . '.');
         }
         
         return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
