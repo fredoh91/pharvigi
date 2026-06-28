@@ -154,6 +154,7 @@ final class CreationCasController extends AbstractController
                     // $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService, $antecedentsMedicaux, $indications);
                     $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $dateArriveeFicheRecueilCM);
                     [$donComplCM, $cm] = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $indications, $antecedentsMedicaux, $cm);
+                    $lsEffetsIndesirables = $importCMService->CreationEffetsIndesirablesCM($eiDataRows, $cm);
                     // Ne pas associer l'entité dans le formulaire principal pour éviter l'erreur
                     // On laisse l'association pour la validation finale
                     $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));

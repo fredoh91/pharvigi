@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Entity\CM\CM;
 use App\Entity\CM\DonneesComplementairesCM;
+use App\Entity\EffetsIndesirables;
 use App\Entity\StatutCasPV;
-// use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMXPath;
@@ -286,6 +286,91 @@ class ImportFicheRecueilCMService
         $this->em->persist($cm);
         $this->em->flush();
         return [$donComplCM, $cm];
+    }
+
+    /**
+     * Création d'un ou plusieurs objet(s) EffetsIndesirables
+     *
+     * @param array $eiDataRows : 
+     * @param CM $cm
+     * @return array : Retourne un tableau d'objets EffetsIndesirables créés
+     */
+    public function CreationEffetsIndesirablesCM(array $eiDataRows, 
+                                                    CM $cm): array
+    {
+
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Utilisateur non connecté.');
+        }
+        if (method_exists($user, 'getUserIdentifier')) {
+            $userName = $user->getUserIdentifier();
+        } elseif (method_exists($user, 'getUserName')) {
+            $userName = $user->getUserName();
+        } elseif (method_exists($user, 'getUsername')) {
+            $userName = $user->getUsername();
+        } else {
+            $userName = (string) $user;
+        }
+        $now = new \DateTimeImmutable();
+
+        if (empty($eiDataRows)) {
+            return [];
+        }
+
+        $lstEI = [];
+        foreach ($eiDataRows as $eiData) {
+            $eiCM = new EffetsIndesirables();
+
+            $eiCM->setCasPV($cm);
+            $eiCM->setCreatedAt($now);
+            $eiCM->setUpdatedAt($now);
+            $eiCM->setUserCreate($userName);
+            $eiCM->setUserModif($userName);
+            $eiCM->setLLTCode($eiData['LLT_Code'] ?? null);
+            $lltTerme = $eiData['LLT_Terme'] ?? null;
+            if ($lltTerme !== null && !mb_check_encoding($lltTerme, 'UTF-8')) {
+                $lltTerme = mb_convert_encoding($lltTerme, 'UTF-8', 'Windows-1252');
+            }
+            $eiCM->setLLTTerme($lltTerme);
+            
+            $eiCM->setPTCode($eiData['PT_Code'] ?? null);
+            $ptTerme = $eiData['PT_Terme'] ?? null;
+            if ($ptTerme !== null && !mb_check_encoding($ptTerme, 'UTF-8')) {
+                $ptTerme = mb_convert_encoding($ptTerme, 'UTF-8', 'Windows-1252');
+            }
+            $eiCM->setPTTerme($ptTerme);
+            
+            $eiCM->setHLTCode($eiData['HLT_Code'] ?? null);
+            $hltTerme = $eiData['HLT_Terme'] ?? null;
+            if ($hltTerme !== null && !mb_check_encoding($hltTerme, 'UTF-8')) {
+                $hltTerme = mb_convert_encoding($hltTerme, 'UTF-8', 'Windows-1252');
+            }
+            $eiCM->setHLTTerme($hltTerme);
+            
+            $eiCM->setHLGTCode($eiData['HLGT_Code'] ?? null);
+            $hlgtTerme = $eiData['HLGT_Terme'] ?? null;
+            if ($hlgtTerme !== null && !mb_check_encoding($hlgtTerme, 'UTF-8')) {
+                $hlgtTerme = mb_convert_encoding($hlgtTerme, 'UTF-8', 'Windows-1252');
+            }
+            $eiCM->setHLGTTerme($hlgtTerme);
+            
+            $eiCM->setSOCCode($eiData['SOC_Code'] ?? null);
+            $socTerme = $eiData['SOC_Terme'] ?? null;
+            if ($socTerme !== null && !mb_check_encoding($socTerme, 'UTF-8')) {
+                $socTerme = mb_convert_encoding($socTerme, 'UTF-8', 'Windows-1252');
+            }
+            $eiCM->setSOCTerme($socTerme);
+            
+            $eiCM->setMedDRAVer($eiData['MedDRA_Ver'] ?? null);
+
+
+            $this->em->persist($eiCM);
+            $lstEI[] = $eiCM;
+        }
+
+        $this->em->flush();
+        return [$lstEI];
     }
 
     private function extractTextStrict(\DOMNode $node): string

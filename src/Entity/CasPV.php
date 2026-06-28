@@ -149,10 +149,17 @@ abstract class CasPV
     #[ORM\Column(nullable: true)]
     private ?bool $FlConfirmMedicale = null;
 
+    /**
+     * @var Collection<int, EffetsIndesirables>
+     */
+    #[ORM\OneToMany(targetEntity: EffetsIndesirables::class, mappedBy: 'CasPV')]
+    private Collection $effetsIndesirables;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
         $this->statutCasPVs = new ArrayCollection();
+        $this->effetsIndesirables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -672,6 +679,36 @@ abstract class CasPV
     public function setFlConfirmMedicale(?bool $FlConfirmMedicale): static
     {
         $this->FlConfirmMedicale = $FlConfirmMedicale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EffetsIndesirables>
+     */
+    public function getEffetsIndesirables(): Collection
+    {
+        return $this->effetsIndesirables;
+    }
+
+    public function addEffetsIndesirable(EffetsIndesirables $effetsIndesirable): static
+    {
+        if (!$this->effetsIndesirables->contains($effetsIndesirable)) {
+            $this->effetsIndesirables->add($effetsIndesirable);
+            $effetsIndesirable->setCasPV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEffetsIndesirable(EffetsIndesirables $effetsIndesirable): static
+    {
+        if ($this->effetsIndesirables->removeElement($effetsIndesirable)) {
+            // set the owning side to null (unless already changed)
+            if ($effetsIndesirable->getCasPV() === $this) {
+                $effetsIndesirable->setCasPV(null);
+            }
+        }
 
         return $this;
     }
