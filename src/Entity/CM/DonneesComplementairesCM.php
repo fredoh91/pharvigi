@@ -110,6 +110,18 @@ class DonneesComplementairesCM
     #[ORM\OneToOne(mappedBy: 'DonneesComplementairesCM', cascade: ['persist', 'remove'])]
     private ?CM $cM = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $CmPourInfo = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $CmPourInfo_comment = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $SignalPotentiel = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $SignalPotentiel_comment = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -505,6 +517,53 @@ class DonneesComplementairesCM
         }
 
         $this->cM = $cM;
+
+        return $this;
+    }
+    public function isCmPourInfo(): ?bool
+    {
+        return $this->CmPourInfo;
+    }
+
+    public function setCmPourInfo(?bool $CmPourInfo): static
+    {
+        $this->CmPourInfo = $CmPourInfo;
+
+        return $this;
+    }
+
+    public function getCmPourInfoComment(): ?string
+    {
+        return $this->CmPourInfo_comment;
+    }
+
+    public function setCmPourInfoComment(?string $CmPourInfo_comment): static
+    {
+        $this->CmPourInfo_comment = $CmPourInfo_comment;
+
+        return $this;
+    }
+
+    public function isSignalPotentiel(): ?bool
+    {
+        return $this->SignalPotentiel;
+    }
+
+    public function setSignalPotentiel(?bool $SignalPotentiel): static
+    {
+        $this->SignalPotentiel = $SignalPotentiel;
+
+        return $this;
+    }
+
+    public function getSignalPotentielComment(): ?string
+    {
+        return $this->SignalPotentiel_comment;
+    }
+
+    public function setSignalPotentielComment(?string $SignalPotentiel_comment): static
+    {
+        $this->SignalPotentiel_comment = $SignalPotentiel_comment;
 
         return $this;
     }

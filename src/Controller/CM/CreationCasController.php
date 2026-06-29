@@ -7,12 +7,12 @@ use App\Entity\CM\CM;
 use App\Entity\CM\EMM;
 use App\Form\CM\UploadFicheRecueilCMType;
 use App\Service\FicheRecueilAnalyseurService;
+use App\Service\IAAnonymiserService;
 use App\Service\ImportFicheRecueilCMService;
 use App\Service\ImportFicheRecueilEMMService;
 use App\Service\RequetesBnpvCMService;
 use App\Service\RequetesMeddraService;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,8 @@ final class CreationCasController extends AbstractController
         RequetesMeddraService $requetesMeddraService, 
         ManagerRegistry $doctrine,
         EntityManagerInterface $em, 
-        AuthenticationUtils $authenticationUtils
+        AuthenticationUtils $authenticationUtils,
+        IAAnonymiserService $iaAnonymiserService
         ): Response
     {
         $form = $this->createForm(UploadFicheRecueilCMType::class);
@@ -155,6 +156,13 @@ final class CreationCasController extends AbstractController
                     $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $dateArriveeFicheRecueilCM);
                     [$donComplCM, $cm] = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $indications, $antecedentsMedicaux, $cm);
                     $lsEffetsIndesirables = $importCMService->CreationEffetsIndesirablesCM($eiDataRows, $cm);
+                    // recherche des données à anonymiser dans les champs texte de la fiche CM pour avertir l'utilisateur avant validation finale
+                    $iaAnonymiserService->analyserTexte(
+                                            $cm->getProblematique(), 
+                                            'CasPV', 
+                                            'problematique', 
+                                            $cm
+                                        );
                     // Ne pas associer l'entité dans le formulaire principal pour éviter l'erreur
                     // On laisse l'association pour la validation finale
                     $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
@@ -337,6 +345,17 @@ final class CreationCasController extends AbstractController
                 if ($donneesComplementaires) {
                     $em->remove($donneesComplementaires);
                 }
+
+                // Suppression des effets indésirables associés
+                foreach ($cas->getEffetsIndesirables() as $effet) {
+                    $em->remove($effet);
+                }
+
+                // Suppression des données a anonymiser associées
+                foreach ($cas->getDonneesAAnonymisers() as $donneeAnonymiser) {
+                    $em->remove($donneeAnonymiser);
+                }
+
             } elseif ($cas instanceof EMM) {
                 // Pour EMM : suppression des statuts
                 foreach ($cas->getStatutCasPVs() as $statut) {

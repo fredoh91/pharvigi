@@ -45,6 +45,10 @@ class DonneesComplementairesCMType extends AbstractType
             ->add('UtilHorsAMM_RTU_ATU_Choix', TextareaType::class, ['required' => false])
             ->add('Autre', CheckboxType::class, ['required' => false])
             ->add('Autre_comment', TextareaType::class, ['required' => false])
+            ->add('CmPourInfo', CheckboxType::class, ['required' => false])
+            ->add('CmPourInfo_comment', TextareaType::class, ['required' => false])
+            ->add('SignalPotentiel', CheckboxType::class, ['required' => false])
+            ->add('SignalPotentiel_comment', TextareaType::class, ['required' => false])
         ;
     }
 

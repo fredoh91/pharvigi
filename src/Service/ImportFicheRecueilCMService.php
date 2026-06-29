@@ -256,9 +256,34 @@ class ImportFicheRecueilCMService
         $donComplCM->setChronoEvo($ficRec['Chrono_Evoc'] ?? null);
         $donComplCM->setSemioEvo($ficRec['Semio_Evoc'] ?? null);
         $donComplCM->setSemioEvoComment($ficRec['Semio_Evoc_Txt'] ?? null);
-        
         $donComplCM->setContexPriseMedic($ficRec['Context_Part'] ?? null);
         $donComplCM->setContexPriseMedicComment($ficRec['Context_Part_Txt'] ?? null);
+        $donComplCM->setSeulMedicSusp($ficRec['Seul_Med_Susp'] ?? null);
+        $donComplCM->setRisqueRecu($ficRec['Risk_Recurrence'] ?? null);
+        $donComplCM->setRisqueRecuComment($ficRec['Risk_Recurrence_Txt'] ?? null);
+        $donComplCM->setAutreCasBNPV($ficRec['Autres_Cas_BNPV'] ?? null);
+        $donComplCM->setAutreCasBNPVComment($ficRec['Autres_Cas_BNPV_Txt'] ?? null);
+        $donComplCM->setAutreCasVigylise($ficRec['Autres_Cas_Vigylise'] ?? null);
+        $donComplCM->setAutreCasVigyliseComment($ficRec['Autres_Cas_Vigylise_Txt'] ?? null);
+        $donComplCM->setParticulaMedic($ficRec['Partic_Med'] ?? null);
+        $donComplCM->setParticulaMedicComment($ficRec['Partic_Med_Txt'] ?? null);
+        $donComplCM->setRisqueDocuLitt($ficRec['Risk_Docu'] ?? null);
+        $donComplCM->setRisqueDocuLittComment($ficRec['Risk_Docu_Txt'] ?? null);
+        $donComplCM->setContextMedia($ficRec['Contexte_Media'] ?? null);
+        $donComplCM->setContextMediaComment($ficRec['Contexte_Media_Txt'] ?? null);
+        $donComplCM->setPersistProb($ficRec['Persist_Apres_Mesures'] ?? null);
+        $donComplCM->setPersistProbComment($ficRec['Persist_Apres_Mesures_Txt'] ?? null);
+        $donComplCM->setASMRSMR($ficRec['ASMR_SMR'] ?? null);
+        $donComplCM->setASMRSMRComment($ficRec['ASMR_SMR_Txt'] ?? null);
+        $donComplCM->setUtilHorsAMMRTUATU($ficRec['Utilis_Hors'] ?? null);
+        $donComplCM->setUtilHorsAMMRTUATUChoix($ficRec['Utilis_Hors_List'] ?? null);
+        $donComplCM->setAutre($ficRec['Autre'] ?? null);
+        $donComplCM->setAutreComment($ficRec['Autre_Txt'] ?? null);
+        $donComplCM->setCmPourInfo($ficRec['CM_Info'] ?? null);
+        $donComplCM->setCmPourInfoComment($ficRec['CM_Info_Txt'] ?? null);
+        $donComplCM->setSignalPotentiel($ficRec['Sign_Potentiel'] ?? null);
+        $donComplCM->setSignalPotentielComment($ficRec['Sign_Potentiel_Txt'] ?? null);
+
         
         $champProblematique = '';
         // dd($indications, $antecedentsMedicaux, $ficRec['Prob_Raison_Qualif']);

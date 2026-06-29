@@ -155,11 +155,18 @@ abstract class CasPV
     #[ORM\OneToMany(targetEntity: EffetsIndesirables::class, mappedBy: 'CasPV')]
     private Collection $effetsIndesirables;
 
+    /**
+     * @var Collection<int, DonneesAAnonymiser>
+     */
+    #[ORM\OneToMany(targetEntity: DonneesAAnonymiser::class, mappedBy: 'CasPV')]
+    private Collection $donneesAAnonymisers;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
         $this->statutCasPVs = new ArrayCollection();
         $this->effetsIndesirables = new ArrayCollection();
+        $this->donneesAAnonymisers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -707,6 +714,36 @@ abstract class CasPV
             // set the owning side to null (unless already changed)
             if ($effetsIndesirable->getCasPV() === $this) {
                 $effetsIndesirable->setCasPV(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DonneesAAnonymiser>
+     */
+    public function getDonneesAAnonymisers(): Collection
+    {
+        return $this->donneesAAnonymisers;
+    }
+
+    public function addDonneesAAnonymiser(DonneesAAnonymiser $donneesAAnonymiser): static
+    {
+        if (!$this->donneesAAnonymisers->contains($donneesAAnonymiser)) {
+            $this->donneesAAnonymisers->add($donneesAAnonymiser);
+            $donneesAAnonymiser->setCasPV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDonneesAAnonymiser(DonneesAAnonymiser $donneesAAnonymiser): static
+    {
+        if ($this->donneesAAnonymisers->removeElement($donneesAAnonymiser)) {
+            // set the owning side to null (unless already changed)
+            if ($donneesAAnonymiser->getCasPV() === $this) {
+                $donneesAAnonymiser->setCasPV(null);
             }
         }
 
