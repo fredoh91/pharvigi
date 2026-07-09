@@ -2,10 +2,12 @@
 
 namespace App\Service;
 
+use App\Entity\AttributionCSPCasPV;
 use App\Entity\CM\CM;
 use App\Entity\CM\DonneesComplementairesCM;
 use App\Entity\EffetsIndesirables;
 use App\Entity\StatutCasPV;
+use App\Repository\ListeCSPRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMXPath;
@@ -18,11 +20,13 @@ class ImportFicheRecueilCMService
 {
     private Security $security;
     private EntityManagerInterface $em;
+    private ListeCSPRepository $listeCSPRepository;
 
-    public function __construct(Security $security, EntityManagerInterface $em)
+    public function __construct(Security $security, EntityManagerInterface $em, ListeCSPRepository $listeCSPRepository)
     {
         $this->security = $security;
         $this->em = $em;
+        $this->listeCSPRepository = $listeCSPRepository;
     }
     public function TraitementFichierWord(UploadedFile $file): array
     {
@@ -159,6 +163,26 @@ class ImportFicheRecueilCMService
         $cm->setUserCreate($userName);
         $cm->setUserModif($userName);
         
+
+        // Attribution de la date de CSP initiale
+
+        // dump($dateArriveeFicheRecueilCM);
+        $CSPInitial = $this->listeCSPRepository->donneDateSCPByDateArrivee($dateArriveeFicheRecueilCM, 'CSP_SIGNAL');
+        if ($CSPInitial) {
+            // dump($CSPInitial);
+            $attributionCSP = new AttributionCSPCasPV();
+            $attributionCSP->setCasPV($cm);
+            $attributionCSP->setListeCSP($CSPInitial);
+            $attributionCSP->setCreatedAt($now);
+            $attributionCSP->setUpdatedAt($now);
+            $attributionCSP->setUserCreate($userName);
+            $attributionCSP->setUserModif($userName);
+            $this->em->persist($attributionCSP);
+            // dd($attributionCSP);
+        }
+
+
+
         $statutCas = new StatutCasPV();
         
         $statutCas->setStatutActif(true);

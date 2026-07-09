@@ -228,12 +228,12 @@ final class CreationCasController extends AbstractController
         if ($cas instanceof CM) {
             $form = $this->createForm(\App\Form\CM\CMOngletsCreationType::class, $cas);
 
-            // Pré-remplissage du champ dateCSP (non-mappé) avec la ListeCSP déjà associée
-            $attributionActuelle = $em->getRepository(AttributionCSPCasPV::class)
-                ->findOneBy(['CasPV' => $cas]);
-            if ($attributionActuelle) {
-                $form->get('dateCSP')->setData($attributionActuelle->getListeCSP());
-            }
+            // // Pré-remplissage du champ dateCSP (non-mappé) avec la ListeCSP déjà associée
+            // $attributionActuelle = $em->getRepository(AttributionCSPCasPV::class)
+            //     ->findOneBy(['CasPV' => $cas]);
+            // if ($attributionActuelle) {
+            //     $form->get('dateCSP')->setData($attributionActuelle->getListeCSP());
+            // }
 
             $form->handleRequest($request);
             
@@ -274,31 +274,31 @@ final class CreationCasController extends AbstractController
                             $em->persist($statutEnCours);   
                         }
 
-                        // Gestion de la liaison avec la ListeCSP via AttributionCSPCasPV
-                        $listeCSPSelectionnee = $form->get('dateCSP')->getData();
-                        if ($listeCSPSelectionnee !== null) {
-                            // Cherche si une attribution CSP existe déjà pour ce cas
-                            $attributionExistante = $em->getRepository(AttributionCSPCasPV::class)
-                                ->findOneBy(['CasPV' => $cas]);
+                        // // Gestion de la liaison avec la ListeCSP via AttributionCSPCasPV
+                        // $listeCSPSelectionnee = $form->get('dateCSP')->getData();
+                        // if ($listeCSPSelectionnee !== null) {
+                        //     // Cherche si une attribution CSP existe déjà pour ce cas
+                        //     $attributionExistante = $em->getRepository(AttributionCSPCasPV::class)
+                        //         ->findOneBy(['CasPV' => $cas]);
 
-                            if ($attributionExistante) {
-                                // Met à jour l'attribution existante
-                                $attributionExistante->setListeCSP($listeCSPSelectionnee);
-                                $attributionExistante->setUserModif($userName);
-                                $attributionExistante->setUpdatedAt($now);
-                                $em->persist($attributionExistante);
-                            } else {
-                                // Crée une nouvelle attribution
-                                $nouvAttributionCSP = new AttributionCSPCasPV();
-                                $nouvAttributionCSP->setCasPV($cas);
-                                $nouvAttributionCSP->setListeCSP($listeCSPSelectionnee);
-                                $nouvAttributionCSP->setUserCreate($userName);
-                                $nouvAttributionCSP->setUserModif($userName);
-                                $nouvAttributionCSP->setCreatedAt($now);
-                                $nouvAttributionCSP->setUpdatedAt($now);
-                                $em->persist($nouvAttributionCSP);
-                            }
-                        }
+                        //     if ($attributionExistante) {
+                        //         // Met à jour l'attribution existante
+                        //         $attributionExistante->setListeCSP($listeCSPSelectionnee);
+                        //         $attributionExistante->setUserModif($userName);
+                        //         $attributionExistante->setUpdatedAt($now);
+                        //         $em->persist($attributionExistante);
+                        //     } else {
+                        //         // Crée une nouvelle attribution
+                        //         $nouvAttributionCSP = new AttributionCSPCasPV();
+                        //         $nouvAttributionCSP->setCasPV($cas);
+                        //         $nouvAttributionCSP->setListeCSP($listeCSPSelectionnee);
+                        //         $nouvAttributionCSP->setUserCreate($userName);
+                        //         $nouvAttributionCSP->setUserModif($userName);
+                        //         $nouvAttributionCSP->setCreatedAt($now);
+                        //         $nouvAttributionCSP->setUpdatedAt($now);
+                        //         $em->persist($nouvAttributionCSP);
+                        //     }
+                        // }
 
                         // Validation du formulaire
                         $em->flush();
@@ -389,6 +389,11 @@ final class CreationCasController extends AbstractController
                 // Suppression des données a anonymiser associées
                 foreach ($cas->getDonneesAAnonymisers() as $donneeAnonymiser) {
                     $em->remove($donneeAnonymiser);
+                }
+
+                // Suppresion des attributions CSP associées
+                foreach ($cas->getAttributionCSPs() as $attributionCSP) {
+                    $em->remove($attributionCSP);
                 }
 
             } elseif ($cas instanceof EMM) {

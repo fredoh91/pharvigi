@@ -88,6 +88,29 @@ class ListeCSPRepository extends ServiceEntityRepository
             return $dates;
         }
 
+        /**
+         * Permet de retourner la date de CSP initiale selon la date d'arrivée du cas passé en paramètre
+         *
+         * @param \DateTimeInterface $dateArrivee
+         * @param string $TypeCSP   - pour CM et EMM 'CSP_SIGNAL' et pour SIMAD 'CSP_SIMAD'
+         * @return ListeCSP|null
+         */
+        public function donneDateSCPByDateArrivee(\DateTimeInterface $dateArrivee, string $TypeCSP): ?ListeCSP
+        {
+            $result = $this->createQueryBuilder('l')
+                ->andWhere('l.TypeCSP = :val')
+                ->setParameter('val', $TypeCSP)
+                ->andWhere('l.FlInactive = false')
+                ->andWhere('l.DateMaxArriveeMailCRPV_CEIP >= :dateArrivee')
+                ->setParameter('dateArrivee', $dateArrivee)
+                ->orderBy('l.DateMaxArriveeMailCRPV_CEIP', 'ASC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            return $result ?? null;
+        }
+
     //    /**
     //     * @return ListeCSP[] Returns an array of ListeCSP objects
     //     */

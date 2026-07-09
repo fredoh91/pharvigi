@@ -64,17 +64,17 @@ class CMType extends CasPVType
             ->add('suiviEnquete')
             ->add('ListeCRPV')
             ->add('MaitriseRisque_Commentaire')
-            ->add('dateCSP', EntityType::class, [
-                'class' => ListeCSP::class,
-                'choice_label' => function (\App\Entity\ListeCSP $listeCSP): string {
-                    return $listeCSP->getDateCSP()?->format('d/m/Y') ?? '(date inconnue)';
-                },
-                'query_builder' => function ($repository) {
-                    return $repository->findDatesCSPQueryBuilderByTypeCSP('CSP_SIGNAL',20);
-                },
-                'mapped' => false,
-                'multiple' => false,
-            ])
+            // ->add('dateCSP', EntityType::class, [
+            //     'class' => ListeCSP::class,
+            //     'choice_label' => function (\App\Entity\ListeCSP $listeCSP): string {
+            //         return $listeCSP->getDateCSP()?->format('d/m/Y') ?? '(date inconnue)';
+            //     },
+            //     'query_builder' => function ($repository) {
+            //         return $repository->findDatesCSPQueryBuilderByTypeCSP('CSP_SIGNAL',20);
+            //     },
+            //     'mapped' => false,
+            //     'multiple' => false,
+            // ])
             // ->add('DonneesComplementairesCM', EntityType::class, [
             //     'class' => DonneesComplementairesCM::class,
             //     'choice_label' => 'id',
