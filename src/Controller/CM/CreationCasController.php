@@ -2,6 +2,7 @@
 
 namespace App\Controller\CM;
 
+use App\Entity\AttributionCSPCasPV;
 use App\Entity\CasPV;
 use App\Entity\CM\CM;
 use App\Entity\CM\EMM;
@@ -226,7 +227,14 @@ final class CreationCasController extends AbstractController
         // Création du formulaire en fonction du type d'entité
         if ($cas instanceof CM) {
             $form = $this->createForm(\App\Form\CM\CMOngletsCreationType::class, $cas);
-            
+
+            // Pré-remplissage du champ dateCSP (non-mappé) avec la ListeCSP déjà associée
+            $attributionActuelle = $em->getRepository(AttributionCSPCasPV::class)
+                ->findOneBy(['CasPV' => $cas]);
+            if ($attributionActuelle) {
+                $form->get('dateCSP')->setData($attributionActuelle->getListeCSP());
+            }
+
             $form->handleRequest($request);
             
             // Vérifier quelle action a été choisie
@@ -265,6 +273,33 @@ final class CreationCasController extends AbstractController
 
                             $em->persist($statutEnCours);   
                         }
+
+                        // Gestion de la liaison avec la ListeCSP via AttributionCSPCasPV
+                        $listeCSPSelectionnee = $form->get('dateCSP')->getData();
+                        if ($listeCSPSelectionnee !== null) {
+                            // Cherche si une attribution CSP existe déjà pour ce cas
+                            $attributionExistante = $em->getRepository(AttributionCSPCasPV::class)
+                                ->findOneBy(['CasPV' => $cas]);
+
+                            if ($attributionExistante) {
+                                // Met à jour l'attribution existante
+                                $attributionExistante->setListeCSP($listeCSPSelectionnee);
+                                $attributionExistante->setUserModif($userName);
+                                $attributionExistante->setUpdatedAt($now);
+                                $em->persist($attributionExistante);
+                            } else {
+                                // Crée une nouvelle attribution
+                                $nouvAttributionCSP = new AttributionCSPCasPV();
+                                $nouvAttributionCSP->setCasPV($cas);
+                                $nouvAttributionCSP->setListeCSP($listeCSPSelectionnee);
+                                $nouvAttributionCSP->setUserCreate($userName);
+                                $nouvAttributionCSP->setUserModif($userName);
+                                $nouvAttributionCSP->setCreatedAt($now);
+                                $nouvAttributionCSP->setUpdatedAt($now);
+                                $em->persist($nouvAttributionCSP);
+                            }
+                        }
+
                         // Validation du formulaire
                         $em->flush();
                         $this->addFlash('success', 'Les modifications du cas ' . $numBNPV . ' ont été enregistrées avec succès.');

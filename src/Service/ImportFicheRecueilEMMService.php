@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\EMM;
+use App\Entity\CM\EMM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ZipArchive;
 use DOMDocument;

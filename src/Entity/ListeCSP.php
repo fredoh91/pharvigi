@@ -31,6 +31,33 @@ class ListeCSP
     #[ORM\OneToMany(targetEntity: AttributionCSPCasPV::class, mappedBy: 'ListeCSP')]
     private Collection $attributionCSPs;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxArriveeMailCRPV_CEIP = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxPrequalifSURV = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxQualifDMM = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxSecurisationSURV = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateEnvoiExperts = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxReceptionAvisExperts = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxImportAvisExpert = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxPrepPlanning = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateMaxEnvoiListeCasMembresCSP = null;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
@@ -103,6 +130,114 @@ class ListeCSP
                 $attributionCSP->setListeCSP(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateMaxArriveeMailCRPVCEIP(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxArriveeMailCRPV_CEIP;
+    }
+
+    public function setDateMaxArriveeMailCRPVCEIP(?\DateTimeImmutable $DateMaxArriveeMailCRPV_CEIP): static
+    {
+        $this->DateMaxArriveeMailCRPV_CEIP = $DateMaxArriveeMailCRPV_CEIP;
+
+        return $this;
+    }
+
+    public function getDateMaxPrequalifSURV(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxPrequalifSURV;
+    }
+
+    public function setDateMaxPrequalifSURV(?\DateTimeImmutable $DateMaxPrequalifSURV): static
+    {
+        $this->DateMaxPrequalifSURV = $DateMaxPrequalifSURV;
+
+        return $this;
+    }
+
+    public function getDateMaxQualifDMM(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxQualifDMM;
+    }
+
+    public function setDateMaxQualifDMM(?\DateTimeImmutable $DateMaxQualifDMM): static
+    {
+        $this->DateMaxQualifDMM = $DateMaxQualifDMM;
+
+        return $this;
+    }
+
+    public function getDateMaxSecurisationSURV(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxSecurisationSURV;
+    }
+
+    public function setDateMaxSecurisationSURV(?\DateTimeImmutable $DateMaxSecurisationSURV): static
+    {
+        $this->DateMaxSecurisationSURV = $DateMaxSecurisationSURV;
+
+        return $this;
+    }
+
+    public function getDateEnvoiExperts(): ?\DateTimeImmutable
+    {
+        return $this->DateEnvoiExperts;
+    }
+
+    public function setDateEnvoiExperts(?\DateTimeImmutable $DateEnvoiExperts): static
+    {
+        $this->DateEnvoiExperts = $DateEnvoiExperts;
+
+        return $this;
+    }
+
+    public function getDateMaxReceptionAvisExperts(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxReceptionAvisExperts;
+    }
+
+    public function setDateMaxReceptionAvisExperts(?\DateTimeImmutable $DateMaxReceptionAvisExperts): static
+    {
+        $this->DateMaxReceptionAvisExperts = $DateMaxReceptionAvisExperts;
+
+        return $this;
+    }
+
+    public function getDateMaxImportAvisExpert(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxImportAvisExpert;
+    }
+
+    public function setDateMaxImportAvisExpert(?\DateTimeImmutable $DateMaxImportAvisExpert): static
+    {
+        $this->DateMaxImportAvisExpert = $DateMaxImportAvisExpert;
+
+        return $this;
+    }
+
+    public function getDateMaxPrepPlanning(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxPrepPlanning;
+    }
+
+    public function setDateMaxPrepPlanning(?\DateTimeImmutable $DateMaxPrepPlanning): static
+    {
+        $this->DateMaxPrepPlanning = $DateMaxPrepPlanning;
+
+        return $this;
+    }
+
+    public function getDateMaxEnvoiListeCasMembresCSP(): ?\DateTimeImmutable
+    {
+        return $this->DateMaxEnvoiListeCasMembresCSP;
+    }
+
+    public function setDateMaxEnvoiListeCasMembresCSP(?\DateTimeImmutable $DateMaxEnvoiListeCasMembresCSP): static
+    {
+        $this->DateMaxEnvoiListeCasMembresCSP = $DateMaxEnvoiListeCasMembresCSP;
 
         return $this;
     }
