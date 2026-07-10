@@ -39,6 +39,10 @@
     {{ form_row(form.niveauRisqueFinal) }}
     {{ form_row(form.niveauRisquePGS) }}
     {{ form_row(form.FlConfirmMedicale) }}
+    
+    {# Affichage du tableau des dates CSP #}
+    {% include 'cm/creation_cas/tableau_dates_csp.html.twig' %}
+    
     {# champs spécifiques aux cas marquants #}
     {{ form_row(form.avisCRPV) }}
     {{ form_row(form.MotifNonPresentation) }}

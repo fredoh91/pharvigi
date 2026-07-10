@@ -312,9 +312,22 @@ final class CreationCasController extends AbstractController
                 }
             }
             
+            // Récupération des dates de ListeCSP associées au cas
+            $datesCSP = [];
+            foreach ($cas->getAttributionCSPs() as $attribution) {
+                $listeCSP = $attribution->getListeCSP();
+                if ($listeCSP && $listeCSP->getDateCSP()) {
+                    $datesCSP[] = [
+                        'date' => $listeCSP->getDateCSP(),
+                        'type' => $listeCSP->getTypeCSP(),
+                    ];
+                }
+            }
+
             return $this->render('cm/creation_cas/form_creation_cas_cm.html.twig', [
                 'form' => $form->createView(),
                 'cas' => $cas,
+                'datesCSP' => $datesCSP,
             ]);
             
         } elseif ($cas instanceof EMM) {
