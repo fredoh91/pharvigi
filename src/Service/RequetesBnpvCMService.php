@@ -112,7 +112,10 @@ class RequetesBnpvCMService
             If (INSTR(ci.seriousnesscriteria,'Congenital')>0,'Oui','Non') AS AnoCong, 
             If (INSTR(ci.seriousnesscriteria,'Other')>0,'Oui','Non') AS AutresGrav,  
             Trim(Replace(Replace(REPLACE(ide.company,'CRPV',''), 'CEIP',''),'SAINT-ETIENNE','SAINT-ÉTIENNE')) as Centre, 
-            If (ci.medicallyconfirm='Yes','Oui','Non') As MEDICALLY_CONFIRMED
+            If (ci.medicallyconfirm='Yes','Oui','Non') As MEDICALLY_CONFIRMED,
+            mv.id As masterId, 
+            mv.DLPVersion ,
+            mv.CreationDate AS bnpvDateCreation
             FROM   master_versions mv
             LEFT join bi_patientinformations p ON mv.id = p.master_id
             LEFT join bi_identifiers ide ON mv.id = ide.master_id 

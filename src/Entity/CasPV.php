@@ -161,6 +161,15 @@ abstract class CasPV
     #[ORM\OneToMany(targetEntity: DonneesAAnonymiser::class, mappedBy: 'CasPV')]
     private Collection $donneesAAnonymisers;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $masterIdImport = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $dlpVersionImport = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $bnpvCreationDate = null;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
@@ -746,6 +755,42 @@ abstract class CasPV
                 $donneesAAnonymiser->setCasPV(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMasterIdImport(): ?int
+    {
+        return $this->masterIdImport;
+    }
+
+    public function setMasterIdImport(?int $masterIdImport): static
+    {
+        $this->masterIdImport = $masterIdImport;
+
+        return $this;
+    }
+
+    public function getDlpVersionImport(): ?int
+    {
+        return $this->dlpVersionImport;
+    }
+
+    public function setDlpVersionImport(?int $dlpVersionImport): static
+    {
+        $this->dlpVersionImport = $dlpVersionImport;
+
+        return $this;
+    }
+
+    public function getBnpvCreationDate(): ?\DateTimeImmutable
+    {
+        return $this->bnpvCreationDate;
+    }
+
+    public function setBnpvCreationDate(?\DateTimeImmutable $bnpvCreationDate): static
+    {
+        $this->bnpvCreationDate = $bnpvCreationDate;
 
         return $this;
     }

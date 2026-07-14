@@ -211,7 +211,15 @@ class ImportFicheRecueilCMService
             $cm->setCRPV($mainData['Centre'] ?? null);
             $cm->setCodeCRPV($mainData['CentreAbrev'] ?? null);
             $cm->setFlConfirmMedicale($mainData['MEDICALLY_CONFIRMED'] === 'Oui' ? true : false);
-
+            $cm->setMasterIdImport($mainData['masterId'] ?? null);
+            $cm->setDlpVersionImport($mainData['DLPVersion'] ?? null);
+            $bnpvCreationDateRaw = $mainData['bnpvDateCreation'] ?? null;
+            $bnpvCreationDate = null;
+            if ($bnpvCreationDateRaw !== null) {
+                $bnpvCreationDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $bnpvCreationDateRaw)
+                    ?: new \DateTimeImmutable($bnpvCreationDateRaw);
+            }
+            $cm->setBnpvCreationDate($bnpvCreationDate);
 
             // if (isset($mainData['AGE_YEARS'])) {
             //     $cm->setAge((int)$mainData['AGE_YEARS']);
