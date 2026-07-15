@@ -170,12 +170,19 @@ abstract class CasPV
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $bnpvCreationDate = null;
 
+    /**
+     * @var Collection<int, IdentifiantsBnpv>
+     */
+    #[ORM\OneToMany(targetEntity: IdentifiantsBnpv::class, mappedBy: 'CasPV')]
+    private Collection $identifiantsBnpvs;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
         $this->statutCasPVs = new ArrayCollection();
         $this->effetsIndesirables = new ArrayCollection();
         $this->donneesAAnonymisers = new ArrayCollection();
+        $this->identifiantsBnpvs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -791,6 +798,36 @@ abstract class CasPV
     public function setBnpvCreationDate(?\DateTimeImmutable $bnpvCreationDate): static
     {
         $this->bnpvCreationDate = $bnpvCreationDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, IdentifiantsBnpv>
+     */
+    public function getIdentifiantsBnpvs(): Collection
+    {
+        return $this->identifiantsBnpvs;
+    }
+
+    public function addIdentifiantsBnpv(IdentifiantsBnpv $identifiantsBnpv): static
+    {
+        if (!$this->identifiantsBnpvs->contains($identifiantsBnpv)) {
+            $this->identifiantsBnpvs->add($identifiantsBnpv);
+            $identifiantsBnpv->setCasPV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdentifiantsBnpv(IdentifiantsBnpv $identifiantsBnpv): static
+    {
+        if ($this->identifiantsBnpvs->removeElement($identifiantsBnpv)) {
+            // set the owning side to null (unless already changed)
+            if ($identifiantsBnpv->getCasPV() === $this) {
+                $identifiantsBnpv->setCasPV(null);
+            }
+        }
 
         return $this;
     }

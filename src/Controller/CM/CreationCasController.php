@@ -143,6 +143,12 @@ final class CreationCasController extends AbstractController
                 $antecedentsMedicaux = $requetesBnpvService->DonneAntecedentsData($aerId);
                 $indications = $requetesBnpvService->DonneIndicationsData($aerId);
 
+                if ($ficRec['Num_Cas']) {
+                    $identifiantsBnpv = $requetesBnpvService->DonneIndentiantsBNPV($ficRec['Num_Cas']);
+                } else {
+                    $identifiantsBnpv = [];
+                }
+
                  // dd($antecedentsMedicaux, $indications);
 
 
@@ -151,12 +157,14 @@ final class CreationCasController extends AbstractController
                 dump($eiDataRows);
                 dump($medicDataRows);
                 dump($antecedentsMedicaux, $indications);
+                dump($identifiantsBnpv);
                 // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
                 if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
                     // $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService, $antecedentsMedicaux, $indications);
                     $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $dateArriveeFicheRecueilCM);
                     [$donComplCM, $cm] = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $indications, $antecedentsMedicaux, $cm);
                     $lsEffetsIndesirables = $importCMService->CreationEffetsIndesirablesCM($eiDataRows, $cm);
+                    $lsIdentifiantsBnpv = $importCMService->CreationIdentifiantsBNPV($identifiantsBnpv, $cm);
                     // recherche des données à anonymiser dans les champs texte de la fiche CM pour avertir l'utilisateur avant validation finale
                     $iaAnonymiserService->analyserTexte(
                                             $cm->getProblematique(), 
@@ -407,6 +415,11 @@ final class CreationCasController extends AbstractController
                 // Suppresion des attributions CSP associées
                 foreach ($cas->getAttributionCSPs() as $attributionCSP) {
                     $em->remove($attributionCSP);
+                }
+
+                // Suppresion des identifiants BNPV associés
+                foreach ($cas->getIdentifiantsBnpvs() as $identifiantBnpv) {
+                    $em->remove($identifiantBnpv);
                 }
 
             } elseif ($cas instanceof EMM) {

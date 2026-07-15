@@ -6,6 +6,7 @@ use App\Entity\AttributionCSPCasPV;
 use App\Entity\CM\CM;
 use App\Entity\CM\DonneesComplementairesCM;
 use App\Entity\EffetsIndesirables;
+use App\Entity\IdentifiantsBnpv;
 use App\Entity\StatutCasPV;
 use App\Repository\ListeCSPRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -428,6 +429,81 @@ class ImportFicheRecueilCMService
 
         $this->em->flush();
         return [$lstEI];
+    }
+
+    public function CreationIdentifiantsBNPV(array $identifiantsBnpv, 
+                                            CM $cm): array
+    {
+
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Utilisateur non connecté.');
+        }
+        if (method_exists($user, 'getUserIdentifier')) {
+            $userName = $user->getUserIdentifier();
+        } elseif (method_exists($user, 'getUserName')) {
+            $userName = $user->getUserName();
+        } elseif (method_exists($user, 'getUsername')) {
+            $userName = $user->getUsername();
+        } else {
+            $userName = (string) $user;
+        }
+        $now = new \DateTimeImmutable();
+
+        if (empty($identifiantsBnpv)) {
+            return [];
+        }
+
+        $lstIdBnpv = [];
+        foreach ($identifiantsBnpv as $idBnpv) {
+            $identifiantBnpv = new IdentifiantsBnpv();
+
+            $identifiantBnpv->setCasPV($cm);
+            $identifiantBnpv->setCreatedAt($now);
+            $identifiantBnpv->setUpdatedAt($now);
+            $identifiantBnpv->setUserCreate($userName);
+            $identifiantBnpv->setUserModif($userName);
+            $identifiantBnpv->setMasterId($idBnpv['id'] ?? null);
+            $identifiantBnpv->setDlpVersion($idBnpv['DLPVersion'] ?? null);
+            $identifiantBnpv->setDeleted($idBnpv['Deleted'] ?? null);
+
+
+            // BNPV - CreationDate
+            $creationDateBnpvRaw = $idBnpv['CreationDate'] ?? null;
+            $creationDateBnpv = null;
+            if ($creationDateBnpvRaw !== null) {
+                $creationDateBnpv = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $creationDateBnpvRaw)
+                    ?: new \DateTimeImmutable($creationDateBnpvRaw);
+            }
+            $identifiantBnpv->setCreationDateBnpv($creationDateBnpv);
+
+
+            // BNPV - LastModificationDate
+            $lastModificationDateBnpvRaw = $idBnpv['LastModificationDate'] ?? null;
+            $lastModificationDateBnpv = null;
+            if ($lastModificationDateBnpvRaw !== null) {
+                $lastModificationDateBnpv = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $lastModificationDateBnpvRaw)
+                    ?: new \DateTimeImmutable($lastModificationDateBnpvRaw);
+            }
+            $identifiantBnpv->setLastModificationDateBnpv($lastModificationDateBnpv);
+
+
+            // BNPV - StatusDate
+            $statusDateRaw = $idBnpv['StatusDate'] ?? null;
+            $statusDateBnpv = null;
+            if ($statusDateRaw !== null) {
+                $statusDateBnpv = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $statusDateRaw)
+                    ?: new \DateTimeImmutable($statusDateRaw);
+            }
+            $identifiantBnpv->setStatusDateBnpv($statusDateBnpv);
+
+            
+            $this->em->persist($identifiantBnpv);
+            $lstIdBnpv[] = $identifiantBnpv;
+        }
+
+        $this->em->flush();
+        return [$lstIdBnpv];
     }
 
     private function extractTextStrict(\DOMNode $node): string

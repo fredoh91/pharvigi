@@ -274,4 +274,32 @@ class RequetesBnpvCMService
         
         return $result ? $result->fetchAllAssociative() : null;
     }
+
+
+    /**
+     * Retourne les identifiants BNPV pour les différents follow-up d'un cas, pour les stocker au moment de la création d'un cas
+     *
+     * @param string $numBNPV - numéro BNPV
+     * @return array|null
+     */
+    public function DonneIndentiantsBNPV(string $numBNPV): array|null
+    {
+        $sql = <<<SQL
+            SELECT DISTINCT
+                mv.specificcaseid ,
+                mv.Deleted ,
+                mv.id, 
+                mv.DLPVersion , 
+                mv.CreationDate ,
+                mv.LastModificationDate ,
+                mv.StatusDate    
+            FROM  master_versions mv
+            WHERE mv.specificcaseid =  :numBNPV ; 
+        SQL;
+
+        $result = $this->executeQuerySafe($sql, ['numBNPV' => $numBNPV]);
+        
+        return $result ? $result->fetchAllAssociative() : null;
+    }
+
 }
