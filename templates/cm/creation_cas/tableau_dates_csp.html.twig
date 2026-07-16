@@ -6,14 +6,12 @@
             <thead class="table-dark">
                 <tr>
                     <th>Date CSP</th>
-                    <th>Type CSP</th>
                 </tr>
             </thead>
             <tbody>
                 {% for dateCSP in datesCSP %}
                     <tr>
                         <td>{{ dateCSP.date ? dateCSP.date|date('d/m/Y') : 'Non définie' }}</td>
-                        <td>{{ dateCSP.type ?: 'Non spécifié' }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

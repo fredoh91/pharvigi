@@ -4,50 +4,108 @@
 
 {# Formulaire des données principales #}
 <div class="form-container">
-    {{ form_row(form.TypeCasPV) }}
-    {{ form_row(form.numeroBNPV) }}
-    {{ form_row(form.problematique) }}
-    {{ form_row(form.propositionCRPV) }}
-    {{ form_row(form.conclusions) }}
-    {{ form_row(form.presentation) }}
-    {{ form_row(form.CRPV) }}
-    {{ form_row(form.codeCRPV) }}
-    {{ form_row(form.gravite) }}
-    {{ form_row(form.deces) }}
-    {{ form_row(form.miseEnJeuPronostic) }}
-    {{ form_row(form.hospitalisation) }}
-    {{ form_row(form.incapacite) }}
-    {{ form_row(form.anomalieCongenitale) }}
-    {{ form_row(form.autreSituation) }}
-    {{ form_row(form.typologie) }}
-    {{ form_row(form.dateArrivee) }}
-    {# {{ form_row(form.dateCSP) }} #}
-    {{ form_row(form.age) }}
-    {{ form_row(form.sexe) }}
-    {{ form_row(form.uniteAge) }}
-    {{ form_row(form.effetIndesirable) }}
-    {{ form_row(form.prequalificationDSURV) }}
-    {{ form_row(form.motifPrequalification) }}
-    {{ form_row(form.investigationDP) }}
-    {{ form_row(form.echangeDMM_CRPV) }}
-    {{ form_row(form.cluster) }}
-    {{ form_row(form.finalise) }}
-    {{ form_row(form.casPere) }}
-    {{ form_row(form.lettre) }}
-    {{ form_row(form.motifQualificationDMM) }}
-    {{ form_row(form.SRE) }}
-    {{ form_row(form.niveauRisqueFinal) }}
-    {{ form_row(form.niveauRisquePGS) }}
-    {{ form_row(form.FlConfirmMedicale) }}
     
-    {# Affichage du tableau des dates CSP #}
-    {% include 'cm/creation_cas/tableau_dates_csp.html.twig' %}
-    
-    {# champs spécifiques aux cas marquants #}
-    {{ form_row(form.avisCRPV) }}
-    {{ form_row(form.MotifNonPresentation) }}
-    {{ form_row(form.suiviEnquete) }}
-    {{ form_row(form.ListeCRPV) }}
-    {{ form_row(form.MaitriseRisque_Commentaire) }}
+    <!-- Zone 1 : Dates, Numéros et CRPV -->
+    <div class="area-header">
+        <div class="form-group">
+            {{ form_label(form.dateArrivee, 'date d\'arrivée :') }}
+            {{ form_widget(form.dateArrivee) }}
+        </div>
+        {% include 'cm/creation_cas/tableau_dates_csp.html.twig' %}
+        {{ form_row(form.CRPV) }}
+        {{ form_row(form.codeCRPV) }}
+        {{ form_row(form.numeroBNPV) }}
+        {{ form_row(form.casPere) }}
+    </div>
+
+    <!-- Zone 2 : Infos Patient -->
+    <div class="area-patient">
+        {{ form_row(form.sexe) }}
+        {{ form_row(form.age) }}
+        {{ form_row(form.uniteAge) }}
+        {{ form_row(form.effetIndesirable) }}
+    </div>
+
+    <!-- Zone 3 : DME & Confirmation Médicale -->
+    <div class="area-dme">
+        {{ form_row(form.SRE) }} <!-- Correspond à "Ei dans la liste des DME" -->
+        {{ form_row(form.FlConfirmMedicale) }} <!-- Correspond à "Confirmé médicalement" -->
+    </div>
+
+    <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
+    <div class="area-workflow">
+        {{ form_row(form.TypeCasPV) }}
+        {{ form_row(form.finalise) }}
+        {{ form_row(form.niveauRisquePGS) }}
+        {{ form_row(form.MotifNonPresentation) }}
+    </div>
+
+    <!-- Zone 5 : Métadonnées Problématique -->
+    <div class="area-problematique-meta">
+        {{ form_row(form.problematique) }}
+        {{ form_row(form.lettre) }}
+    </div>
+
+    <!-- Zone 6 : Zone de Texte Présentation -->
+    <div class="area-presentation-text">
+        {{ form_row(form.presentation) }}
+    </div>
+
+    <!-- Zone 7 : Proposition & Avis CRPV -->
+    <div class="area-crpv">
+        {{ form_row(form.propositionCRPV) }}
+        {{ form_row(form.avisCRPV) }}
+        {{ form_row(form.conclusions) }}
+    </div>
+
+    <!-- Zone 8 : Cluster -->
+    <div class="area-cluster-checkbox">
+        {{ form_row(form.cluster) }}
+    </div>
+
+    <!-- Zone 9 : Typologie -->
+    <div class="area-typology">
+        {{ form_row(form.typologie) }}
+    </div>
+
+    <!-- Zone 10 : Bloc Gravité et Critères -->
+    <div class="area-gravite-group">
+        {{ form_row(form.gravite) }}
+        {{ form_row(form.deces) }}
+        {{ form_row(form.miseEnJeuPronostic) }}
+        {{ form_row(form.hospitalisation) }}
+        {{ form_row(form.incapacite) }}
+        {{ form_row(form.anomalieCongenitale) }}
+        {{ form_row(form.autreSituation) }}
+    </div>
+
+    <!-- Zone 11 : Évaluateurs & Suivi -->
+    <div class="area-evaluators">
+        {{ form_row(form.suiviEnquete) }}
+        {{ form_row(form.ListeCRPV) }}
+    </div>
+
+    <!-- Zone 12 : Pré-qualification DSURV -->
+    <div class="area-dsurv">
+        {{ form_row(form.prequalificationDSURV) }}
+        {{ form_row(form.motifPrequalification) }}
+    </div>
+
+    <!-- Zone 13 : Chronologie & Risque Final -->
+    <div class="area-chronologie-group">
+        <div class="sub-group">
+            {{ form_row(form.investigationDP) }} <!-- Type (CM/EMM) -->
+            {{ form_row(form.niveauRisqueFinal) }}
+        </div>
+        <div class="chrono-textarea">
+            {{ form_row(form.echangeDMM_CRPV) }} <!-- Chronologie -->
+        </div>
+    </div>
+
+    <!-- Zone 14 : Autres informations (S'adaptent en bas) -->
+    <div class="area-complementary">
+        {{ form_row(form.motifQualificationDMM) }}
+        {{ form_row(form.MaitriseRisque_Commentaire) }}
+    </div>
 
 </div>

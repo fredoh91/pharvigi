@@ -1,0 +1,97 @@
+// ==========================================================================
+// Fichier : assets/styles/cm/form_creation_cas_cm.scss
+// Rôle : Gestion exclusive des THÈMES (Couleurs de fond et bordures)
+// ==========================================================================
+
+.container-fluid {
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+
+    // On applique les variables CSS qui seront lues par les fichiers enfants
+    background-color: var(--theme-bg-color);
+    border-color: var(--theme-border-color);
+
+    // --- 1. CONFIGURATION DU THÈME VIOLET ---
+    &.theme-purple {
+        --theme-bg-color: #F4EAF6;
+        --theme-border-color: #d3c2d6;
+
+        .nav-tabs {
+            border-bottom-color: var(--theme-border-color);
+            .nav-link {
+                color: #5d3f6d;
+                background-color: rgba(255, 255, 255, 0.4);
+                border-color: transparent;
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.7);
+                    border-color: var(--theme-border-color) var(--theme-border-color) transparent;
+                }
+                &.active {
+                    color: #4a154b;
+                    background-color: #ffffff;
+                    border-color: var(--theme-border-color) var(--theme-border-color) transparent;
+                }
+            }
+        }
+    }
+
+    // --- 2. CONFIGURATION DU THÈME VERT ---
+    &.theme-green {
+        --theme-bg-color: #CAFACF;
+        --theme-border-color: #a8dbae;
+
+        .nav-tabs {
+            border-bottom-color: var(--theme-border-color);
+            .nav-link {
+                color: #2e5a34;
+                background-color: rgba(255, 255, 255, 0.4);
+                border-color: transparent;
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.7);
+                    border-color: var(--theme-border-color) var(--theme-border-color) transparent;
+                }
+                &.active {
+                    color: #1b4d22;
+                    background-color: #ffffff;
+                    border-color: var(--theme-border-color) var(--theme-border-color) transparent;
+                }
+            }
+        }
+    }
+
+    // --- 3. CONFIGURATION DU THÈME JAUNE ---
+    &.theme-yellow {
+        --theme-bg-color: #FBFDBB;
+        --theme-border-color: #e6e8ad;
+
+        .nav-tabs {
+            border-bottom-color: var(--theme-border-color);
+            .nav-link {
+                color: #6d6e2f;
+                background-color: rgba(255, 255, 255, 0.4);
+                border-color: transparent;
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.7);
+                    border-color: var(--theme-border-color) var(--theme-border-color) transparent;
+                }
+                &.active {
+                    color: #525316;
+                    background-color: #ffffff;
+                    border-color: var(--theme-border-color) var(--theme-border-color) transparent;
+                }
+            }
+        }
+    }
+}
+
+// Style structurel des onglets Bootstrap
+.nav-tabs {
+    margin-bottom: 1.5rem;
+    .nav-link {
+        font-weight: bold;
+        border-radius: 6px 6px 0 0;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+}

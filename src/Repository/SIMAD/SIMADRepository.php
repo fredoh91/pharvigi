@@ -2,7 +2,7 @@
 
 namespace App\Repository\SIMAD;
 
-use App\Entity\SIMAD;
+use App\Entity\SIMAD\SIMAD;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

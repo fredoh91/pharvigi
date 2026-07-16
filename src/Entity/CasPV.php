@@ -176,6 +176,18 @@ abstract class CasPV
     #[ORM\OneToMany(targetEntity: IdentifiantsBnpv::class, mappedBy: 'CasPV')]
     private Collection $identifiantsBnpvs;
 
+    /**
+     * @var Collection<int, ProduitsBnpv>
+     */
+    #[ORM\OneToMany(targetEntity: ProduitsBnpv::class, mappedBy: 'CasPV')]
+    private Collection $produitsBnpvs;
+
+    /**
+     * @var Collection<int, Produits>
+     */
+    #[ORM\OneToMany(targetEntity: Produits::class, mappedBy: 'CasPV')]
+    private Collection $produits;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
@@ -183,6 +195,8 @@ abstract class CasPV
         $this->effetsIndesirables = new ArrayCollection();
         $this->donneesAAnonymisers = new ArrayCollection();
         $this->identifiantsBnpvs = new ArrayCollection();
+        $this->produitsBnpvs = new ArrayCollection();
+        $this->produits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -826,6 +840,66 @@ abstract class CasPV
             // set the owning side to null (unless already changed)
             if ($identifiantsBnpv->getCasPV() === $this) {
                 $identifiantsBnpv->setCasPV(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProduitsBnpv>
+     */
+    public function getProduitsBnpvs(): Collection
+    {
+        return $this->produitsBnpvs;
+    }
+
+    public function addProduitsBnpv(ProduitsBnpv $produitsBnpv): static
+    {
+        if (!$this->produitsBnpvs->contains($produitsBnpv)) {
+            $this->produitsBnpvs->add($produitsBnpv);
+            $produitsBnpv->setCasPV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitsBnpv(ProduitsBnpv $produitsBnpv): static
+    {
+        if ($this->produitsBnpvs->removeElement($produitsBnpv)) {
+            // set the owning side to null (unless already changed)
+            if ($produitsBnpv->getCasPV() === $this) {
+                $produitsBnpv->setCasPV(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Produits>
+     */
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
+
+    public function addProduit(Produits $produit): static
+    {
+        if (!$this->produits->contains($produit)) {
+            $this->produits->add($produit);
+            $produit->setCasPV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduit(Produits $produit): static
+    {
+        if ($this->produits->removeElement($produit)) {
+            // set the owning side to null (unless already changed)
+            if ($produit->getCasPV() === $this) {
+                $produit->setCasPV(null);
             }
         }
 

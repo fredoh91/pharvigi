@@ -7,6 +7,7 @@ use App\Entity\CM\CM;
 use App\Entity\CM\DonneesComplementairesCM;
 use App\Entity\EffetsIndesirables;
 use App\Entity\IdentifiantsBnpv;
+use App\Entity\ProduitsBnpv;
 use App\Entity\StatutCasPV;
 use App\Repository\ListeCSPRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -422,7 +423,6 @@ class ImportFicheRecueilCMService
             
             $eiCM->setMedDRAVer($eiData['MedDRA_Ver'] ?? null);
 
-
             $this->em->persist($eiCM);
             $lstEI[] = $eiCM;
         }
@@ -431,6 +431,14 @@ class ImportFicheRecueilCMService
         return [$lstEI];
     }
 
+    /**
+     * A la création d'un CM, on stocke dans la table identifiants_bnpv les master_id, DLPVersion et dates des différents follow-up du cas
+     * Ainsi on pourra les afficher plus tard dans l'appli en requetant dans la bnpv via les master_id.
+     *
+     * @param array $identifiantsBnpv
+     * @param CM $cm
+     * @return array
+     */
     public function CreationIdentifiantsBNPV(array $identifiantsBnpv, 
                                             CM $cm): array
     {
@@ -504,6 +512,86 @@ class ImportFicheRecueilCMService
 
         $this->em->flush();
         return [$lstIdBnpv];
+    }
+
+    /**
+     * A la création d'un CM, on stock dans la table .... les info médicaments BNPV.
+     * Ils pourront ainsi être affichés dans l'écran de recherche CODEX pour ajout manuel des médicaments.
+     *
+     * @param array $medicsBnpv : tableau des médicaments issus de la BNPV
+     * @param array $mainDataBnpv : tableau des données principales issues de la BNPV
+     * @param CM $cm : Objet CM qui est en cours de création
+     * @return array : Tableau d'objets ProduitsBnpv créés
+     */
+    public function CreationProduitsBNPV(array $medicsBnpv, 
+                                            array $mainDataBnpv,
+                                            CM $cm): array
+    {
+
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Utilisateur non connecté.');
+        }
+        if (method_exists($user, 'getUserIdentifier')) {
+            $userName = $user->getUserIdentifier();
+        } elseif (method_exists($user, 'getUserName')) {
+            $userName = $user->getUserName();
+        } elseif (method_exists($user, 'getUsername')) {
+            $userName = $user->getUsername();
+        } else {
+            $userName = (string) $user;
+        }
+        $now = new \DateTimeImmutable();
+        if (empty($medicsBnpv)) {
+            return [];
+        }
+
+        $lsProduitsBnpv = [];
+        foreach ($medicsBnpv as $medic) {
+            $produitBnpv = new ProduitsBnpv();
+
+            $produitBnpv->setCasPV($cm);
+            $produitBnpv->setCreatedAt($now);
+            $produitBnpv->setUpdatedAt($now);
+            $produitBnpv->setUserCreate($userName);
+            $produitBnpv->setUserModif($userName);
+
+            $produitBnpv->setMasterId($medic['master_id'] ?? null);
+            $produitBnpv->setProductCharacterization($medic['productcharacterization'] ?? null);
+
+            // $produitBnpv->setProductName($medic['productname'] ?? null);
+            $productName = $medic['productname'] ?? null;
+            if ($productName !== null && !mb_check_encoding($productName, 'UTF-8')) {
+                $productName = mb_convert_encoding($productName, 'UTF-8', 'Windows-1252');
+            }
+            $produitBnpv->setProductName($productName);
+
+            // $produitBnpv->setSubstanceName($medic['substancename'] ?? null);
+            $substanceName = $medic['substancename'] ?? null;
+            if ($substanceName !== null && !mb_check_encoding($substanceName, 'UTF-8')) {
+                $substanceName = mb_convert_encoding($substanceName, 'UTF-8', 'Windows-1252');
+            }
+            $produitBnpv->setSubstanceName($substanceName);
+
+            // $produitBnpv->setProductIndication($medic['productindication'] ?? null);
+            $productIndication = $medic['productindication'] ?? null;
+            if ($productIndication !== null && !mb_check_encoding($productIndication, 'UTF-8')) {
+                $productIndication = mb_convert_encoding($productIndication, 'UTF-8', 'Windows-1252');
+            }
+            $produitBnpv->setProductIndication($productIndication);
+            
+            $produitBnpv->setNBBlock((int)($medic['NBBlock'] ?? null));
+            $produitBnpv->setNBBlock2((int)($medic['NBBlock2'] ?? null));
+            if (!empty($mainDataBnpv)) {
+                $produitBnpv->setDlpVersion($mainDataBnpv['DLPVersion'] ?? null);
+            }
+
+            $this->em->persist($produitBnpv);
+            $lsProduitsBnpv[] = $produitBnpv;
+        }
+
+        $this->em->flush();
+        return [$lsProduitsBnpv];
     }
 
     private function extractTextStrict(\DOMNode $node): string

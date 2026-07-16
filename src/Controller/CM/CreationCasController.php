@@ -69,7 +69,7 @@ final class CreationCasController extends AbstractController
                     return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
                 }
 
-                dump($typeFiche);
+                // dump($typeFiche);
 
                 $ficRec = [];
 
@@ -90,7 +90,7 @@ final class CreationCasController extends AbstractController
                     $ficRec = $result['Data_FicheRecueilEMM'] ?? null;
                 }
 
-                dump($ficRec);
+                // dump($ficRec);
 
                 // --- ÉTAPE 3 : VALIDATION DES DONNÉES EXTRAITES ---
                 if (!$ficRec) {
@@ -136,7 +136,7 @@ final class CreationCasController extends AbstractController
                 }
                 $mainData = $mainDataRows[0];
 
-                dump($mainData);
+                // dump($mainData);
 
                 $eiDataRows = $requetesBnpvService->DonneEIData($aerId);
                 $medicDataRows = $requetesBnpvService->DonneMedicamentData($aerId);
@@ -154,10 +154,10 @@ final class CreationCasController extends AbstractController
 
 
                 // --- ÉTAPE DE DÉBOGAGE (DUMP & DD) ---
-                dump($eiDataRows);
-                dump($medicDataRows);
-                dump($antecedentsMedicaux, $indications);
-                dump($identifiantsBnpv);
+                // dump($eiDataRows);
+                // dump($medicDataRows);
+                // dump($antecedentsMedicaux, $indications);
+                // dump($identifiantsBnpv);
                 // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
                 if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
                     // $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService, $antecedentsMedicaux, $indications);
@@ -165,6 +165,8 @@ final class CreationCasController extends AbstractController
                     [$donComplCM, $cm] = $importCMService->CreationDonneesComplementairesCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $indications, $antecedentsMedicaux, $cm);
                     $lsEffetsIndesirables = $importCMService->CreationEffetsIndesirablesCM($eiDataRows, $cm);
                     $lsIdentifiantsBnpv = $importCMService->CreationIdentifiantsBNPV($identifiantsBnpv, $cm);
+                    $lsProduitsBnpv = $importCMService->CreationProduitsBNPV($medicDataRows, $mainData, $cm);
+
                     // recherche des données à anonymiser dans les champs texte de la fiche CM pour avertir l'utilisateur avant validation finale
                     $iaAnonymiserService->analyserTexte(
                                             $cm->getProblematique(), 
@@ -420,6 +422,11 @@ final class CreationCasController extends AbstractController
                 // Suppresion des identifiants BNPV associés
                 foreach ($cas->getIdentifiantsBnpvs() as $identifiantBnpv) {
                     $em->remove($identifiantBnpv);
+                }
+
+                // Suppresion des identifiants BNPV associés
+                foreach ($cas->getProduitsBnpvs() as $produitsBnpv) {
+                    $em->remove($produitsBnpv);
                 }
 
             } elseif ($cas instanceof EMM) {

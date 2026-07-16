@@ -1,0 +1,20 @@
+.form-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+/* Personnalisation spécifique pour certains champs si nécessaire */
+.form-container .form-group {
+    margin-bottom: 0;
+}
+
+/* Pour les champs textarea qui peuvent être plus grands */
+.form-container textarea {
+    min-height: 100px;
+}
+
+/* Pour les champs de type checkbox */
+.form-container .checkbox {
+    align-self: center;
+}

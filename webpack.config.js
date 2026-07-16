@@ -22,8 +22,10 @@ Encore
      */
     .addEntry('app', './assets/app.js')
 
-
+    .addStyleEntry('rechlabo_css', './assets/styles/rechlabo.scss')
+    .addStyleEntry('ajoutproduit_css', './assets/styles/ajout_produit.scss')
     .addStyleEntry('navbar', './assets/styles/navbar.scss')
+    .addStyleEntry('form_creation_cas_cm', './assets/styles/cm/form_creation_cas_cm.scss')
     .addStyleEntry('form_creation_cas_cm_donnees_principales', './assets/styles/cm/form_creation_cas_cm_donnees_principales.scss')
     .addStyleEntry('form_creation_cas_cm_donnees_complementaires', './assets/styles/cm/form_creation_cas_cm_donnees_complementaires.scss')
 

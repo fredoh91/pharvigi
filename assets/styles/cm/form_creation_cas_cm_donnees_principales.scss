@@ -1,20 +1,135 @@
 .form-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    // Remplacement du repeat(auto-fit) par une grille explicite à 12 colonnes
+    grid-template-columns: repeat(12, 1fr);
     gap: 1rem;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+
+
+    // Définition de l'emplacement de chaque bloc (Template Areas)
+    grid-template-areas:
+        "header        header        header        header        header        header        header        header        header        header        header        header"
+        "patient       patient       patient       patient       patient       patient       patient       patient       patient       patient       patient       patient"
+        "dme           dme           dme           dme           dme           dme           dme           dme           dme           dme           dme           dme"
+        "prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     workflow      workflow      workflow"
+        "presentation  presentation  presentation  presentation  presentation  presentation  presentation  presentation  presentation  workflow      workflow      workflow"
+        "crpv          crpv          crpv          crpv          crpv          crpv          crpv          cluster       cluster       workflow      workflow      workflow"
+        "typology      typology      typology      typology      typology      typology      typology      typology      typology      typology      typology      typology"
+        "gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite"
+        "evaluators    evaluators    evaluators    evaluators    dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv"
+        "chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        complem       complem       complem"
+    ;
 }
 
-/* Personnalisation spécifique pour certains champs si nécessaire */
+/* --- Attribution des zones de la grille --- */
+.area-header             { grid-area: header; }
+.area-patient            { grid-area: patient; }
+.area-dme                { grid-area: dme; }
+.area-workflow           { grid-area: workflow; }
+.area-problematique-meta { grid-area: prob-meta; }
+.area-presentation-text  { grid-area: presentation; }
+.area-crpv               { grid-area: crpv; }
+.area-cluster-checkbox   { grid-area: cluster; }
+.area-typology           { grid-area: typology; }
+.area-gravite-group      { grid-area: gravite; }
+.area-evaluators         { grid-area: evaluators; }
+.area-dsurv              { grid-area: dsurv; }
+.area-chronologie-group  { grid-area: chrono; }
+.area-complementary      { grid-area: complem; }
+
+
+/* --- Organisation interne de chaque zone (Flexbox & Alignements) --- */
+
+.area-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+    
+    & > div {
+        flex: 1;
+        min-width: 130px;
+    }
+}
+
+.area-patient {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    
+    // Pour que le champ "effetIndesirable" s'élargisse au maximum comme sur Access
+    div:last-child {
+        flex-grow: 2;
+    }
+}
+
+.area-dme {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.area-workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+}
+
+.area-problematique-meta {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-end;
+}
+
+.area-gravite-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 8px;
+    border-radius: 4px;
+    
+    & > div {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0 !important;
+    }
+}
+
+.area-dsurv {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.area-chronologie-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+    
+    .sub-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* --- Tes règles d'origine préservées --- */
 .form-container .form-group {
     margin-bottom: 0;
 }
 
-/* Pour les champs textarea qui peuvent être plus grands */
 .form-container textarea {
     min-height: 100px;
 }
 
-/* Pour les champs de type checkbox */
 .form-container .checkbox {
     align-self: center;
 }
