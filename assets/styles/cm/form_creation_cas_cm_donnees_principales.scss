@@ -13,6 +13,7 @@
         "header        header        header        header        header        header        header        header        header        header        header        header"
         "patient       patient       patient       patient       patient       patient       patient       patient       patient       patient       patient       patient"
         "dme           dme           dme           dme           dme           dme           dme           dme           dme           dme           dme           dme"
+        "produits      produits      produits      produits      produits      produits      produits      produits      produits      produits      .             ."
         "prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     workflow      workflow      workflow"
         "presentation  presentation  presentation  presentation  presentation  presentation  presentation  presentation  presentation  workflow      workflow      workflow"
         "crpv          crpv          crpv          crpv          crpv          crpv          crpv          cluster       cluster       workflow      workflow      workflow"
@@ -28,6 +29,7 @@
 .area-patient            { grid-area: patient; }
 .area-dme                { grid-area: dme; }
 .area-workflow           { grid-area: workflow; }
+.area-produits           { grid-area: produits; }
 .area-problematique-meta { grid-area: prob-meta; }
 .area-presentation-text  { grid-area: presentation; }
 .area-crpv               { grid-area: crpv; }

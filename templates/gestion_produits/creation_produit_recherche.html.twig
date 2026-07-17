@@ -3,6 +3,70 @@
 {% block title %}Ajout de produit à un cas{% endblock %}
 
 {% block body %}
+
+    {# affichage d'un tableau contenant les produits issus de la BNPV #}
+    {% if lstProduitsBnpv is not empty %}
+        <div class="container-fluid p-3">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <h4 class="text-center mb-3">Médicaments issus de la BNPV</h4>
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Spécialité</th>
+                                <th>DCI</th>
+                                <th>Suspect/Concomitant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for produit in lstProduitsBnpv %}
+                                {% if produit.productCharacterization == 'Suspect' or produit.productCharacterization == 'Interacting' %}
+                                    <tr>
+                                        <td>{{ produit.productName }}</td>
+                                        <td>{{ produit.substanceName }}</td>
+                                        <td>{{ produit.productCharacterization }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {# affichage d'un tableau contenant les produits déjà lié au cas #}
+    {% if lstProduitsCasPV is not empty %}
+        <div class="container-fluid p-3">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <h4 class="text-center mb-3">Médicaments déjà lié à ce cas</h4>
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Spécialité</th>
+                                <th>DCI</th>
+                                <th>CodeATC</th>
+                                <th>CodeCIS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for produit in lstProduitsCasPV %}
+                                <tr>
+                                    <td>{{ produit.Denomination }}</td>
+                                    <td>{{ produit.DCI }}</td>
+                                    <td>{{ produit.CodeATC }}</td>
+                                    <td>{{ produit.CodeCIS }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
     <div class="produit-search-full-width-bg">
         {{ encore_entry_link_tags('rechlabo_css') }}
         <div class="container page_form_medic" data-controller="recherche-labo-spinner">
@@ -51,10 +115,16 @@
             </div>
         </div>
 
-        <div class="page_liste_medic p-3"
-             data-controller="ajout-sub-en-masse"
-             data-ajout-sub-en-masse-signal-id-value="{{ idCasPV }}"
-             data-ajout-sub-en-masse-url-value="{{ path('app_ajout_produits_masse', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, }) }}">
+         <div class="page_liste_medic p-3"
+              data-controller="ajout-sub-en-masse"
+              data-ajout-sub-en-masse-signal-id-value="{{ idCasPV }}"
+              data-ajout-sub-en-masse-url-value="
+                  {% if routeSource %}
+                      {{ path('app_ajout_produits_masse', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, routeSource: routeSource }) }}
+                  {% else %}
+                      {{ path('app_ajout_produits_masse', { type_cas_pv: type_cas_pv, idCasPV: idCasPV }) }}
+                  {% endif %}
+              ">
 
             {% if (SubMed is not empty) or (SubNonMed is not empty) %}
             <div class="d-flex justify-content-end mb-3">
@@ -88,7 +158,13 @@
                                                 <strong>{{ medic.nomVU }}</strong> ({{ medic.substances|join(', ') }})
                                             </label>
                                         </div>
-                                        <a href="{{ path('app_ajout_produit_med', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, codeCIS: medic.codeCIS }) }}" class="btn btn-sm btn-success">
+                                        <a href="
+                                            {% if routeSource %}
+                                                {{ path('app_ajout_produit_med', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, codeCIS: medic.codeCIS, routeSource: routeSource }) }}
+                                            {% else %}
+                                                {{ path('app_ajout_produit_med', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, codeCIS: medic.codeCIS }) }}
+                                            {% endif %}
+                                            " class="btn btn-sm btn-success">
                                             Ajouter ce médicament
                                         </a>
                                     </div>
@@ -148,7 +224,13 @@
                                                 <strong>{{ nonMedic.nomVU }}</strong>
                                             </label>
                                         </div>
-                                        <a href="{{ path('app_ajout_produit_non_med', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, SubSIMADId: nonMedic.id }) }}" class="btn btn-sm btn-success">
+                                        <a href="
+                                            {% if routeSource %}
+                                                {{ path('app_ajout_produit_non_med', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, SubSIMADId: nonMedic.id, routeSource: routeSource }) }}
+                                            {% else %}
+                                                {{ path('app_ajout_produit_non_med', { type_cas_pv: type_cas_pv, idCasPV: idCasPV, SubSIMADId: nonMedic.id }) }}
+                                            {% endif %}
+                                        " class="btn btn-sm btn-success">
                                             Ajouter cette substance
                                         </a>
                                     </div>

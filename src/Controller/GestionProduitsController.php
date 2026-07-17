@@ -39,15 +39,20 @@ final class GestionProduitsController extends AbstractController
         $this->kernel = $kernel;
     }
 
-    #[Route('/{type_cas_pv}/{idCasPV}/creation_produits', name: 'app_creation_produits')]
+    #[Route('/{type_cas_pv}/{idCasPV}/creation_produits/{routeSource}', 
+            name: 'app_creation_produits', 
+            defaults: ['routeSource' => null])
+    ]
     public function creation_produits(
         string $type_cas_pv, 
-        int $idCasPV, 
+        int $idCasPV,
+        ?string $routeSource,
         CasPVRepository $casPVRepo, 
         Request $request, 
         ManagerRegistry $doctrine
     ): Response
     {
+
         // $casPV = $casPVRepo->find($idCasPV);
         // Récupération du cas PV selon le type
         $casPV = $this->getCasPVByType($type_cas_pv, $idCasPV, $doctrine);
@@ -56,6 +61,10 @@ final class GestionProduitsController extends AbstractController
         if (!$casPV ) {
             throw $this->createNotFoundException('Le cas PV avec l\'id ' . $idCasPV . ' n\'existe pas.');
         }
+
+        $lstProduitsBnpv = $casPV->getProduitsBnpvs();
+
+        $lstProduitsCasPV = $casPV->getProduits();
 
         $form = $this->createForm(CodexSearchType::class);
         $form->handleRequest($request);
@@ -77,10 +86,15 @@ final class GestionProduitsController extends AbstractController
                 }
             }
             if ($form->get('reset')->isClicked()) {
-                return $this->redirectToRoute('app_creation_produits', ['type_cas_pv' => $type_cas_pv, 'idCasPV' => $idCasPV]);
+                $params = ['type_cas_pv' => $type_cas_pv, 'idCasPV' => $idCasPV];
+                // Ajout du paramètre routeSource s'il existe
+                if ($routeSource) {
+                    $params['routeSource'] = $routeSource;
+                }
+                return $this->redirectToRoute('app_creation_produits', $params);
             }
             if ($form->get('annulation')->isClicked()) {
-                return $this->redirectAfterProductModification($request, $idCasPV);
+                return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
             }
         }
 
@@ -91,12 +105,26 @@ final class GestionProduitsController extends AbstractController
             'NbMedics' => $NbMedics,
             'idCasPV' => $idCasPV,
             'type_cas_pv' => $type_cas_pv,
+            'lstProduitsBnpv' => $lstProduitsBnpv,
+            'lstProduitsCasPV' => $lstProduitsCasPV,
+            'routeSource' => $routeSource,
         ]);
     }
 
 
-    #[Route('/{type_cas_pv}/{idCasPV}/modification_produits/{produitId}', name: 'app_modif_produits')]
-    public function modif_produits(string $type_cas_pv, int $idCasPV, int $produitId, CasPVRepository $casPVRepo, Request $request, ManagerRegistry $doctrine): Response
+    #[Route('/{type_cas_pv}/{idCasPV}/modification_produits/{produitId}/{routeSource}', 
+            name: 'app_modif_produits', 
+            defaults: ['routeSource' => null])
+    ]
+    public function modif_produits(
+        string $type_cas_pv, 
+        int $idCasPV, 
+        int $produitId, 
+        ?string $routeSource = null,
+        CasPVRepository $casPVRepo, 
+        Request $request, 
+        ManagerRegistry $doctrine
+        ): Response
     {
         $casPV = $casPVRepo->find($idCasPV);
 
@@ -154,7 +182,7 @@ final class GestionProduitsController extends AbstractController
 
                     $this->addFlash('success', 'Le produit ' . $produit->getId() . ' a été modifié avec succès.');
 
-                    return $this->redirectAfterProductModification($request, $signalId);
+                    return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
                 }
             }
 
@@ -163,11 +191,11 @@ final class GestionProduitsController extends AbstractController
                 $em->remove($produit);
                 $em->flush();
                 $this->addFlash('success', 'Le produit ' . $produit->getId() . ' a été supprimé avec succès.');
-                return $this->redirectAfterProductModification($request, $signalId);
+                return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
             }
 
             if ($form->get('annulation')->isClicked()) {
-                return $this->redirectAfterProductModification($request, $signalId);
+                return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
             }
         }
 
@@ -179,14 +207,18 @@ final class GestionProduitsController extends AbstractController
     }
 
 
-    #[Route('/{type_cas_pv}/{idCasPV}/ajout_produit_med/{codeCIS}', name: 'app_ajout_produit_med', defaults: ['codeCIS' => null])]
+    #[Route('/{type_cas_pv}/{idCasPV}/ajout_produit_med/{codeCIS}/{routeSource}', 
+            name: 'app_ajout_produit_med', 
+            defaults: ['codeCIS' => null, 'routeSource' => null])
+    ]
     public function ajout_produits_med(
         string $type_cas_pv, 
         int $idCasPV, 
         CasPVRepository $casPVRepo, 
         Request $request, 
         ManagerRegistry $doctrine, 
-        ?string $codeCIS = null
+        ?string $codeCIS = null,
+        ?string $routeSource = null
     ): Response
     {
         $casPV = $casPVRepo->find($idCasPV);
@@ -222,7 +254,7 @@ final class GestionProduitsController extends AbstractController
             // dump($DCI);
             $produit = new Produits();
             $produit->setTypeSubstance('Medic');
-            $produit->setSignalLie($signal);
+            $produit->setCasPV($casPV);
             $produit->setDenomination($vuUtil[0]->getNomVU());
             $produit->setDosage($dosage);
             $produit->setDci($DCI);
@@ -260,7 +292,7 @@ final class GestionProduitsController extends AbstractController
         } else {
             // Traitement si codeCIS n'est pas fourni
             $produit = new Produits();
-            $produit->setSignalLie($signal);
+            $produit->setCasPV($casPV);
             $produit->setTypeSubstance('SaisieManuelle');
         }
 
@@ -290,31 +322,38 @@ final class GestionProduitsController extends AbstractController
                     $em = $doctrine->getManager();
                     $em->persist($produit);
                     $em->flush();
-                    return $this->redirectAfterProductModification($request, $signalId);
+                    return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
                 }
             }
             // if ($form->get('reset')->isClicked()) {
             //     return $this->redirectToRoute('app_creation_produits', ['signalId' => $signalId]);
             // }
             if ($form->get('annulation')->isClicked()) {
-                return $this->redirectAfterProductModification($request, $signalId);
+                return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
             }
         }
 
-
-
         return $this->render('gestion_produits/ajout_produit_med_recherche.html.twig', [
             'form' => $form->createView(),
-            'medics' => $medics ?? [],
-            'NbMedics' => $NbMedics ?? 0,
             'idCasPV' => $idCasPV,
             'type_cas_pv' => $type_cas_pv,
         ]);
     }
 
 
-    #[Route('/{type_cas_pv}/{idCasPV}/ajout_produit_non_med/{SubSIMADId}', name: 'app_ajout_produit_non_med', defaults: ['SubSIMADId' => null])]
-    public function ajout_produits_non_med(string $type_cas_pv, int $idCasPV, CasPVRepository $casPVRepo, Request $request, ManagerRegistry $doctrine, ?int $SubSIMADId = null): Response
+    #[Route('/{type_cas_pv}/{idCasPV}/ajout_produit_non_med/{SubSIMADId}/{routeSource}', 
+            name: 'app_ajout_produit_non_med', 
+            defaults: ['SubSIMADId' => null, 'routeSource' => null])
+    ]
+    public function ajout_produits_non_med(
+        string $type_cas_pv, 
+        int $idCasPV, 
+        CasPVRepository $casPVRepo, 
+        Request $request, 
+        ManagerRegistry $doctrine, 
+        ?int $SubSIMADId = null,
+        ?string $routeSource = null
+        ): Response
     {
         $casPV = $casPVRepo->find($idCasPV);
 
@@ -345,7 +384,7 @@ final class GestionProduitsController extends AbstractController
 
             $produit = new Produits();
             // 3. Remplir l'entité avec les données
-            $produit->setSignalLie($signal);
+            $produit->setCasPV($casPV);
 
             $produit->setTypeSubstance('NonMedic');
             $produit->setDenomination($subSIMAD->getProductname());  // donnée saisie
@@ -360,6 +399,14 @@ final class GestionProduitsController extends AbstractController
             $produit->setUserCreate($userName);
             $produit->setUserModif($userName);
 
+        } else {
+            $produit = new Produits();
+            $produit->setCasPV($casPV);
+            $produit->setTypeSubstance('NonMedic');
+            $produit->setCreatedAt(new \DateTimeImmutable());
+            $produit->setUpdatedAt(new \DateTimeImmutable());
+            $produit->setUserCreate($userName);
+            $produit->setUserModif($userName);
         }
 
         $form = $this->createForm(
@@ -378,29 +425,32 @@ final class GestionProduitsController extends AbstractController
                     $em = $doctrine->getManager();
                     $em->persist($produit);
                     $em->flush();
-                    return $this->redirectAfterProductModification($request, $signalId);
+                    return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
                 }
             }
 
             if ($form->get('annulation')->isClicked()) {
-                return $this->redirectAfterProductModification($request, $signalId);
+                return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
             }
         }
 
         return $this->render('gestion_produits/ajout_produit_non_med_recherche.html.twig', [
             'form' => $form->createView(),
-            'medics' => $medics ?? [],
-            'NbMedics' => $NbMedics ?? 0,
             'idCasPV' => $idCasPV,
             'type_cas_pv' => $type_cas_pv,
         ]);
     }
 
-    #[Route('/{type_cas_pv}/{idCasPV}/produits/ajout_produits_masse', name: 'app_ajout_produits_masse', methods: ['POST'])]
+    #[Route('/{type_cas_pv}/{idCasPV}/produits/ajout_produits_masse/{routeSource}', 
+            name: 'app_ajout_produits_masse', 
+            methods: ['POST'], 
+            defaults: ['routeSource' => null])
+    ]
     public function ajoutProduitsMasse(
         Request $request,
         string $type_cas_pv,
         #[MapEntity(id: 'idCasPV')] CasPV $casPV, // Le ParamConverter trouve le cas PV via {idCasPV}
+        ?string $routeSource,
         ManagerRegistry $doctrine
     ): JsonResponse {
 
@@ -452,7 +502,7 @@ final class GestionProduitsController extends AbstractController
             $produit = new Produits();
             // 3. Remplir l'entité avec les données
             $produit->setTypeSubstance('Medic');
-            $produit->setSignalLie($signal);
+            $produit->setCasPV($casPV);
             $produit->setDenomination($vuUtil[0]->getNomVU());
             $produit->setDosage($dosage);
             $produit->setDci($DCI);
@@ -528,7 +578,7 @@ final class GestionProduitsController extends AbstractController
             // 2. Créer une nouvelle entité `Produit`
             $produit = new Produits();
             // 3. Remplir l'entité avec les données
-            $produit->setSignalLie($signal);
+            $produit->setCasPV($casPV);
 
             $produit->setTypeSubstance('NonMedic');
             $produit->setDenomination($subSIMAD->getProductname());  // donnée saisie
@@ -556,8 +606,15 @@ final class GestionProduitsController extends AbstractController
             $this->addFlash('success', $addedCount . ' produit(s)/substance(s) ont été ajouté(s) au signal. Pensez à compléter les informations manquantes.');
             $this->logger->info('GestionProduitsController: ' . $addedCount . ' produits ajoutés.');
         }
-
-        $redirectUrl = $this->generateUrl('app_signal_modif', ['signalId' => $signal->getId()]);
+        if ($routeSource) {
+            $redirectUrl = $this->generateUrl($routeSource, [
+                'cas' => $casPV->getId(),
+                'idCasPV' => $casPV->getId(),
+                'type_cas_pv' => $type_cas_pv
+            ]);
+        } else {
+            $redirectUrl = $this->generateUrl('app_cm_creation_cas_creation', ['cas' => $casPV->getId()]);
+        }
         $this->logger->info('GestionProduitsController: Redirection vers ' . $redirectUrl);
 
         // On renvoie l'URL de redirection au JS
@@ -638,18 +695,19 @@ final class GestionProduitsController extends AbstractController
         return [$medics, $NbMedics];
     }
 
-    private function redirectAfterProductModification(Request $request, int $signalId): Response
+    private function redirectAfterProductModificationByRoute(string $type_cas_pv, int $idCasPV, ?string $routeSource = null): Response
     {
-        $session = $request->getSession();
-        $returnToUrl = $session->get('return_to_after_product_creation');
-
-        if ($returnToUrl) {
-            $session->remove('return_to_after_product_creation');
-            return $this->redirect($returnToUrl);
+        // Si routeSource est fourni, on utilise cette route plutôt que la redirection par défaut
+        if ($routeSource) {
+            return $this->redirectToRoute($routeSource, [
+                'cas' => $idCasPV,
+                'idCasPV' => $idCasPV,
+                'type_cas_pv' => $type_cas_pv
+            ]);
         }
 
         // Fallback redirection
-        return $this->redirectToRoute('app_signal_modif', ['signalId' => $signalId]);
+        return $this->redirectToRoute('app_cm_creation_cas_creation', ['cas' => $idCasPV]);
     }
 
     /**

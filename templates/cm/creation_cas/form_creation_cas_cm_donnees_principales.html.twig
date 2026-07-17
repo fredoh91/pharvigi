@@ -40,6 +40,12 @@
         {{ form_row(form.MotifNonPresentation) }}
     </div>
 
+
+    <!-- Zone 4.5 : Produits -->
+    <div class="area-produits">
+        {% include 'cm/creation_cas/tableau_produits.html.twig' %}
+    </div>
+
     <!-- Zone 5 : Métadonnées Problématique -->
     <div class="area-problematique-meta">
         {{ form_row(form.problematique) }}
