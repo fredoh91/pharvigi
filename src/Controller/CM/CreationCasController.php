@@ -19,10 +19,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 final class CreationCasController extends AbstractController
 {
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/creation_cas_upload', name: 'app_cm_creation_cas_upload_fiche_recueil')]
     public function uploadFicheRecueilCM(
         Request $request, 
@@ -177,12 +180,20 @@ final class CreationCasController extends AbstractController
                     // Ne pas associer l'entité dans le formulaire principal pour éviter l'erreur
                     // On laisse l'association pour la validation finale
                     $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
-                    return $this->redirectToRoute('app_cm_creation_cas_creation', ['cas' => $cm->getId()]);
+                    return $this->redirectToRoute('app_cm_creation_cas_creation', 
+                                                [
+                                                    'cas' => $cm->getId(), 
+                                                    'routeSource' => $request->query->get('routeSource', null)
+                                                ]);
 
                 } elseif ($typeFiche === FicheRecueilAnalyseurService::TYPE_EMM) {
                     $emm = $importEMMService->CreationCasEMM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService);
                     $this->addFlash('success', sprintf('Fiche EMM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));
-                    return $this->redirectToRoute('app_cm_creation_cas_creation', ['cas' => $emm->getId()]);
+                    return $this->redirectToRoute('app_cm_creation_cas_creation', 
+                                                [
+                                                    'cas' => $emm->getId(),
+                                                    'routeSource' => 'app_cm_creation_cas_creation'
+                                                ]);
                 }
 
                 return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
@@ -194,6 +205,7 @@ final class CreationCasController extends AbstractController
         ]);
     }
 
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/creation_cas_creation/{cas}', name: 'app_cm_creation_cas_creation')]
     public function creationCas(
         CasPV $cas,
@@ -339,6 +351,7 @@ final class CreationCasController extends AbstractController
         return $this->redirectToRoute('app_cm_creation_cas_upload_fiche_recueil');
     }
 
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/creation_cas_annulation/{cas}', name: 'app_cm_creation_cas_annulation')]
     public function annulationCas(
         CasPV $cas,

@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class GestionProduitsController extends AbstractController
 {
@@ -39,6 +41,7 @@ final class GestionProduitsController extends AbstractController
         $this->kernel = $kernel;
     }
 
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/{type_cas_pv}/{idCasPV}/creation_produits/{routeSource}', 
             name: 'app_creation_produits', 
             defaults: ['routeSource' => null])
@@ -46,10 +49,10 @@ final class GestionProduitsController extends AbstractController
     public function creation_produits(
         string $type_cas_pv, 
         int $idCasPV,
-        ?string $routeSource,
         CasPVRepository $casPVRepo, 
         Request $request, 
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        ?string $routeSource = null
     ): Response
     {
 
@@ -112,6 +115,7 @@ final class GestionProduitsController extends AbstractController
     }
 
 
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/{type_cas_pv}/{idCasPV}/modification_produits/{produitId}/{routeSource}', 
             name: 'app_modif_produits', 
             defaults: ['routeSource' => null])
@@ -120,12 +124,13 @@ final class GestionProduitsController extends AbstractController
         string $type_cas_pv, 
         int $idCasPV, 
         int $produitId, 
-        ?string $routeSource = null,
         CasPVRepository $casPVRepo, 
         Request $request, 
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        ?string $routeSource = null,
         ): Response
     {
+
         $casPV = $casPVRepo->find($idCasPV);
 
         // Gérer le cas où le cas PV n'existe pas
@@ -188,9 +193,11 @@ final class GestionProduitsController extends AbstractController
 
             if ($form->get('delete')->isClicked()) {
                 $em = $doctrine->getManager();
+                $idProduit = $produit->getId();
+                $DenoProduit = $produit->getDenomination();
                 $em->remove($produit);
                 $em->flush();
-                $this->addFlash('success', 'Le produit ' . $produit->getId() . ' a été supprimé avec succès.');
+                $this->addFlash('success', 'Le produit ' . $idProduit . ' (' . $DenoProduit . ') a été supprimé avec succès.');
                 return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
             }
 
@@ -207,6 +214,56 @@ final class GestionProduitsController extends AbstractController
     }
 
 
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_ADMIN")'))]
+    #[Route('/{type_cas_pv}/{idCasPV}/suppression_produits/{produitId}/{routeSource}', 
+            name: 'app_suppression_produits', 
+            defaults: ['routeSource' => null])
+    ]
+    public function suppression_produits(
+        string $type_cas_pv, 
+        int $idCasPV, 
+        int $produitId, 
+        CasPVRepository $casPVRepo, 
+        Request $request, 
+        ManagerRegistry $doctrine,
+        ?string $routeSource = null,
+        )
+    {
+
+        $casPV = $casPVRepo->find($idCasPV);
+
+        // Gérer le cas où le cas PV n'existe pas
+        if (!$casPV ) {
+            throw $this->createNotFoundException('Le cas PV avec l\'id ' . $idCasPV . ' n\'existe pas.');
+        }
+
+        $produit = $doctrine->getRepository(Produits::class)->find($produitId);
+        if (!$produit) {
+            throw $this->createNotFoundException('Le produit avec l\'id ' . $produitId . ' n\'existe pas.');
+        }
+
+
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+        if ($user) {
+            $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+            // dd($userName); // Affiche le userName pour vérifier
+        } else {
+            throw $this->createAccessDeniedException('Utilisateur non connecté.');
+        }
+
+        $idProduit = $produit->getId();
+        $DenoProduit = $produit->getDenomination();
+
+        $em = $doctrine->getManager();
+        $em->remove($produit);
+        $em->flush();
+        $this->addFlash('success', 'Le produit ' . $idProduit . ' (' . $DenoProduit . ') a été supprimé avec succès.');
+        return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
+
+    }
+
+
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/{type_cas_pv}/{idCasPV}/ajout_produit_med/{codeCIS}/{routeSource}', 
             name: 'app_ajout_produit_med', 
             defaults: ['codeCIS' => null, 'routeSource' => null])
@@ -341,6 +398,7 @@ final class GestionProduitsController extends AbstractController
     }
 
 
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/{type_cas_pv}/{idCasPV}/ajout_produit_non_med/{SubSIMADId}/{routeSource}', 
             name: 'app_ajout_produit_non_med', 
             defaults: ['SubSIMADId' => null, 'routeSource' => null])
@@ -441,6 +499,7 @@ final class GestionProduitsController extends AbstractController
         ]);
     }
 
+    #[IsGranted(new Expression('is_granted("ROLE_PHARVIGI_SURV_GEST") or is_granted("ROLE_PHARVIGI_SURV_EVAL")'))]
     #[Route('/{type_cas_pv}/{idCasPV}/produits/ajout_produits_masse/{routeSource}', 
             name: 'app_ajout_produits_masse', 
             methods: ['POST'], 
@@ -707,7 +766,7 @@ final class GestionProduitsController extends AbstractController
         }
 
         // Fallback redirection
-        return $this->redirectToRoute('app_cm_creation_cas_creation', ['cas' => $idCasPV]);
+        return $this->redirectToRoute('app_cm_creation_cas_creation', ['cas' => $idCasPV,]);
     }
 
     /**
