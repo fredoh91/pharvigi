@@ -6,16 +6,23 @@
 <div class="form-container">
     
     <!-- Zone 1 : Dates, Numéros et CRPV -->
-    <div class="area-header">
+    <div class="area-date-cas">
         <div class="form-group">
             {{ form_label(form.dateArrivee, 'date d\'arrivée :') }}
             {{ form_widget(form.dateArrivee) }}
         </div>
         {% include 'cm/creation_cas/tableau_dates_csp.html.twig' %}
+        <div class="form-group">
+            {{ form_label(form.DateLimiteQualif_7jours, 'Date limite de qualif DMM :') }}
+            {{ form_widget(form.DateLimiteQualif_7jours) }}
+        </div>
+    </div>
+    
+    <!-- Zone 1.5 : Identifiants -->
+    <div class="area-id">
         {{ form_row(form.CRPV) }}
         {{ form_row(form.codeCRPV) }}
         {{ form_row(form.numeroBNPV) }}
-        {{ form_row(form.casPere) }}
     </div>
 
     <!-- Zone 2 : Infos Patient -->
@@ -23,13 +30,14 @@
         {{ form_row(form.sexe) }}
         {{ form_row(form.age) }}
         {{ form_row(form.uniteAge) }}
-        {{ form_row(form.effetIndesirable) }}
     </div>
 
     <!-- Zone 3 : DME & Confirmation Médicale -->
-    <div class="area-dme">
-        {{ form_row(form.SRE) }} <!-- Correspond à "Ei dans la liste des DME" -->
+    <div class="area-ei">
+        {# {{ form_row(form.SRE) }} #}
+        {{ form_row(form.effetIndesirable) }}
         {{ form_row(form.FlConfirmMedicale) }} <!-- Correspond à "Confirmé médicalement" -->
+        {% include 'cm/creation_cas/tableau_ei.html.twig' %}
     </div>
 
     <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
@@ -53,9 +61,9 @@
     </div>
 
     <!-- Zone 6 : Zone de Texte Présentation -->
-    <div class="area-presentation-text">
+    {# <div class="area-presentation-text">
         {{ form_row(form.presentation) }}
-    </div>
+    </div> #}
 
     <!-- Zone 7 : Proposition & Avis CRPV -->
     <div class="area-crpv">
@@ -112,6 +120,18 @@
     <div class="area-complementary">
         {{ form_row(form.motifQualificationDMM) }}
         {{ form_row(form.MaitriseRisque_Commentaire) }}
+    </div>
+    <!-- Zone 15 : utilisateur de création du cas -->
+    <div class="area-user-create">
+        <div>
+            Utilisateur de création du cas : 
+            {% if userCreateObject is not null %}
+                {{ userCreateObject.prenom }} {{ userCreateObject.nom }}
+            {% else %}
+                <p>Aucun utilisateur de création trouvé.</p>
+            {% endif %}
+        </div>
+
     </div>
 
 </div>

@@ -188,6 +188,15 @@ abstract class CasPV
     #[ORM\OneToMany(targetEntity: Produits::class, mappedBy: 'CasPV')]
     private Collection $produits;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $DateLimiteQualif_7jours = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $idBaseAccess = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $typeIdBaseAccess = null;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
@@ -902,6 +911,42 @@ abstract class CasPV
                 $produit->setCasPV(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateLimiteQualif7jours(): ?\DateTimeImmutable
+    {
+        return $this->DateLimiteQualif_7jours;
+    }
+
+    public function setDateLimiteQualif7jours(?\DateTimeImmutable $DateLimiteQualif_7jours): static
+    {
+        $this->DateLimiteQualif_7jours = $DateLimiteQualif_7jours;
+
+        return $this;
+    }
+
+    public function getIdBaseAccess(): ?int
+    {
+        return $this->idBaseAccess;
+    }
+
+    public function setIdBaseAccess(?int $idBaseAccess): static
+    {
+        $this->idBaseAccess = $idBaseAccess;
+
+        return $this;
+    }
+
+    public function getTypeIdBaseAccess(): ?string
+    {
+        return $this->typeIdBaseAccess;
+    }
+
+    public function setTypeIdBaseAccess(?string $typeIdBaseAccess): static
+    {
+        $this->typeIdBaseAccess = $typeIdBaseAccess;
 
         return $this;
     }

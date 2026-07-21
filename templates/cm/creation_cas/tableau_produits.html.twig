@@ -1,7 +1,7 @@
 {# Tableau des produits lié au cas #}
 {% if lstProduitsCasPV is defined %}
     <div class="table-responsive mt-4">
-        <h4>Produits associés</h4>
+        <h4 class="text-center">Produits associés</h4>
         <div class="d-flex justify-content-center mb-3">
         {% if is_granted('ROLE_PHARVIGI_SURV_GEST') or is_granted('ROLE_PHARVIGI_SURV_EVAL') %}
             <a

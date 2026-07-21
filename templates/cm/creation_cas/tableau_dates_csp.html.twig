@@ -1,17 +1,24 @@
 {# Tableau des dates CSP #}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('tableau_dates_csp') }}
+{% endblock %}
+
 {% if datesCSP is defined and datesCSP is not empty %}
     <div class="table-responsive mt-4">
-        <h4>Dates des Listes CSP associées</h4>
+        {# <h4>Dates des Listes CSP associées</h4> #}
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
                     <th>Date CSP</th>
+                    <th>Date limite de qualif avant envoi aux experts</th>
                 </tr>
             </thead>
             <tbody>
                 {% for dateCSP in datesCSP %}
                     <tr>
                         <td>{{ dateCSP.date ? dateCSP.date|date('d/m/Y') : 'Non définie' }}</td>
+                        <td>{{ dateCSP.DateMaxQualifDMM ? dateCSP.DateMaxQualifDMM|date('d/m/Y') : 'Non définie' }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

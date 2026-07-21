@@ -23,7 +23,7 @@ class CasPVType extends AbstractType
             ->add('problematique')
             ->add('propositionCRPV')
             ->add('conclusions')
-            ->add('presentation')
+            // ->add('presentation')
             ->add('CRPV')
             ->add('codeCRPV')
             ->add('gravite', ChoiceType::class, [
@@ -104,6 +104,9 @@ class CasPVType extends AbstractType
             ->add('dateArrivee', null, [
                 'widget' => 'single_text',
             ])
+            ->add('DateLimiteQualif_7jours', null, [
+                'widget' => 'single_text',
+            ])
             ->add('age')
             ->add('sexe')
             ->add('uniteAge')
@@ -114,7 +117,7 @@ class CasPVType extends AbstractType
             ->add('echangeDMM_CRPV')
             ->add('cluster')
             ->add('finalise')
-            ->add('casPere')
+            // ->add('casPere')
             ->add('lettre')
             ->add('motifQualificationDMM')
             ->add('SRE')

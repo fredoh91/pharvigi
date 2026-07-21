@@ -1,0 +1,32 @@
+// Styles pour le tableau des dates CSP
+// Réduction de la taille de police et rendu plus discret pour les en-têtes
+
+.table-dark th {
+    font-size: 0.775rem; // Réduction de la taille de police (de 1rem à 0.875rem)
+    color: #6c757d; // Texte gris plus discret
+    background-color: #e9ecef; // Arrière-plan plus clair
+    border-color: #dee2e6; // Bordure plus discrète
+    height: 50px !important; // Augmentation de la hauteur de l'en-tête
+    vertical-align: middle !important; // Centrage vertical du contenu
+    white-space: normal !important; // Autoriser le retour à la ligne
+    text-align: center !important; // Centrage horizontal du texte
+    max-width: 20ch !important; // Limiter la largeur à 20 caractères
+    overflow: hidden !important; // Cacher le contenu débordant
+    text-overflow: clip !important; // Pas de points de suspension
+}
+
+// Centrage du contenu des cellules du tableau (hors-en-tête)
+.table-dark td {
+    text-align: center !important; // Centrage horizontal du texte
+    vertical-align: middle !important; // Centrage vertical du texte
+}
+
+// Optionnel : amélioration de l'apparence globale du tableau
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #dee2e6;
+}

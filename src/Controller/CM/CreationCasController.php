@@ -228,6 +228,13 @@ final class CreationCasController extends AbstractController
             $userName = (string) $user;
         }
         
+        $userCreate = $cas->getUserCreate();
+        if ($userCreate) {
+            $userCreateObject = $em->getRepository(get_class($user))->findOneBy(['email' => $userCreate]);
+        } else {
+            $userCreateObject = null;
+        }
+
         // Vérification que l'utilisateur est le créateur du cas ou a les droits nécessaires
         if ($cas->getUserCreate() !== $user->getUserIdentifier() && 
             !in_array('ROLE_PHARVIGI_SURV_EVAL', $user->getRoles()) && 
@@ -316,17 +323,22 @@ final class CreationCasController extends AbstractController
                     $datesCSP[] = [
                         'date' => $listeCSP->getDateCSP(),
                         'type' => $listeCSP->getTypeCSP(),
+                        'DateMaxQualifDMM' => $listeCSP->getDateMaxQualifDMM(),
                     ];
                 }
             }
 
             $lstProduitsCasPV = $cas->getProduits();
 
+            $lstEI = $cas->getEffetsIndesirables();
+
             return $this->render('cm/creation_cas/form_creation_cas_cm.html.twig', [
                 'form' => $form->createView(),
                 'cas' => $cas,
                 'datesCSP' => $datesCSP,
                 'lstProduitsCasPV' => $lstProduitsCasPV,
+                'lstEI' => $lstEI,
+                'userCreateObject' => $userCreateObject,
             ]);
             
         } elseif ($cas instanceof EMM) {
