@@ -160,6 +160,17 @@ class ImportFicheRecueilCMService
         $cm->setCluster($ficRec['Cluster'] ?? false);
         $cm->setDateArrivee($dateArriveeFicheRecueilCM);
         
+        // champ AvisCRPV : $cm->setAvisCRPV()
+        // Priorité à Sign_Potentiel si vrai, sinon CM_Info, sinon null
+        if ($ficRec['Sign_Potentiel'] ?? false) {
+            $cm->setAvisCRPV('Pour action');
+        } elseif ($ficRec['CM_Info'] ?? false) {
+            $cm->setAvisCRPV('Pour information');
+        } else {
+            $cm->setAvisCRPV(null);
+        }
+
+
         $cm->setCreatedAt($now);
         $cm->setUpdatedAt($now);
         $cm->setUserCreate($userName);
@@ -209,7 +220,14 @@ class ImportFicheRecueilCMService
             $cm->setIncapacite($mainData['Handi'] ?? null);
             $cm->setAnomalieCongenitale($mainData['AnoCong'] ?? null);
             $cm->setAutreSituation($mainData['AutresGrav'] ?? null);
-            $cm->setTypologie($mainData['TYP_EFFET'] ?? null);
+
+            // $cm->setTypologie($mainData['TYP_EFFET'] ?? null);
+            $typEffet = $mainData['TYP_EFFET'] ?? null;
+            if ($typEffet !== null && !mb_check_encoding($typEffet, 'UTF-8')) {
+                $typEffet = mb_convert_encoding($typEffet, 'UTF-8', 'Windows-1252');
+            }
+            $cm->setTypologie($typEffet);
+
             $cm->setCRPV($mainData['Centre'] ?? null);
             $cm->setCodeCRPV($mainData['CentreAbrev'] ?? null);
             $cm->setFlConfirmMedicale($mainData['MEDICALLY_CONFIRMED'] === 'Oui' ? true : false);

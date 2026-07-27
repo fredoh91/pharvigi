@@ -3,10 +3,10 @@
 namespace App\Form\CM;
 
 use App\Entity\CM\CM;
-// use App\Entity\CM\DonneesComplementairesCM;
 use App\Entity\ListeCSP;
 use App\Form\CasPVType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -59,7 +59,15 @@ class CMType extends CasPVType
             // ])
             // ->add('niveauRisqueFinal')
             // ->add('niveauRisquePGS')
-            ->add('avisCRPV')
+            ->add('avisCRPV', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    '' => '',
+                    'Pour action' => 'Pour action',
+                    'Pour information' => 'Pour information',
+                ],
+                'placeholder' => 'Avis CRPV'
+            ])
             ->add('MotifNonPresentation')
             ->add('suiviEnquete')
             ->add('ListeCRPV')

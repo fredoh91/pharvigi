@@ -197,6 +197,30 @@ abstract class CasPV
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $typeIdBaseAccess = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $avisExperts = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $pointDeDiscussion = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbVotant = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $abstention = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $avisDefavorables = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $avisFavorables = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $MMR_experts = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $actionSURV_experts = null;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
@@ -947,6 +971,102 @@ abstract class CasPV
     public function setTypeIdBaseAccess(?string $typeIdBaseAccess): static
     {
         $this->typeIdBaseAccess = $typeIdBaseAccess;
+
+        return $this;
+    }
+
+    public function getAvisExperts(): ?string
+    {
+        return $this->avisExperts;
+    }
+
+    public function setAvisExperts(?string $avisExperts): static
+    {
+        $this->avisExperts = $avisExperts;
+
+        return $this;
+    }
+
+    public function getPointDeDiscussion(): ?string
+    {
+        return $this->pointDeDiscussion;
+    }
+
+    public function setPointDeDiscussion(?string $pointDeDiscussion): static
+    {
+        $this->pointDeDiscussion = $pointDeDiscussion;
+
+        return $this;
+    }
+
+    public function getNbVotant(): ?int
+    {
+        return $this->nbVotant;
+    }
+
+    public function setNbVotant(?int $nbVotant): static
+    {
+        $this->nbVotant = $nbVotant;
+
+        return $this;
+    }
+
+    public function getAbstention(): ?string
+    {
+        return $this->abstention;
+    }
+
+    public function setAbstention(?string $abstention): static
+    {
+        $this->abstention = $abstention;
+
+        return $this;
+    }
+
+    public function getAvisDefavorables(): ?string
+    {
+        return $this->avisDefavorables;
+    }
+
+    public function setAvisDefavorables(?string $avisDefavorables): static
+    {
+        $this->avisDefavorables = $avisDefavorables;
+
+        return $this;
+    }
+
+    public function getAvisFavorables(): ?string
+    {
+        return $this->avisFavorables;
+    }
+
+    public function setAvisFavorables(?string $avisFavorables): static
+    {
+        $this->avisFavorables = $avisFavorables;
+
+        return $this;
+    }
+
+    public function getMMRExperts(): ?string
+    {
+        return $this->MMR_experts;
+    }
+
+    public function setMMRExperts(?string $MMR_experts): static
+    {
+        $this->MMR_experts = $MMR_experts;
+
+        return $this;
+    }
+
+    public function getActionSURVExperts(): ?string
+    {
+        return $this->actionSURV_experts;
+    }
+
+    public function setActionSURVExperts(?string $actionSURV_experts): static
+    {
+        $this->actionSURV_experts = $actionSURV_experts;
 
         return $this;
     }

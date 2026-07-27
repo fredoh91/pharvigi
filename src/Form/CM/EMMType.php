@@ -4,6 +4,7 @@ namespace App\Form\CM;
 
 use App\Entity\EMM;
 use App\Form\CasPVType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -56,7 +57,14 @@ class EMMType extends CasPVType
             // ])
             // ->add('niveauRisqueFinal')
             // ->add('niveauRisquePGS')
-            ->add('avisCRPV')
+            ->add('avisCRPV', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Pour action' => 'Pour action',
+                    'Pour information' => 'Pour information',
+                ],
+                'placeholder' => false
+            ])
             ->add('MotifNonPresentation')
             ->add('suiviEnquete')
             ->add('ListeCRPV')

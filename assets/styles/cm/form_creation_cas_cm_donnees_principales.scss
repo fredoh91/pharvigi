@@ -7,6 +7,8 @@
         padding: 20px;
         border-radius: 6px;
         border: 1px solid transparent;
+        // Ajout pour permettre un ajustement de hauteur automatique
+        grid-auto-rows: min-content;
 
 
         // Définition de l'emplacement de chaque bloc (Template Areas)
@@ -17,10 +19,10 @@
             "prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     workflow      workflow      workflow"
             ".             .             .             .             .             .             .             .             .             workflow      workflow      workflow"
             "crpv          crpv          crpv          crpv          crpv          crpv          crpv          cluster       cluster       workflow      workflow      workflow"
-            "typology      typology      typology      typology      typology      typology      typology      typology      typology      typology      typology      typology"
             "gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite"
             "evaluators    evaluators    evaluators    evaluators    dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv"
             "chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        complem       complem       complem"
+            "typology      typology      typology      typology      typology      typology      typology      typology      .             .             .             ."
         ;
     }
 
@@ -30,6 +32,7 @@
     .area-patient            { grid-area: patient; }
     .area-ei                 { grid-area: ei; }
     .area-workflow           { grid-area: workflow; }
+    .area-typology           { grid-area: typology; }
     .area-produits           { grid-area: produits; }
     .area-problematique-meta { grid-area: prob-meta; }
     .area-crpv               { grid-area: crpv; }
@@ -53,6 +56,8 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 10px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
     }
 
     .area-id {
@@ -63,6 +68,8 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 10px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
 
         & > div {
             flex: 1;
@@ -79,17 +86,44 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 10px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
+        
+        .form-group:nth-child(1) {
+            flex: 0 0 15ch; /* Sexe : 3 caractères */
+        }
+        
+        .form-group:nth-child(2) {
+            flex: 0 0 15ch; /* Age : 5 caractères */
+        }
+        
+        .form-group:nth-child(3) {
+            flex: 0 0 15ch; /* Unité d'âge : 5 caractères */
+        }
     }
 
     .area-ei {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "effet-indesirable effet-indesirable"
+            "confirm-medical tableau";
         gap: 1rem;
-        align-items: center;
-        justify-content: center;
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 10px;
+        
+        .form-group:nth-child(1) {
+            grid-area: effet-indesirable;
+        }
+        
+        .form-group:nth-child(2) {
+            grid-area: confirm-medical;
+        }
+        
+        .tableau-ei {
+            grid-area: tableau;
+        }
     }
 
     .area-produits {
@@ -101,6 +135,8 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 10px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
     }
 
 
@@ -118,12 +154,45 @@
         padding: 10px;
         background-color: rgba(255, 255, 255, 0.4);
         border-radius: 4px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
+    }
+    .area-typology {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 4px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
+        
+        .form-group:nth-child(1) {
+            flex: 0 0 15ch; /* Taille minimale pour le premier champ */
+        }
+        
+        .form-group:nth-child(2) {
+            flex: 0 0 10ch; /* Taille minimale pour le deuxième champ */
+        }
+        
+        .form-group:nth-child(3) {
+            flex: 0 0 45ch; /* Taille minimale pour le troisième champ */
+        }
+        
+        .form-group:nth-child(4) {
+            flex: 0 0 15ch; /* Taille minimale pour le quatrième champ */
+        }
     }
 
     .area-problematique-meta {
         display: flex;
         gap: 1.5rem;
         align-items: flex-end;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
     }
 
     .area-gravite-group {
@@ -133,6 +202,8 @@
         background-color: rgba(255, 255, 255, 0.3);
         padding: 8px;
         border-radius: 4px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
         
         /* Conteneur pour les 2 lignes */
         display: grid;
@@ -157,6 +228,8 @@
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
     }
 
     .area-chronologie-group {

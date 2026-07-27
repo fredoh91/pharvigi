@@ -22,69 +22,77 @@ class CasPVType extends AbstractType
             ])
             ->add('problematique')
             ->add('propositionCRPV')
-            ->add('conclusions')
+            // ->add('conclusions')
             // ->add('presentation')
             ->add('CRPV')
             ->add('codeCRPV')
             ->add('gravite', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Oui' => 'Oui',
                     'Non' => 'Non',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Gravité'
             ])
             ->add('deces', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Oui' => 'Oui',
                     'Non' => 'Non',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Décès'
             ])
             ->add('miseEnJeuPronostic', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Oui' => 'Oui',
                     'Non' => 'Non',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Mise en jeu du pronostic'
             ])
             ->add('hospitalisation', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Oui' => 'Oui',
                     'Non' => 'Non',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Hospitalisation'
             ])
             ->add('incapacite', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Oui' => 'Oui',
                     'Non' => 'Non',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Incapacité'
             ])
             ->add('anomalieCongenitale', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Oui' => 'Oui',
                     'Non' => 'Non',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Anomalie congénitale'
             ])
             ->add('autreSituation', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Oui' => 'Oui',
                     'Non' => 'Non',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Autre situation'
             ])
             ->add('typologie', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
+                    '' => '',
                     'Effet indésirable' => 'Effet indésirable',
                     'Interaction' => 'Interaction',
                     'Surdosage' => 'Surdosage',
@@ -99,7 +107,7 @@ class CasPVType extends AbstractType
                     'Autre' => 'Autre',
                     'Exposition professionnelle' => 'Exposition professionnelle',
                 ],
-                'placeholder' => false
+                'placeholder' => 'Sélectionnez une typologie'
             ])
             ->add('dateArrivee', null, [
                 'widget' => 'single_text',
@@ -118,9 +126,22 @@ class CasPVType extends AbstractType
             ->add('cluster')
             ->add('finalise')
             // ->add('casPere')
-            ->add('lettre')
+            ->add('lettre', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    '' => '',
+                    'A' => 'A',
+                    'B' => 'B',
+                    'C' => 'C',
+                    'D' => 'D',
+                ],
+                'placeholder' => 'Sélectionnez une lettre'
+            ])
             ->add('motifQualificationDMM')
-            ->add('SRE')
+            ->add('SRE', CheckboxType::class, [
+                'required' => false,
+                'label' => 'SRE',
+            ])
             // ->add('UserCreate')
             // ->add('UserModif')
             // ->add('CreatedAt', null, [
@@ -131,7 +152,10 @@ class CasPVType extends AbstractType
             // ])
             ->add('niveauRisqueFinal')
             ->add('niveauRisquePGS')
-            ->add('FlConfirmMedicale', CheckboxType::class, ['required' => false])
+            ->add('FlConfirmMedicale', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Confirmé médicalement',
+            ])
         ;
     }
 

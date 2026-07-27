@@ -139,7 +139,7 @@ final class CreationCasController extends AbstractController
                 }
                 $mainData = $mainDataRows[0];
 
-                // dump($mainData);
+                // dd($mainData);
 
                 $eiDataRows = $requetesBnpvService->DonneEIData($aerId);
                 $medicDataRows = $requetesBnpvService->DonneMedicamentData($aerId);

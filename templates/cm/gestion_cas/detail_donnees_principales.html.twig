@@ -52,24 +52,26 @@
 
     <!-- Zone 3 : DME & Confirmation Médicale -->
     <div class="area-ei">
-
         <div class="form-group">
             {{ form_label(form.effetIndesirable, 'Effet indésirable :') }}
             {{ form_widget(form.effetIndesirable) }}
         </div>
         <div class="form-group">
-            {{ form_label(form.FlConfirmMedicale, 'Confirmé médicalement :') }}
+            {# {{ form_label(form.FlConfirmMedicale, 'Confirmé médicalement :') }} #}
             {{ form_widget(form.FlConfirmMedicale) }}
         </div>
         {% include 'cm/creation_cas/tableau_ei.html.twig' %}
     </div>
 
+
+    <!-- Zone 4.5 : Produits -->
+    <div class="area-produits">
+        {% include 'cm/creation_cas/tableau_produits.html.twig' %}
+    </div>
+
+
     <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
     <div class="area-workflow">
-        <div class="form-group">
-            {{ form_label(form.TypeCasPV, 'Type de cas :') }}
-            {{ form_widget(form.TypeCasPV) }}
-        </div>
         <div class="form-group">
             {{ form_label(form.finalise, 'Finalisé :') }}
             {{ form_widget(form.finalise) }}
@@ -85,9 +87,24 @@
     </div>
 
 
-    <!-- Zone 4.5 : Produits -->
-    <div class="area-produits">
-        {% include 'cm/creation_cas/tableau_produits.html.twig' %}
+    <!-- Zone 4.3 : typologie du cas -->
+    <div class="area-typology">
+        <div class="form-group">
+            {{ form_label(form.TypeCasPV, 'Type de cas :') }}
+            {{ form_widget(form.TypeCasPV) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.lettre, 'Lettre :') }}
+            {{ form_widget(form.lettre) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.typologie, 'Typologie :') }}
+            {{ form_widget(form.typologie) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.SRE, 'SRE :') }}
+            {{ form_widget(form.SRE) }}
+        </div>
     </div>
 
     <!-- Zone 5 : Métadonnées Problématique -->
@@ -95,10 +112,6 @@
         <div class="form-group">
             {{ form_label(form.problematique, 'Problématique :') }}
             {{ form_widget(form.problematique) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.lettre, 'Lettre :') }}
-            {{ form_widget(form.lettre) }}
         </div>
     </div>
 
@@ -117,10 +130,6 @@
             {{ form_label(form.avisCRPV, 'Avis CRPV :') }}
             {{ form_widget(form.avisCRPV) }}
         </div>
-        <div class="form-group">
-            {{ form_label(form.conclusions, 'Conclusions :') }}
-            {{ form_widget(form.conclusions) }}
-        </div>
     </div>
 
     <!-- Zone 8 : Cluster -->
@@ -132,12 +141,9 @@
     </div>
 
     <!-- Zone 9 : Typologie -->
-    <div class="area-typology">
-        <div class="form-group">
-            {{ form_label(form.typologie, 'Typologie :') }}
-            {{ form_widget(form.typologie) }}
-        </div>
-    </div>
+    {# <div class="area-typology">
+
+    </div> #}
 
     <!-- Zone 10 : Bloc Gravité et Critères -->
     <div class="area-gravite-group">
@@ -233,7 +239,6 @@
                 <p>Aucun utilisateur de création trouvé.</p>
             {% endif %}
         </div>
-
     </div>
 
 </div>
