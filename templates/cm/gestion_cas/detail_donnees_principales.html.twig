@@ -108,7 +108,7 @@
     </div>
 
     <!-- Zone 5 : Métadonnées Problématique -->
-    <div class="area-problematique-meta">
+    <div class="area-problematique">
         <div class="form-group">
             {{ form_label(form.problematique, 'Problématique :') }}
             {{ form_widget(form.problematique) }}
@@ -122,16 +122,21 @@
 
     <!-- Zone 7 : Proposition & Avis CRPV -->
     <div class="area-crpv">
-        <div class="form-group">
-            {{ form_label(form.propositionCRPV, 'Proposition CRPV :') }}
-            {{ form_widget(form.propositionCRPV) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.avisCRPV, 'Avis CRPV :') }}
-            {{ form_widget(form.avisCRPV) }}
-        </div>
+        {{ form_label(form.propositionCRPV, 'Proposition CRPV :') }}
+        {{ form_label(form.avisCRPV, 'Avis CRPV :') }}
+        {{ form_widget(form.avisCRPV) }}
+        {{ form_widget(form.propositionCRPV) }}
     </div>
 
+    <!-- Zone 12 : Pré-qualification DSURV -->
+    <div class="area-dsurv">
+        {{ form_label(form.motifPrequalification, 'Motif de pré-qualification :') }}
+        {{ form_label(form.prequalificationDSURV, 'Pré-qualification DSURV :') }}
+        {{ form_widget(form.prequalificationDSURV) }}
+        {{ form_widget(form.motifPrequalification) }}
+    </div>
+
+    
     <!-- Zone 8 : Cluster -->
     <div class="area-cluster-checkbox">
         <div class="form-group">
@@ -189,17 +194,6 @@
         </div>
     </div>
 
-    <!-- Zone 12 : Pré-qualification DSURV -->
-    <div class="area-dsurv">
-        <div class="form-group">
-            {{ form_label(form.prequalificationDSURV, 'Pré-qualification DSURV :') }}
-            {{ form_widget(form.prequalificationDSURV) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.motifPrequalification, 'Motif de pré-qualification :') }}
-            {{ form_widget(form.motifPrequalification) }}
-        </div>
-    </div>
 
     <!-- Zone 13 : Chronologie & Risque Final -->
     <div class="area-chronologie-group">

@@ -72,6 +72,17 @@ class CMType extends CasPVType
             ->add('suiviEnquete')
             ->add('ListeCRPV')
             ->add('MaitriseRisque_Commentaire')
+            ->add('lettre', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    '' => '',
+                    'A' => 'A',
+                    'B' => 'B',
+                    'C' => 'C',
+                    'D' => 'D',
+                ],
+                'placeholder' => 'Sélectionnez une lettre'
+            ])
             // ->add('dateCSP', EntityType::class, [
             //     'class' => ListeCSP::class,
             //     'choice_label' => function (\App\Entity\ListeCSP $listeCSP): string {

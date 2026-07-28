@@ -16,13 +16,14 @@
             "date-cas      date-cas      date-cas      date-cas      date-cas      date-cas      id            id            id            id            id            id"
             "patient       patient       patient       patient       patient       patient       ei            ei            ei            ei            ei            ei"
             "produits      produits      produits      produits      produits      produits      produits      produits      produits      produits      produits      produits"
-            "prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     prob-meta     workflow      workflow      workflow"
+            "prob          prob          prob          prob          prob          prob          prob          prob          prob          workflow      workflow      workflow"
             ".             .             .             .             .             .             .             .             .             workflow      workflow      workflow"
             "crpv          crpv          crpv          crpv          crpv          crpv          crpv          cluster       cluster       workflow      workflow      workflow"
             "gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite"
-            "evaluators    evaluators    evaluators    evaluators    dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv"
+            "dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         .             .             .             .             .        "
+            "typology      typology      typology      typology      typology      typology      .             .             .             .             .             ."
             "chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        complem       complem       complem"
-            "typology      typology      typology      typology      typology      typology      typology      typology      .             .             .             ."
+            "evaluators    evaluators    evaluators    evaluators    .             .             .             .             .             .             .             ."
         ;
     }
 
@@ -34,7 +35,7 @@
     .area-workflow           { grid-area: workflow; }
     .area-typology           { grid-area: typology; }
     .area-produits           { grid-area: produits; }
-    .area-problematique-meta { grid-area: prob-meta; }
+    .area-problematique      { grid-area: prob; }
     .area-crpv               { grid-area: crpv; }
     .area-cluster-checkbox   { grid-area: cluster; }
     .area-typology           { grid-area: typology; }
@@ -139,6 +140,71 @@
         align-self: start;
     }
 
+    .area-problematique {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: stretch;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
+        
+        // Permet aux enfants de s'étirer horizontalement
+        & > * {
+            flex: 1 1 100%;
+        }
+    }
+
+
+    .area-crpv {
+        display: grid;
+        grid-template-columns: auto 1fr 20ch;
+        gap: 1rem;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        align-self: start;
+
+        // Libellé du textarea (Proposition CRPV)
+        label[for$="propositionCRPV"],
+        label:first-of-type {
+            grid-column: 1;
+            grid-row: 1;
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+
+        // Libellé du menu déroulant (Avis CRPV)
+        label[for$="avisCRPV"],
+        label:last-of-type {
+            grid-column: 2;
+            grid-row: 1;
+            margin-bottom: 0;
+            white-space: nowrap;
+            justify-self: end;
+        }
+
+        // Menu déroulant (Avis CRPV)
+        select,
+        .form-select {
+            grid-column: 3;
+            grid-row: 1;
+            width: 100%;
+            min-width: 20ch;
+        }
+
+        // Textarea (Proposition CRPV)
+        textarea,
+        textarea.form-control {
+            grid-column: 1 / span 3;
+            grid-row: 2;
+            width: 100%;
+        }
+    }
 
     // .area-dme {
     //     display: flex;
@@ -157,6 +223,7 @@
         // Ajout pour que la zone s'ajuste à son contenu
         align-self: start;
     }
+
     .area-typology {
         display: flex;
         flex-wrap: wrap;
@@ -171,29 +238,22 @@
         align-self: start;
         
         .form-group:nth-child(1) {
-            flex: 0 0 15ch; /* Taille minimale pour le premier champ */
+            flex: 0 0 12ch; /* Taille minimale pour le premier champ */
         }
         
         .form-group:nth-child(2) {
-            flex: 0 0 10ch; /* Taille minimale pour le deuxième champ */
+            flex: 0 0 8ch; /* Taille minimale pour le deuxième champ */
         }
         
         .form-group:nth-child(3) {
-            flex: 0 0 45ch; /* Taille minimale pour le troisième champ */
+            flex: 0 0 42ch; /* Taille minimale pour le troisième champ */
         }
         
         .form-group:nth-child(4) {
-            flex: 0 0 15ch; /* Taille minimale pour le quatrième champ */
+            flex: 0 0 10ch; /* Taille minimale pour le quatrième champ */
         }
     }
 
-    .area-problematique-meta {
-        display: flex;
-        gap: 1.5rem;
-        align-items: flex-end;
-        // Ajout pour que la zone s'ajuste à son contenu
-        align-self: start;
-    }
 
     .area-gravite-group {
         display: flex;
@@ -225,12 +285,53 @@
     }
 
     .area-dsurv {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        // Ajout pour que la zone s'ajuste à son contenu
+        display: grid;
+        grid-template-columns: auto 1fr 40ch;
+        gap: 1rem;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
         align-self: start;
+
+        // Libellé du textarea (Motif de pré-qualification :)
+        label[for$="motifPrequalification"],
+        label:first-of-type {
+            grid-column: 1;
+            grid-row: 1;
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+
+        // Libellé du menu déroulant (Pré-qualification DSURV :)
+        label[for$="prequalificationDSURV"],
+        label:last-of-type {
+            grid-column: 2;
+            grid-row: 1;
+            margin-bottom: 0;
+            white-space: nowrap;
+            justify-self: end;
+        }
+
+        // Menu déroulant (Pré-qualification DSURV :)
+        select,
+        .form-select {
+            grid-column: 3;
+            grid-row: 1;
+            width: 100%;
+            min-width: 40ch;
+        }
+
+        // Textarea (Motif de pré-qualification :)
+        textarea,
+        textarea.form-control {
+            grid-column: 1 / span 3;
+            grid-row: 2;
+            width: 100%;
+        }
     }
+
+
 
     .area-chronologie-group {
         display: grid;

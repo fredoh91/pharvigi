@@ -89,7 +89,7 @@
     </div>
 
     <!-- Zone 5 : Métadonnées Problématique -->
-    <div class="area-problematique-meta">
+    <div class="area-problematique">
         {{ form_row(form.problematique) }}
     </div>
 
@@ -100,9 +100,17 @@
 
     <!-- Zone 7 : Proposition & Avis CRPV -->
     <div class="area-crpv">
-        {{ form_row(form.propositionCRPV) }}
-        {{ form_row(form.avisCRPV) }}
-        {# {{ form_row(form.conclusions) }} #}
+        {{ form_label(form.propositionCRPV, 'Proposition CRPV :') }}
+        {{ form_label(form.avisCRPV, 'Avis CRPV :') }}
+        {{ form_widget(form.avisCRPV) }}
+        {{ form_widget(form.propositionCRPV) }}
+    </div>
+    <!-- Zone 12 : Pré-qualification DSURV -->
+    <div class="area-dsurv">
+        {{ form_label(form.motifPrequalification, 'Motif de pré-qualification :') }}
+        {{ form_label(form.prequalificationDSURV, 'Pré-qualification DSURV :') }}
+        {{ form_widget(form.prequalificationDSURV) }}
+        {{ form_widget(form.motifPrequalification) }}
     </div>
 
     <!-- Zone 8 : Cluster -->
@@ -131,11 +139,6 @@
         {{ form_row(form.ListeCRPV) }}
     </div>
 
-    <!-- Zone 12 : Pré-qualification DSURV -->
-    <div class="area-dsurv">
-        {{ form_row(form.prequalificationDSURV) }}
-        {{ form_row(form.motifPrequalification) }}
-    </div>
 
     <!-- Zone 13 : Chronologie & Risque Final -->
     <div class="area-chronologie-group">

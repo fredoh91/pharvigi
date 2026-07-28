@@ -69,6 +69,20 @@ class EMMType extends CasPVType
             ->add('suiviEnquete')
             ->add('ListeCRPV')
             ->add('MaitriseRisque_Commentaire')
+            ->add('lettre', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    '' => '',
+                    '1' => '1',
+                    '2' => '2',
+                    '3' => '3',
+                    '4' => '4',
+                    '5' => '5',
+                    '6' => '6',
+                    '7' => '7',
+                ],
+                'placeholder' => 'Sélectionnez une lettre'
+            ])
         ;
     }
 

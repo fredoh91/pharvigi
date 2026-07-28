@@ -119,24 +119,34 @@ class CasPVType extends AbstractType
             ->add('sexe')
             ->add('uniteAge')
             ->add('effetIndesirable')
-            ->add('prequalificationDSURV')
+            ->add('prequalificationDSURV', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    '' => '',
+                    'Cas marquant présenté' => 'Cas marquant présenté',
+                    'Cas marquant pour info' => 'Cas marquant pour info',
+                    'Cas marquant - en cours de traitement' => 'Cas marquant - en cours de traitement',
+
+                ],
+                'placeholder' => 'Sélectionnez une typologie'
+            ])
             ->add('motifPrequalification')
             ->add('investigationDP')
             ->add('echangeDMM_CRPV')
             ->add('cluster')
             ->add('finalise')
             // ->add('casPere')
-            ->add('lettre', ChoiceType::class, [
-                'required' => false,
-                'choices' => [
-                    '' => '',
-                    'A' => 'A',
-                    'B' => 'B',
-                    'C' => 'C',
-                    'D' => 'D',
-                ],
-                'placeholder' => 'Sélectionnez une lettre'
-            ])
+            // ->add('lettre', ChoiceType::class, [
+            //     'required' => false,
+            //     'choices' => [
+            //         '' => '',
+            //         'A' => 'A',
+            //         'B' => 'B',
+            //         'C' => 'C',
+            //         'D' => 'D',
+            //     ],
+            //     'placeholder' => 'Sélectionnez une lettre'
+            // ])
             ->add('motifQualificationDMM')
             ->add('SRE', CheckboxType::class, [
                 'required' => false,
