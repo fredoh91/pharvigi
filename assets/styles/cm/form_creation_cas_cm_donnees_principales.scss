@@ -16,14 +16,15 @@
             "date-cas      date-cas      date-cas      date-cas      date-cas      date-cas      id            id            id            id            id            id"
             "patient       patient       patient       patient       patient       patient       ei            ei            ei            ei            ei            ei"
             "produits      produits      produits      produits      produits      produits      produits      produits      produits      produits      produits      produits"
-            "prob          prob          prob          prob          prob          prob          prob          prob          prob          workflow      workflow      workflow"
-            ".             .             .             .             .             .             .             .             .             workflow      workflow      workflow"
-            "crpv          crpv          crpv          crpv          crpv          crpv          crpv          cluster       cluster       workflow      workflow      workflow"
+            "prob          prob          prob          prob          prob          prob          prob          prob          prob          .             .             ."
+            "crpv          crpv          crpv          crpv          crpv          crpv          .             cluster       cluster       .             .             ."
             "gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite"
-            "dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         .             .             .             .             .        "
+            "dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         .             .             .             .             .             ."
+            "dmm           dmm           dmm           dmm           dmm           dmm           dmm           dmm           dmm           dmm           dmm           dmm"
             "typology      typology      typology      typology      typology      typology      .             .             .             .             .             ."
-            "chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        complem       complem       complem"
-            "evaluators    evaluators    evaluators    evaluators    .             .             .             .             .             .             .             ."
+            "chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        .             .             ."
+            "niv-risk      niv-risk      niv-risk      .             .             .             .             .             .             .             .             ."
+            "ovpt          ovpt          ovpt          ovpt          ovpt          .             .             workflow      workflow      workflow      workflow      workflow"
         ;
     }
 
@@ -32,7 +33,7 @@
     .area-id                 { grid-area: id; }
     .area-patient            { grid-area: patient; }
     .area-ei                 { grid-area: ei; }
-    .area-workflow           { grid-area: workflow; }
+    .area-niv-risk           { grid-area: niv-risk; }
     .area-typology           { grid-area: typology; }
     .area-produits           { grid-area: produits; }
     .area-problematique      { grid-area: prob; }
@@ -40,10 +41,11 @@
     .area-cluster-checkbox   { grid-area: cluster; }
     .area-typology           { grid-area: typology; }
     .area-gravite-group      { grid-area: gravite; }
-    .area-evaluators         { grid-area: evaluators; }
     .area-dsurv              { grid-area: dsurv; }
     .area-chronologie-group  { grid-area: chrono; }
-    .area-complementary      { grid-area: complem; }
+    .area-workflow           { grid-area: workflow; }
+    .area-dmm                { grid-area: dmm; }
+    .area-on-verra-plus-tard { grid-area: ovpt; }
 
 
     /* --- Organisation interne de chaque zone (Flexbox & Alignements) --- */
@@ -152,6 +154,12 @@
         // Ajout pour que la zone s'ajuste à son contenu
         align-self: start;
         
+        /* Hauteur minimale pour le champ problématique */
+        .form-group textarea,
+        .form-group textarea.form-control {
+            min-height: 20em;
+        }
+
         // Permet aux enfants de s'étirer horizontalement
         & > * {
             flex: 1 1 100%;
@@ -203,14 +211,9 @@
             grid-column: 1 / span 3;
             grid-row: 2;
             width: 100%;
+            min-height: 10em;
         }
     }
-
-    // .area-dme {
-    //     display: flex;
-    //     gap: 2rem;
-    //     align-items: center;
-    // }
 
     .area-workflow {
         display: flex;
@@ -328,21 +331,110 @@
             grid-column: 1 / span 3;
             grid-row: 2;
             width: 100%;
+            min-height: 15em;
+        }
+    }
+
+
+    .area-dmm {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-areas: 
+            "label-motif            label-motif             label-motif             label-motif             label-motif             label-motif         label-motif         label-motif"
+            "textarea-motif         textarea-motif          textarea-motif          textarea-motif          textarea-motif          textarea-motif      textarea-motif      textarea-motif"
+            "label-investigation    label-investigation     label-investigation     label-investigation     label-investigation     label-echange       label-echange       label-echange"
+            "textarea-investigation textarea-investigation  textarea-investigation  textarea-investigation  textarea-investigation  textarea-echange    textarea-echange    textarea-echange";
+        gap: 1rem;
+        align-items: start;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        align-self: start;
+
+        // Apply display: contents to the wrappers so their children participate directly in the grid layout
+        & > .form-group,
+        & > .chrono-textarea {
+            &:has(label[for$="motifQualificationDMM"]),
+            &:has(label[for$="investigationDMM"]),
+            &:has(label[for$="echangeDMM_CRPV"]) {
+                display: contents;
+            }
+        }
+
+        // Libellé du textarea (Motif de qualification DMM :)
+        label[for$="motifQualificationDMM"] {
+            grid-area: label-motif;
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+
+        // Textarea (Motif de qualification DMM :)
+        textarea[id$="motifQualificationDMM"],
+        textarea.form-control[id$="motifQualificationDMM"] {
+            grid-area: textarea-motif;
+            width: 100%;
+            min-height: 15em;
+        }
+
+        // Libellé du textarea (Investigation DMM)
+        label[for$="investigationDMM"] {
+            grid-area: label-investigation;
+            margin-bottom: 0;
+            white-space: nowrap;
+            justify-self: start;
+        }
+
+        // Textarea (Investigation DMM)
+        textarea[id$="investigationDMM"],
+        textarea.form-control[id$="investigationDMM"] {
+            grid-area: textarea-investigation;
+            width: 100%;
+            min-height: 15em;
+            // min-width: 30ch;
+        }
+
+        // Libellé du textarea (Échange DMM CRPV)
+        label[for$="echangeDMM_CRPV"] {
+            grid-area: label-echange;
+            margin-bottom: 0;
+            white-space: nowrap;
+            justify-self: end;
+        }
+
+        // Textarea (Échange DMM CRPV)
+        textarea[id$="echangeDMM_CRPV"],
+        textarea.form-control[id$="echangeDMM_CRPV"] {
+            grid-area: textarea-echange;
+            width: 100%;
+            min-height: 15em;
+            // min-width: 30ch;
         }
     }
 
 
 
-    .area-chronologie-group {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 1rem;
-        
-        .sub-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+    .area-niv-risk {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 4px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
+    }
+
+    .area-on-verra-plus-tard {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 4px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
     }
 
     /* --- Tes règles d'origine préservées --- */
@@ -350,9 +442,11 @@
         margin-bottom: 0;
     }
 
-    .form-container textarea {
+    /* .form-container textarea {
         min-height: 100px;
-    }
+    } */
+       
+
 
     .form-container .checkbox {
         align-self: center;

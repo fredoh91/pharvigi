@@ -69,8 +69,8 @@ class CMType extends CasPVType
                 'placeholder' => 'Avis CRPV'
             ])
             ->add('MotifNonPresentation')
-            ->add('suiviEnquete')
-            ->add('ListeCRPV')
+            // ->add('suiviEnquete')
+            // ->add('ListeCRPV')
             ->add('MaitriseRisque_Commentaire')
             ->add('lettre', ChoiceType::class, [
                 'required' => false,

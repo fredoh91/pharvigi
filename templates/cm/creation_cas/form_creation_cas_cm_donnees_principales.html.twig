@@ -56,12 +56,20 @@
 
     <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
     <div class="area-workflow">
-        {{ form_row(form.finalise) }}
-        {{ form_row(form.niveauRisquePGS) }}
-        {{ form_row(form.MotifNonPresentation) }}
+
     </div>
 
-
+    <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
+    <div class="area-on-verra-plus-tard">
+        <div class="form-group">
+            {{ form_label(form.finalise, 'Finalisé :') }}
+            {{ form_widget(form.finalise) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.MotifNonPresentation, 'Motif de non-présentation :') }}
+            {{ form_widget(form.MotifNonPresentation) }}
+        </div>
+    </div>
 
     <!-- Zone 4.3 : typologie du cas -->
     <div class="area-typology">
@@ -77,11 +85,16 @@
             {{ form_label(form.typologie, 'Typologie :') }}
             {{ form_widget(form.typologie) }}
         </div>
-        <div class="form-group">
-            {{ form_label(form.SRE, 'SRE :') }}
-            {{ form_widget(form.SRE) }}
-        </div>
+        <div>
+            Utilisateur de création du cas : 
+            {% if userCreateObject is not null %}
+                {{ userCreateObject.prenom }} {{ userCreateObject.nom }}
+            {% else %}
+                <p>Aucun utilisateur de création trouvé.</p>
+            {% endif %}
+        </div>    
     </div>
+
 
     <!-- Zone 4.5 : Produits -->
     <div class="area-produits">
@@ -113,14 +126,18 @@
         {{ form_widget(form.motifPrequalification) }}
     </div>
 
+    <!-- Zone 14 : Autres informations (S'adaptent en bas) -->
+    <div class="area-dmm">
+        {{ form_row(form.motifQualificationDMM) }}
+        {{ form_row(form.investigationDMM) }}
+        {{ form_row(form.echangeDMM_CRPV) }}
+    </div>
+
     <!-- Zone 8 : Cluster -->
     <div class="area-cluster-checkbox">
         {{ form_row(form.cluster) }}
     </div>
 
-    <!-- Zone 9 : Typologie -->
-    <div class="area-typology">
-    </div>
 
     <!-- Zone 10 : Bloc Gravité et Critères -->
     <div class="area-gravite-group">
@@ -134,39 +151,31 @@
     </div>
 
     <!-- Zone 11 : Évaluateurs & Suivi -->
-    <div class="area-evaluators">
-        {{ form_row(form.suiviEnquete) }}
-        {{ form_row(form.ListeCRPV) }}
-    </div>
+    {# <div class="area-evaluators"> #}
+        {# {{ form_row(form.suiviEnquete) }} #}
+        {# {{ form_row(form.ListeCRPV) }} #}
+    {# </div> #}
 
 
     <!-- Zone 13 : Chronologie & Risque Final -->
-    <div class="area-chronologie-group">
-        <div class="sub-group">
-            {{ form_row(form.investigationDP) }} <!-- Type (CM/EMM) -->
-            {{ form_row(form.niveauRisqueFinal) }}
+    <div class="area-niv-risk">
+        <div class="form-group">
+            {{ form_label(form.niveauRisquePGS, 'Niveau de risque PGS :') }}
+            {{ form_widget(form.niveauRisquePGS) }}
         </div>
-        <div class="chrono-textarea">
-            {{ form_row(form.echangeDMM_CRPV) }} <!-- Chronologie -->
+        <div class="form-group">
+            {{ form_label(form.niveauRisqueFinal, 'Niveau de risque final :') }}
+            {{ form_widget(form.niveauRisqueFinal) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.MaitriseRisque_Commentaire, 'Commentaire sur la maîtrise du risque :') }}
+            {{ form_widget(form.MaitriseRisque_Commentaire) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.SRE, 'SRE :') }}
+            {{ form_widget(form.SRE) }}
         </div>
     </div>
 
-    <!-- Zone 14 : Autres informations (S'adaptent en bas) -->
-    <div class="area-complementary">
-        {{ form_row(form.motifQualificationDMM) }}
-        {{ form_row(form.MaitriseRisque_Commentaire) }}
-    </div>
-    
-    <!-- Zone 15 : utilisateur de création du cas -->
-    <div class="area-user-create">
-        <div>
-            Utilisateur de création du cas : 
-            {% if userCreateObject is not null %}
-                {{ userCreateObject.prenom }} {{ userCreateObject.nom }}
-            {% else %}
-                <p>Aucun utilisateur de création trouvé.</p>
-            {% endif %}
-        </div>
-    </div>
 
 </div>

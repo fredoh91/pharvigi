@@ -93,7 +93,7 @@ abstract class CasPV
     private ?string $motifPrequalification = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $investigationDP = null;
+    private ?string $investigationDMM = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $echangeDMM_CRPV = null;
@@ -513,14 +513,14 @@ abstract class CasPV
         return $this;
     }
 
-    public function getInvestigationDP(): ?string
+    public function getInvestigationDMM(): ?string
     {
-        return $this->investigationDP;
+        return $this->investigationDMM;
     }
 
-    public function setInvestigationDP(?string $investigationDP): static
+    public function setInvestigationDMM(?string $investigationDMM): static
     {
-        $this->investigationDP = $investigationDP;
+        $this->investigationDMM = $investigationDMM;
 
         return $this;
     }

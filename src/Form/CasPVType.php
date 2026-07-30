@@ -131,7 +131,7 @@ class CasPVType extends AbstractType
                 'placeholder' => 'Sélectionnez une typologie'
             ])
             ->add('motifPrequalification')
-            ->add('investigationDP')
+            ->add('investigationDMM')
             ->add('echangeDMM_CRPV')
             ->add('cluster')
             ->add('finalise')

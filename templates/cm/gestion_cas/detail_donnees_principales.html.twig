@@ -72,13 +72,14 @@
 
     <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
     <div class="area-workflow">
+
+    </div>
+
+    <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
+    <div class="area-on-verra-plus-tard">
         <div class="form-group">
             {{ form_label(form.finalise, 'Finalisé :') }}
             {{ form_widget(form.finalise) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.niveauRisquePGS, 'Niveau de risque PGS :') }}
-            {{ form_widget(form.niveauRisquePGS) }}
         </div>
         <div class="form-group">
             {{ form_label(form.MotifNonPresentation, 'Motif de non-présentation :') }}
@@ -101,9 +102,13 @@
             {{ form_label(form.typologie, 'Typologie :') }}
             {{ form_widget(form.typologie) }}
         </div>
-        <div class="form-group">
-            {{ form_label(form.SRE, 'SRE :') }}
-            {{ form_widget(form.SRE) }}
+        <div>
+            Utilisateur de création du cas : 
+            {% if userCreateObject is not null %}
+                {{ userCreateObject.prenom }} {{ userCreateObject.nom }}
+            {% else %}
+                <p>Aucun utilisateur de création trouvé.</p>
+            {% endif %}
         </div>
     </div>
 
@@ -183,48 +188,56 @@
     </div>
 
     <!-- Zone 11 : Évaluateurs & Suivi -->
-    <div class="area-evaluators">
-        <div class="form-group">
+    {# <div class="area-evaluators"> #}
+        {# <div class="form-group">
             {{ form_label(form.suiviEnquete, 'Suivi de l\'enquête :') }}
             {{ form_widget(form.suiviEnquete) }}
-        </div>
-        <div class="form-group">
+        </div> #}
+        {# <div class="form-group">
             {{ form_label(form.ListeCRPV, 'Liste des CRPV :') }}
             {{ form_widget(form.ListeCRPV) }}
-        </div>
-    </div>
+        </div> #}
+    {# </div> #}
 
 
     <!-- Zone 13 : Chronologie & Risque Final -->
-    <div class="area-chronologie-group">
-        <div class="sub-group">
+    <div class="area-niv-risk">
         <div class="form-group">
-            {{ form_label(form.investigationDP, 'Investigation DMM :') }}
-            {{ form_widget(form.investigationDP) }}
+            {{ form_label(form.niveauRisquePGS, 'Niveau de risque PGS :') }}
+            {{ form_widget(form.niveauRisquePGS) }}
         </div>
         <div class="form-group">
             {{ form_label(form.niveauRisqueFinal, 'Niveau de risque final :') }}
             {{ form_widget(form.niveauRisqueFinal) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.MaitriseRisque_Commentaire, 'Commentaire sur la maîtrise du risque :') }}
+            {{ form_widget(form.MaitriseRisque_Commentaire) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.SRE, 'SRE :') }}
+            {{ form_widget(form.SRE) }}
+        </div>
+    </div>
+
+    <!-- Zone 14 : Autres informations (S'adaptent en bas) -->
+    <div class="area-dmm">
+        <div class="form-group">
+            {{ form_label(form.motifQualificationDMM, 'Motif de qualification DMM :') }}
+            {{ form_widget(form.motifQualificationDMM) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.investigationDMM, 'Investigation DMM :') }}
+            {{ form_widget(form.investigationDMM) }}
         </div>
         <div class="chrono-textarea">
             {{ form_label(form.echangeDMM_CRPV, 'Echange DMM/CRPV :') }}
             {{ form_widget(form.echangeDMM_CRPV) }}
         </div>
     </div>
-
-    <!-- Zone 14 : Autres informations (S'adaptent en bas) -->
-    <div class="area-complementary">
-        <div class="form-group">
-            {{ form_label(form.motifQualificationDMM, 'Motif de qualification DMM :') }}
-            {{ form_widget(form.motifQualificationDMM) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.MaitriseRisque_Commentaire, 'Commentaire sur la maîtrise du risque :') }}
-            {{ form_widget(form.MaitriseRisque_Commentaire) }}
-        </div>
-    </div>
+    
     <!-- Zone 15 : utilisateur de création du cas -->
-    <div class="area-user-create">
+    {# <div class="area-user-create">
         <div>
             Utilisateur de création du cas : 
             {% if userCreateObject is not null %}
@@ -233,6 +246,6 @@
                 <p>Aucun utilisateur de création trouvé.</p>
             {% endif %}
         </div>
-    </div>
+    </div> #}
 
 </div>
