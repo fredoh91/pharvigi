@@ -122,6 +122,24 @@ class DonneesComplementairesCM
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $SignalPotentiel_comment = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $numeroBNPV = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $specialiteDCI = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $effetsIndesirables = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $lettre = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $problematique = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $Cluster = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -564,6 +582,78 @@ class DonneesComplementairesCM
     public function setSignalPotentielComment(?string $SignalPotentiel_comment): static
     {
         $this->SignalPotentiel_comment = $SignalPotentiel_comment;
+
+        return $this;
+    }
+
+    public function getNumeroBNPV(): ?string
+    {
+        return $this->numeroBNPV;
+    }
+
+    public function setNumeroBNPV(?string $numeroBNPV): static
+    {
+        $this->numeroBNPV = $numeroBNPV;
+
+        return $this;
+    }
+
+    public function getSpecialiteDCI(): ?string
+    {
+        return $this->specialiteDCI;
+    }
+
+    public function setSpecialiteDCI(?string $specialiteDCI): static
+    {
+        $this->specialiteDCI = $specialiteDCI;
+
+        return $this;
+    }
+
+    public function getEffetsIndesirables(): ?string
+    {
+        return $this->effetsIndesirables;
+    }
+
+    public function setEffetsIndesirables(?string $effetsIndesirables): static
+    {
+        $this->effetsIndesirables = $effetsIndesirables;
+
+        return $this;
+    }
+
+    public function getLettre(): ?string
+    {
+        return $this->lettre;
+    }
+
+    public function setLettre(?string $lettre): static
+    {
+        $this->lettre = $lettre;
+
+        return $this;
+    }
+
+    public function getProblematique(): ?string
+    {
+        return $this->problematique;
+    }
+
+    public function setProblematique(?string $problematique): static
+    {
+        $this->problematique = $problematique;
+
+        return $this;
+    }
+
+    public function isCluster(): ?bool
+    {
+        return $this->Cluster;
+    }
+
+    public function setCluster(?bool $Cluster): static
+    {
+        $this->Cluster = $Cluster;
 
         return $this;
     }

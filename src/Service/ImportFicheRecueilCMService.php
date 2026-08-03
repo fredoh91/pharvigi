@@ -300,6 +300,29 @@ class ImportFicheRecueilCMService
         // $donComplCM->setUpdatedAt($now);
         // $donComplCM->setUserCreate($userName);
         // $donComplCM->setUserModif($userName);
+        $donComplCM->setNumeroBNPV($ficRec['Num_Cas'] ?? null);
+
+
+        $champSpecialiteDCI = $ficRec['Spec_DCI'] ?? null;
+        if ($champSpecialiteDCI !== null && !mb_check_encoding($champSpecialiteDCI, 'UTF-8')) {
+            $champSpecialiteDCI = mb_convert_encoding($champSpecialiteDCI, 'UTF-8', 'Windows-1252');
+        }
+        $donComplCM->setSpecialiteDCI($champSpecialiteDCI);
+
+        $champEffetsIndesirables = $ficRec['EIs'] ?? null;
+        if ($champEffetsIndesirables !== null && !mb_check_encoding($champEffetsIndesirables, 'UTF-8')) {
+            $champEffetsIndesirables = mb_convert_encoding($champEffetsIndesirables, 'UTF-8', 'Windows-1252');
+        }
+        $donComplCM->setEffetsIndesirables($champEffetsIndesirables);
+        
+        $champProbRaisonQualif = $ficRec['Prob_Raison_Qualif'] ?? null;
+        if ($champProbRaisonQualif !== null && !mb_check_encoding($champProbRaisonQualif, 'UTF-8')) {
+            $champProbRaisonQualif = mb_convert_encoding($champProbRaisonQualif, 'UTF-8', 'Windows-1252');
+        }
+        $donComplCM->setProblematique($champProbRaisonQualif);
+        
+        $donComplCM->setLettre($ficRec['LettreLogi'] ?? null);
+
         $donComplCM->setEIAttendu($ficRec['EI_Attendu'] ?? null);
         $donComplCM->setEIInattendu($ficRec['EI_Inattendu'] ?? null);
         $donComplCM->setPlausibilitePharma($ficRec['Plausib_Pharma'] ?? null);
@@ -313,6 +336,7 @@ class ImportFicheRecueilCMService
         $donComplCM->setSeulMedicSusp($ficRec['Seul_Med_Susp'] ?? null);
         $donComplCM->setRisqueRecu($ficRec['Risk_Recurrence'] ?? null);
         $donComplCM->setRisqueRecuComment($ficRec['Risk_Recurrence_Txt'] ?? null);
+        $donComplCM->setCluster($ficRec['Cluster'] ?? null);
         $donComplCM->setAutreCasBNPV($ficRec['Autres_Cas_BNPV'] ?? null);
         $donComplCM->setAutreCasBNPVComment($ficRec['Autres_Cas_BNPV_Txt'] ?? null);
         $donComplCM->setAutreCasVigylise($ficRec['Autres_Cas_Vigylise'] ?? null);
@@ -355,8 +379,8 @@ class ImportFicheRecueilCMService
         if (!mb_check_encoding($champProblematique, 'UTF-8')) {
             $champProblematique = mb_convert_encoding($champProblematique, 'UTF-8', 'Windows-1252');
         }
-
         $cm->setProblematique(empty($champProblematique) ? null : $champProblematique);
+
         $cm->setPropositionCRPV($ficRec['Sign_Potentiel_Txt']  ?? null);
 
         $this->em->persist($donComplCM);

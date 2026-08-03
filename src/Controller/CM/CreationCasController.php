@@ -93,7 +93,7 @@ final class CreationCasController extends AbstractController
                     $ficRec = $result['Data_FicheRecueilEMM'] ?? null;
                 }
 
-                // dump($ficRec);
+                // dd($ficRec);
 
                 // --- ÉTAPE 3 : VALIDATION DES DONNÉES EXTRAITES ---
                 if (!$ficRec) {

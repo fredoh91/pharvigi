@@ -25,9 +25,9 @@ Encore
     .addStyleEntry('rechlabo_css', './assets/styles/rechlabo.scss')
     .addStyleEntry('ajoutproduit_css', './assets/styles/ajout_produit.scss')
     .addStyleEntry('navbar', './assets/styles/navbar.scss')
-    .addStyleEntry('form_creation_cas_cm', './assets/styles/cm/form_creation_cas_cm.scss')
-    .addStyleEntry('form_creation_cas_cm_donnees_principales', './assets/styles/cm/form_creation_cas_cm_donnees_principales.scss')
-    .addStyleEntry('form_creation_cas_cm_donnees_complementaires', './assets/styles/cm/form_creation_cas_cm_donnees_complementaires.scss')
+    .addStyleEntry('detail_cas_cm', './assets/styles/cm/detail_cas_cm.scss')
+    .addStyleEntry('detail_cas_cm_donnees_principales', './assets/styles/cm/detail_cas_cm_donnees_principales.scss')
+    .addStyleEntry('detail_cas_cm_donnees_complementaires', './assets/styles/cm/detail_cas_cm_donnees_complementaires.scss')
     .addStyleEntry('tableau_dates_csp', './assets/styles/cm/tableau_dates_csp.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

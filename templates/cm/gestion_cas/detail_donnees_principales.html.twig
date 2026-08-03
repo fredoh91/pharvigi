@@ -1,11 +1,11 @@
 {% block stylesheets %}
-    {{ encore_entry_link_tags('form_creation_cas_cm_donnees_principales') }}
+    {{ encore_entry_link_tags('detail_cas_cm_donnees_principales') }}
 {% endblock %}
 
 {# Formulaire des données principales #}
 <div class="form-container">
     
-    <!-- Zone 1 : Dates, Numéros et CRPV -->
+    <!-- Zone 1 : Dates -->
     <div class="area-date-cas">
         <div class="form-group">
             {{ form_label(form.dateArrivee, 'date d\'arrivée :') }}
@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <!-- Zone 3 : DME & Confirmation Médicale -->
+    <!-- Zone 3 : Effets indésirables -->
     <div class="area-ei">
         <div class="form-group">
             {{ form_label(form.effetIndesirable, 'Effet indésirable :') }}
@@ -70,12 +70,12 @@
     </div>
 
 
-    <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
+    <!-- Zone 4.6 : Phase & Étapes (Workflow) -->
     <div class="area-workflow">
 
     </div>
 
-    <!-- Zone 4 : Phase & Étapes (Workflow à droite) -->
+    <!-- Zone 4.7 : On verra plus tard -->
     <div class="area-on-verra-plus-tard">
         <div class="form-group">
             {{ form_label(form.finalise, 'Finalisé :') }}
@@ -112,7 +112,7 @@
         </div>
     </div>
 
-    <!-- Zone 5 : Métadonnées Problématique -->
+    <!-- Zone 5 : Problématique -->
     <div class="area-problematique">
         <div class="form-group">
             {{ form_label(form.problematique, 'Problématique :') }}
@@ -125,7 +125,7 @@
         {{ form_row(form.presentation) }}
     </div> #}
 
-    <!-- Zone 7 : Proposition & Avis CRPV -->
+    <!-- Zone 7 :propositions et avis du CRPV -->
     <div class="area-crpv">
         {{ form_label(form.propositionCRPV, 'Proposition CRPV :') }}
         {{ form_label(form.avisCRPV, 'Avis CRPV :') }}
@@ -133,7 +133,7 @@
         {{ form_widget(form.propositionCRPV) }}
     </div>
 
-    <!-- Zone 12 : Pré-qualification DSURV -->
+    <!-- Zone 12 : préqualification DSURV -->
     <div class="area-dsurv">
         {{ form_label(form.motifPrequalification, 'Motif de pré-qualification :') }}
         {{ form_label(form.prequalificationDSURV, 'Pré-qualification DSURV :') }}
@@ -155,7 +155,7 @@
 
     </div> #}
 
-    <!-- Zone 10 : Bloc Gravité et Critères -->
+    <!-- Zone 10 : champs de Gravité -->
     <div class="area-gravite-group">
         <div class="form-group">
             {{ form_label(form.gravite, 'Gravité :') }}
@@ -200,7 +200,7 @@
     {# </div> #}
 
 
-    <!-- Zone 13 : Chronologie & Risque Final -->
+    <!-- Zone 13 : Niveau de Risque -->
     <div class="area-niv-risk">
         <div class="form-group">
             {{ form_label(form.niveauRisquePGS, 'Niveau de risque PGS :') }}
@@ -220,7 +220,7 @@
         </div>
     </div>
 
-    <!-- Zone 14 : Autres informations (S'adaptent en bas) -->
+    <!-- Zone 14 : évaluation DMM -->
     <div class="area-dmm">
         <div class="form-group">
             {{ form_label(form.motifQualificationDMM, 'Motif de qualification DMM :') }}
@@ -235,17 +235,5 @@
             {{ form_widget(form.echangeDMM_CRPV) }}
         </div>
     </div>
-    
-    <!-- Zone 15 : utilisateur de création du cas -->
-    {# <div class="area-user-create">
-        <div>
-            Utilisateur de création du cas : 
-            {% if userCreateObject is not null %}
-                {{ userCreateObject.prenom }} {{ userCreateObject.nom }}
-            {% else %}
-                <p>Aucun utilisateur de création trouvé.</p>
-            {% endif %}
-        </div>
-    </div> #}
 
 </div>

@@ -1,0 +1,140 @@
+#donnees_complementaires {
+    .form-container {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 1rem;
+        padding: 20px;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        grid-auto-rows: min-content;
+
+        // Définition du layout global
+        grid-template-areas:
+            "prod-ei        prod-ei       prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei"
+            "proble         proble        proble         proble         proble         proble         proble         proble         proble         proble         proble         proble"
+            "exp            exp           exp            exp            exp            exp            exp            exp            exp            exp            exp            exp"
+            "risk           risk          risk           risk           risk           risk           risk           risk           risk           risk           risk           risk"
+            "autres         autres        autres         autres         autres         autres         autres         autres         autres         autres         autres         autres"
+            "crpv           crpv          crpv           crpv           crpv           crpv           crpv           crpv           crpv           crpv           crpv           crpv"
+            ;
+    }
+
+    /* --- Attribution des zones de la grille --- */
+    .area-produit-ei       { grid-area: prod-ei; }
+    .area-problematique    { grid-area: proble; }
+    .area-expertise        { grid-area: exp; }
+    .area-donnees-niv-risk { grid-area: risk; }
+    .area-donnees-autres   { grid-area: autres; }
+    .area-proposition-crpv { grid-area: crpv; }
+
+
+    /* --- Modèle de base pour CHAQUE zone (exactement comme données principales) --- */
+    [class^="area-"] {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: flex-start;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        align-self: start;
+
+        // // On ajuste la largeur des éléments enfants
+        // .mb-3 {
+        //     margin-bottom: 0 !important;
+        // }
+
+        // // Pour les textareas et leurs labels afin qu'ils prennent toute la largeur du bloc si besoin
+        // textarea {
+        //     width: 100%;
+        //     min-height: 4em;
+        // }
+    }
+
+    /* --- Spécificités pour chaque zone --- */
+    .area-produit-ei {
+        // Styles spécifiques à la zone produit ei
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        
+        // Tous les champs sur la même ligne avec label à gauche et champ à droite
+        .form-group {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        .form-group .form-label {
+            flex: 0 0 auto;
+            min-width: 150px;
+        }
+        
+        .form-group .form-control {
+            flex: 1 1 auto;
+        }
+        
+        // Contraintes de taille spécifiques
+        #cm_onglets_detail_DonneesComplementairesCM_NumeroBNPV {
+            max-width: 20ch;
+        }
+        
+        #cm_onglets_detail_DonneesComplementairesCM_Lettre {
+            max-width: 7ch;
+        }
+        
+        // Positionner les checkboxes côte à côte
+        .checkbox-container {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            width: 100%;
+            
+            .mb-3 {
+                margin-bottom: 0 !important;
+            }
+        }
+    }
+
+    .area-problematique {
+        
+        /* Hauteur minimale pour le champ problématique */
+        .form-group textarea,
+        .form-group textarea.form-control {
+            min-height: 20em;
+        }
+
+        // Permet aux enfants de s'étirer horizontalement
+        & > * {
+            flex: 1 1 100%;
+        }
+    }
+
+    .area-expertise {
+        // Styles spécifiques à la zone expertise
+    }
+
+    .area-donnees-niv-risk {
+        // Styles spécifiques à la zone données niveau risk
+    }
+
+    .area-donnees-autres {
+        // Styles spécifiques à la zone données autres
+    }
+
+    .area-proposition-crpv {
+        // Styles spécifiques à la zone proposition crpv
+    }
+
+    /* --- Vos règles d'origine préservées --- */
+    .form-container .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-container .checkbox {
+        align-self: center;
+    }
+}

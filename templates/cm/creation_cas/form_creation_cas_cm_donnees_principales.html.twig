@@ -1,5 +1,5 @@
 {% block stylesheets %}
-    {{ encore_entry_link_tags('form_creation_cas_cm_donnees_principales') }}
+    {{ encore_entry_link_tags('detail_cas_cm_donnees_principales') }}
 {% endblock %}
 
 {# Formulaire des données principales #}
@@ -126,11 +126,20 @@
         {{ form_widget(form.motifPrequalification) }}
     </div>
 
-    <!-- Zone 14 : Autres informations (S'adaptent en bas) -->
+    <!-- Zone 14 : évaluation DMM -->
     <div class="area-dmm">
-        {{ form_row(form.motifQualificationDMM) }}
-        {{ form_row(form.investigationDMM) }}
-        {{ form_row(form.echangeDMM_CRPV) }}
+        <div class="form-group">
+            {{ form_label(form.motifQualificationDMM, 'Motif de qualification DMM :') }}
+            {{ form_widget(form.motifQualificationDMM) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.investigationDMM, 'Investigation DMM :') }}
+            {{ form_widget(form.investigationDMM) }}
+        </div>
+        <div class="chrono-textarea">
+            {{ form_label(form.echangeDMM_CRPV, 'Echange DMM/CRPV :') }}
+            {{ form_widget(form.echangeDMM_CRPV) }}
+        </div>
     </div>
 
     <!-- Zone 8 : Cluster -->

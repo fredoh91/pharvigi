@@ -14,8 +14,19 @@ class DonneesComplementairesCMType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('EI_Attendu', CheckboxType::class, ['required' => false])
-            ->add('EI_Inattendu', CheckboxType::class, ['required' => false])
+            ->add('NumeroBNPV')
+            ->add('SpecialiteDCI')
+            ->add('EffetsIndesirables')
+            ->add('Lettre')
+            ->add('EI_Attendu', CheckboxType::class, [
+                'required' => false,
+                'label' => 'EI attendu',
+                ])
+            ->add('EI_Inattendu', CheckboxType::class, [
+                'required' => false,
+                'label' => 'EI inattendu',
+            ])
+            ->add('Problematique', TextareaType::class, ['required' => false])
             ->add('PlausibilitePharma', CheckboxType::class, ['required' => false])
             ->add('TabCliniInhab', CheckboxType::class, ['required' => false])
             ->add('TabCliniInhab_comment', TextareaType::class, ['required' => false])
@@ -27,6 +38,7 @@ class DonneesComplementairesCMType extends AbstractType
             ->add('SeulMedicSusp', CheckboxType::class, ['required' => false])
             ->add('RisqueRecu', CheckboxType::class, ['required' => false])
             ->add('RisqueRecu_comment', TextareaType::class, ['required' => false])
+            ->add('Cluster', CheckboxType::class, ['required' => false])
             ->add('AutreCasBNPV', CheckboxType::class, ['required' => false])
             ->add('AutreCasBNPV_comment', TextareaType::class, ['required' => false])
             ->add('AutreCasVigylise', CheckboxType::class, ['required' => false])
