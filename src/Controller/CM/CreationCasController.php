@@ -46,6 +46,12 @@ final class CreationCasController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $FicWordRecueilCM = $form->get('FicWordRecueilCM')->getData();
+
+            // // Augmenter le temps d'exécution pour cette requête spécifique
+            // if (function_exists('set_time_limit')) {
+            //     set_time_limit(1200); // 20 minutes en secondes
+            // }
+
             $dateArriveeFicheRecueilCM = $form->get('DateArriveeFicheRecueilCM')->getData();
             if ($FicWordRecueilCM) {
                 // dump($form);
@@ -161,7 +167,6 @@ final class CreationCasController extends AbstractController
                 // dump($medicDataRows);
                 // dump($antecedentsMedicaux, $indications);
                 // dump($identifiantsBnpv);
-                // Le code ci-dessous ne sera pas exécuté tant que le dd() est actif
                 if ($typeFiche === FicheRecueilAnalyseurService::TYPE_CM) {
                     // $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $requetesMeddraService, $antecedentsMedicaux, $indications);
                     $cm = $importCMService->CreationCasCM($ficRec, $mainData, $eiDataRows, $medicDataRows, $dateArriveeFicheRecueilCM);
@@ -171,12 +176,9 @@ final class CreationCasController extends AbstractController
                     $lsProduitsBnpv = $importCMService->CreationProduitsBNPV($medicDataRows, $mainData, $cm);
 
                     // recherche des données à anonymiser dans les champs texte de la fiche CM pour avertir l'utilisateur avant validation finale
-                    $iaAnonymiserService->analyserTexte(
-                                            $cm->getProblematique(), 
-                                            'CasPV', 
-                                            'problematique', 
-                                            $cm
-                                        );
+                    $iaAnonymiserService->analyserDonneesCM($donComplCM, $cm);
+
+
                     // Ne pas associer l'entité dans le formulaire principal pour éviter l'erreur
                     // On laisse l'association pour la validation finale
                     $this->addFlash('success', sprintf('Fiche CM détectée et pré-remplie avec succès pour le cas %s.', $NumBNPV));

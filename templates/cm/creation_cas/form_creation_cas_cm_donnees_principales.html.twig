@@ -103,7 +103,20 @@
 
     <!-- Zone 5 : Métadonnées Problématique -->
     <div class="area-problematique">
-        {{ form_row(form.problematique) }}
+        <div class="form-group">
+            {{ form_label(form.problematique, 'Problématique :') }}
+            {{ form_widget(form.problematique) }}
+        </div>
+    </div>
+    
+    <!-- Zone 5 bis : Résultat anonymisation Problématique -->
+    <div class="area-problematique-anonyme-div" 
+        data-controller="anonymizer" 
+        data-anonymizer-entite-value="CasPV"
+        data-anonymizer-champ-value="problematique" 
+        data-anonymizer-cas-pv-id-value="{{ cas.id }}">
+        {{ form_label(form.problematique, 'Problématique (données brutes) :') }}
+        <div class="problematique-content">{{ form.problematique.vars.value|nl2br }}</div>
     </div>
 
     <!-- Zone 6 : Zone de Texte Présentation -->

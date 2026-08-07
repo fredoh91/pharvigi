@@ -40,6 +40,12 @@
         padding: 10px;
         align-self: start;
 
+        // Centrage des titres dans toutes les zones
+        h3 {
+            text-align: center;
+            width: 100%;
+        }
+
         // // On ajuste la largeur des éléments enfants
         // .mb-3 {
         //     margin-bottom: 0 !important;
@@ -78,11 +84,11 @@
         }
         
         // Contraintes de taille spécifiques
-        #cm_onglets_detail_DonneesComplementairesCM_NumeroBNPV {
+        [id*="_NumeroBNPV"] {
             max-width: 20ch;
         }
         
-        #cm_onglets_detail_DonneesComplementairesCM_Lettre {
+        [id*="_Lettre"] {
             max-width: 7ch;
         }
         
@@ -101,10 +107,15 @@
 
     .area-problematique {
         
-        /* Hauteur minimale pour le champ problématique */
+        /* Hauteur minimale pour le champ problématique, s'étire si le contenu est plus grand */
         .form-group textarea,
         .form-group textarea.form-control {
-            min-height: 20em;
+            min-height: 15em;
+            overflow: auto;                    // Permet le défilement si nécessaire
+            box-sizing: border-box;            // Inclut le padding dans la hauteur
+            // Pour une adaptation dynamique, on peut aussi utiliser :
+            // height: auto;
+            // min-height: 10em;
         }
 
         // Permet aux enfants de s'étirer horizontalement
@@ -112,22 +123,139 @@
             flex: 1 1 100%;
         }
     }
+    
+    // /* Styles spécifiques pour le textarea de problématique qui a des problèmes d'adaptation */
+    // .area-problematique .form-group textarea.adaptative-textarea,
+    // .area-problematique .form-group textarea.form-control.adaptative-textarea {
+    //     height: auto !important;           // Hauteur automatique
+    //     min-height: auto !important;       // Pas de hauteur minimale fixe
+    //     resize: none !important;           // Désactiver le redimensionnement
+    //     width: 100%;                       // Pleine largeur
+    //     display: block;                    // Comportement de bloc
+    // }
 
-    .area-expertise {
-        // Styles spécifiques à la zone expertise
-    }
-
-    .area-donnees-niv-risk {
-        // Styles spécifiques à la zone données niveau risk
-    }
-
-    .area-donnees-autres {
-        // Styles spécifiques à la zone données autres
-    }
-
+    .area-expertise,
+    .area-donnees-niv-risk,
+    .area-donnees-autres,
     .area-proposition-crpv {
-        // Styles spécifiques à la zone proposition crpv
+        // Styles spécifiques aux zones expertise et données niveau risk
+        
+        // Positionner les éléments dans une disposition en colonne
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        
+        // S'assurer que le titre reste centré
+        h3 {
+            text-align: center;
+            width: 100%;
+        }
+
+        // Supprimer la marge inférieure par défaut sur les form_rows pour respecter le gap du conteneur flex
+        & > .mb-3 {
+            margin-bottom: 0 !important;
+        }
+
+        // Alignement en ligne pour la case à cocher et son commentaire associé
+        .form-row-inline {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 1.5rem;
+            width: 100%;
+
+            .checkbox-field {
+                flex: 0 0 24rem; // 24rem = 384px (avec 1rem = 16px par défaut)
+
+                .mb-3 {
+                    margin-bottom: 0 !important;
+                }
+            }
+
+            .comment-field {
+                flex: 1 1 auto;
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 1rem;
+
+                .form-label {
+                    flex: 0 0 auto;
+                    margin-bottom: 0;
+                    margin-top: 0.25rem; // Léger décalage pour aligner le label avec le haut du textarea
+                    white-space: nowrap;
+                    min-width: auto;
+                }
+
+                textarea, .form-control {
+                    flex: 1 1 auto;
+                    min-height: 15em;
+                    margin-bottom: 0;
+                }
+            }
+        }
+        
+        // Pour tous les éléments de formulaire dans les zones expertise et données niveau risk
+        .form-group {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start; // Alignement au début pour les checkbox
+            gap: 1rem;
+            width: 100%;
+            min-height: 2rem; // Hauteur minimum pour les éléments
+        }
+        
+        // Pour les labels et les champs de formulaire
+        .form-group .form-label {
+            flex: 0 0 auto;
+            min-width: 200px;
+            margin-top: 0.25rem; // Petit décalage vertical pour aligner avec les checkbox
+        }
+        
+        .form-group .form-control {
+            flex: 1 1 auto;
+        }
+        
+        // Pour les checkbox, les aligner à gauche avec une marge à droite
+        .form-group .form-check {
+            flex: 0 0 auto;
+            margin-right: 1rem;
+            margin-left: 0;
+            align-self: flex-start; // Alignement au début vertical
+        }
+        
+        // Pour les checkbox qui sont en paire avec un textarea
+        .form-group .form-check.pair-checkbox {
+            flex: 0 0 auto;
+            margin-right: 1rem;
+            margin-left: 0;
+            align-self: flex-start;
+        }
+        
+        // Pour les textareas, prendre toute la largeur
+        .form-group textarea {
+            width: 100%;
+            min-height: 4em;
+        }
+        
+        // Pour les éléments individuels (cas simples sans textarea associé)
+        .form-group.single-checkbox {
+            align-items: center;
+        }
     }
+    
+    // .area-donnees-niv-risk {
+    //     // Styles spécifiques à la zone données niveau risk
+    // }
+
+    // .area-donnees-autres {
+    //     // Styles spécifiques à la zone données autres
+    // }
+
+    // .area-proposition-crpv {
+    //     // Styles spécifiques à la zone proposition crpv
+    // }
 
     /* --- Vos règles d'origine préservées --- */
     .form-container .form-group {

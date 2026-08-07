@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\CasPV;
 use App\Entity\DonneesAAnonymiser;
+use App\Entity\CM\DonneesComplementairesCM;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -100,5 +101,150 @@ class IAAnonymiserService
             // ex: $this->logger->error('Erreur IA Anonymiser : ' . $e->getMessage());
             throw $e; 
         }
+    }
+
+    /**
+     * Analyse les données complémentaires CM via l'IA Albert pour détecter les données à anonymiser.
+     *
+     * @param DonneesComplementairesCM $donneesComplementairesCM Les données complémentaires CM à analyser
+     * @param CasPV $casPV L'instance du dossier de pharmacovigilance lié
+     */
+    public function analyserDonneesCM(DonneesComplementairesCM $donneesComplementairesCM, CasPV $casPV): void
+    {
+        // Données principales : problématique
+        $this->analyserTexte(
+            $casPV->getProblematique(), 
+            'CasPV', 
+            'problematique', 
+            $casPV
+        );
+        
+        // Données complémentaires : problématique
+        $this->analyserTexte(
+            $donneesComplementairesCM->getProblematique(), 
+            'DonneesComplementairesCM', 
+            'problematique', 
+            $casPV
+        );
+        
+        // Données complémentaires : tableau clinique inhabituel
+        $this->analyserTexte(
+            $donneesComplementairesCM->getTabCliniInhabComment(), 
+            'DonneesComplementairesCM', 
+            'TabCliniInhab_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : sémiologie évocatrice
+        $this->analyserTexte(
+            $donneesComplementairesCM->getSemioEvoComment(), 
+            'DonneesComplementairesCM', 
+            'SemioEvo_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Contexte particulier
+        $this->analyserTexte(
+            $donneesComplementairesCM->getContexPriseMedicComment(), 
+            'DonneesComplementairesCM', 
+            'ContexPriseMedic_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Risque de récurence
+        $this->analyserTexte(
+            $donneesComplementairesCM->getRisqueRecuComment(), 
+            'DonneesComplementairesCM', 
+            'RisqueRecu_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Autre cas BNPV
+        $this->analyserTexte(
+            $donneesComplementairesCM->getAutreCasBNPVComment(), 
+            'DonneesComplementairesCM', 
+            'AutreCasBNPV_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Autre cas vigylise
+        $this->analyserTexte(
+            $donneesComplementairesCM->getAutreCasVigyliseComment(), 
+            'DonneesComplementairesCM', 
+            'AutreCasVigylise_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Particuliarité du médicament
+        $this->analyserTexte(
+            $donneesComplementairesCM->getParticulaMedicComment(), 
+            'DonneesComplementairesCM', 
+            'ParticulaMedic_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Risque documenté
+        $this->analyserTexte(
+            $donneesComplementairesCM->getRisqueDocuLittComment(), 
+            'DonneesComplementairesCM', 
+            'RisqueDocuLitt_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : contexte médiatique
+        $this->analyserTexte(
+            $donneesComplementairesCM->getContextMediaComment(), 
+            'DonneesComplementairesCM', 
+            'ContextMedia_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Persistance du problème
+        $this->analyserTexte(
+            $donneesComplementairesCM->getPersistProbComment(), 
+            'DonneesComplementairesCM', 
+            'PersistProb_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : ASMR/SMR
+        $this->analyserTexte(
+            $donneesComplementairesCM->getASMRSMRComment(), 
+            'DonneesComplementairesCM', 
+            'ASMR_SMR_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Utilisation hors AMM / hors RTU / hors ATU
+        $this->analyserTexte(
+            $donneesComplementairesCM->getUtilHorsAMMRTUATUChoix(), 
+            'DonneesComplementairesCM', 
+            'UtilHorsAMM_RTU_ATU_Choix', 
+            $casPV
+        );
+        
+        // Données complémentaires : Autre
+        $this->analyserTexte(
+            $donneesComplementairesCM->getAutreComment(), 
+            'DonneesComplementairesCM', 
+            'Autre_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Cas marquant pour info
+        $this->analyserTexte(
+            $donneesComplementairesCM->getCmPourInfoComment(), 
+            'DonneesComplementairesCM', 
+            'CmPourInfo_comment', 
+            $casPV
+        );
+        
+        // Données complémentaires : Signal potentiel a investiguer
+        $this->analyserTexte(
+            $donneesComplementairesCM->getSignalPotentielComment(), 
+            'DonneesComplementairesCM', 
+            'SignalPotentiel_comment', 
+            $casPV
+        );
     }
 }

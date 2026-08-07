@@ -4,8 +4,199 @@
 
 {# Formulaire des données complémentaires #}
 <div class="form-container">
+
+    <!-- ZONE : num BNPV, Produit, EI,Attendu / Inattendu et lettre -->
+    <div class="area-produit-ei">
+        <div class="form-group">
+            {{ form_label(form.DonneesComplementairesCM.NumeroBNPV, 'Numéro BNPV :') }}
+            {{ form_widget(form.DonneesComplementairesCM.NumeroBNPV) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.DonneesComplementairesCM.SpecialiteDCI, 'Spécialité DCI :') }}
+            {{ form_widget(form.DonneesComplementairesCM.SpecialiteDCI) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.DonneesComplementairesCM.EffetsIndesirables, 'Effets Indésirables :') }}
+            {{ form_widget(form.DonneesComplementairesCM.EffetsIndesirables) }}
+        </div>
+        <div class="checkbox-container">
+            {{ form_row(form.DonneesComplementairesCM.EI_Attendu) }}
+            {{ form_row(form.DonneesComplementairesCM.EI_Inattendu) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.DonneesComplementairesCM.Lettre, 'Lettre du logigramme :') }}
+            {{ form_widget(form.DonneesComplementairesCM.Lettre) }}
+        </div>
+    </div>
+
+
+    <!-- Problematique -->
+    <div class="area-problematique">
+        <div class="form-group">
+            {{ form_label(form.DonneesComplementairesCM.Problematique, 'Problématique :') }}
+            {{ form_widget(form.DonneesComplementairesCM.Problematique) }}
+        </div>
+    </div>
+    
+
+    <!-- Critères d'expertise -->
+    <div class="area-expertise">
+        <h3>Expertise</h3>
+        {{ form_row(form.DonneesComplementairesCM.PlausibilitePharma) }}
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.TabCliniInhab) }}
+            </div>
+            <div class="comment-field">
+                {# {{ form_label(form.DonneesComplementairesCM.TabCliniInhab_comment, 'Précisions :') }} #}
+                {{ form_widget(form.DonneesComplementairesCM.TabCliniInhab_comment) }}
+            </div>
+        </div>
+        {{ form_row(form.DonneesComplementairesCM.ChronoEvo) }}
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.SemioEvo) }}
+            </div>
+            <div class="comment-field">
+                {# {{ form_label(form.DonneesComplementairesCM.SemioEvo_comment, 'Précisions :') }} #}
+                {{ form_widget(form.DonneesComplementairesCM.SemioEvo_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.ContexPriseMedic) }}
+            </div>
+            <div class="comment-field">
+                {# {{ form_label(form.DonneesComplementairesCM.ContexPriseMedic_comment, 'Explicitez :') }} #}
+                {{ form_widget(form.DonneesComplementairesCM.ContexPriseMedic_comment) }}
+            </div>
+        </div>
+        {{ form_row(form.DonneesComplementairesCM.SeulMedicSusp) }}
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.RisqueRecu) }}
+            </div>
+            <div class="comment-field">
+                {# {{ form_label(form.DonneesComplementairesCM.RisqueRecu_comment, 'Explicitez :') }} #}
+                {{ form_widget(form.DonneesComplementairesCM.RisqueRecu_comment) }}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Données documentant le niveau de risque -->
+    <div class="area-donnees-niv-risk">
+        <h3>Données documentant le niveau de risque</h3>
+        {{ form_row(form.DonneesComplementairesCM.Cluster) }}
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.AutreCasBNPV) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.AutreCasBNPV_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.AutreCasVigylise) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.AutreCasVigylise_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.ParticulaMedic) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.ParticulaMedic_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.RisqueDocuLitt) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.RisqueDocuLitt_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.ContextMedia) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.ContextMedia_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.PersistProb) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.PersistProb_comment) }}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Autres données -->
+    <div class="area-donnees-autres">
+        <h3>Autres données</h3>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.ASMR_SMR) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.ASMR_SMR_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.UtilHorsAMM_RTU_ATU) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.UtilHorsAMM_RTU_ATU_Choix) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.Autre) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.Autre_comment) }}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Proposition du CRPV -->
+    <div class="area-proposition-crpv">
+        <h3>Proposition du CRPV</h3>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.CmPourInfo) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.CmPourInfo_comment) }}
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="checkbox-field">
+                {{ form_row(form.DonneesComplementairesCM.SignalPotentiel) }}
+            </div>
+            <div class="comment-field">
+                {{ form_widget(form.DonneesComplementairesCM.SignalPotentiel_comment) }}
+            </div>
+        </div>
+    </div>
+
+
+
+{#     
     {{ form_row(form.DonneesComplementairesCM.EI_Attendu) }}
     {{ form_row(form.DonneesComplementairesCM.EI_Inattendu) }}
+
+
     {{ form_row(form.DonneesComplementairesCM.PlausibilitePharma) }}
     {{ form_row(form.DonneesComplementairesCM.TabCliniInhab) }}
     {{ form_row(form.DonneesComplementairesCM.TabCliniInhab_comment) }}
@@ -17,6 +208,8 @@
     {{ form_row(form.DonneesComplementairesCM.SeulMedicSusp) }}
     {{ form_row(form.DonneesComplementairesCM.RisqueRecu) }}
     {{ form_row(form.DonneesComplementairesCM.RisqueRecu_comment) }}
+
+
     {{ form_row(form.DonneesComplementairesCM.AutreCasBNPV) }}
     {{ form_row(form.DonneesComplementairesCM.AutreCasBNPV_comment) }}
     {{ form_row(form.DonneesComplementairesCM.AutreCasVigylise) }}
@@ -29,14 +222,20 @@
     {{ form_row(form.DonneesComplementairesCM.ContextMedia_comment) }}
     {{ form_row(form.DonneesComplementairesCM.PersistProb) }}
     {{ form_row(form.DonneesComplementairesCM.PersistProb_comment) }}
+
+
     {{ form_row(form.DonneesComplementairesCM.ASMR_SMR) }}
     {{ form_row(form.DonneesComplementairesCM.ASMR_SMR_comment) }}
     {{ form_row(form.DonneesComplementairesCM.UtilHorsAMM_RTU_ATU) }}
     {{ form_row(form.DonneesComplementairesCM.UtilHorsAMM_RTU_ATU_Choix) }}
     {{ form_row(form.DonneesComplementairesCM.Autre) }}
     {{ form_row(form.DonneesComplementairesCM.Autre_comment) }}
+
+
     {{ form_row(form.DonneesComplementairesCM.CmPourInfo) }}
     {{ form_row(form.DonneesComplementairesCM.CmPourInfo_comment) }}
     {{ form_row(form.DonneesComplementairesCM.SignalPotentiel) }}
-    {{ form_row(form.DonneesComplementairesCM.SignalPotentiel_comment) }}
+    {{ form_row(form.DonneesComplementairesCM.SignalPotentiel_comment) }} #}
+
+
 </div>

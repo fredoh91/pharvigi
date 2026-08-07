@@ -326,7 +326,7 @@ class ImportFicheRecueilCMService
         $donComplCM->setEIAttendu($ficRec['EI_Attendu'] ?? null);
         $donComplCM->setEIInattendu($ficRec['EI_Inattendu'] ?? null);
         $donComplCM->setPlausibilitePharma($ficRec['Plausib_Pharma'] ?? null);
-        $donComplCM->setTabCliniInhab($ficRec['Tab_Clinique_Inhab'] ?? null);
+        $donComplCM->setTabCliniInhab($ficRec['Tab_Clin_Inhab'] ?? null);
         $donComplCM->setTabCliniInhabComment($ficRec['Tab_Clin_Inhab_Txt'] ?? null);
         $donComplCM->setChronoEvo($ficRec['Chrono_Evoc'] ?? null);
         $donComplCM->setSemioEvo($ficRec['Semio_Evoc'] ?? null);
@@ -643,7 +643,19 @@ class ImportFicheRecueilCMService
             $localName = $child->localName;
             $nodeName = $child->nodeName;
 
-            if ($localName === 'sdt' || $nodeName === 'w:sdt') continue;
+            // Gérer les éléments sdt imbriqués
+            if (($localName === 'sdt' || $nodeName === 'w:sdt') && $child->hasChildNodes()) {
+                // Extraire le contenu de l'élément sdt avec XPath
+                $dom = $child->ownerDocument;
+                $xpath = new DOMXPath($dom);
+                $xpath->registerNamespace('w', 'http://schemas.openxmlformats.org/wordprocessingml/2006/main');
+                $contentNodes = $xpath->query('.//w:sdtContent', $child);
+                if ($contentNodes->length > 0) {
+                    $contentNode = $contentNodes->item(0);
+                    $text .= $this->extractTextStrict($contentNode);
+                }
+                continue;
+            }
             
             if ($localName === 't' || $nodeName === 'w:t') {
                 $text .= $child->nodeValue;
@@ -658,6 +670,7 @@ class ImportFicheRecueilCMService
                 $text .= $this->extractTextStrict($child);
             }
         }
+
         return $text;
     }
 }

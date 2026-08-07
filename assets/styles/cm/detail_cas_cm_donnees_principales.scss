@@ -17,6 +17,7 @@
             "patient       patient       patient       patient       patient       patient       ei            ei            ei            ei            ei            ei"
             "produits      produits      produits      produits      produits      produits      produits      produits      produits      produits      produits      produits"
             "prob          prob          prob          prob          prob          prob          prob          prob          prob          .             .             ."
+            "prob-anonyme  prob-anonyme  prob-anonyme  prob-anonyme  prob-anonyme  prob-anonyme  prob-anonyme  prob-anonyme  prob-anonyme  .             .             ."
             "crpv          crpv          crpv          crpv          crpv          crpv          .             cluster       cluster       .             .             ."
             "gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite       gravite"
             "dsurv         dsurv         dsurv         dsurv         dsurv         dsurv         .             .             .             .             .             ."
@@ -37,6 +38,7 @@
     .area-typology           { grid-area: typology; }
     .area-produits           { grid-area: produits; }
     .area-problematique      { grid-area: prob; }
+    .area-problematique-anonyme-div { grid-area: prob-anonyme; }
     .area-crpv               { grid-area: crpv; }
     .area-cluster-checkbox   { grid-area: cluster; }
     .area-typology           { grid-area: typology; }
@@ -164,6 +166,31 @@
         & > * {
             flex: 1 1 100%;
         }
+    }
+
+
+    .area-problematique-anonyme-div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: stretch;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        // Ajout pour que la zone s'ajuste à son contenu
+        align-self: start;
+        
+        // /* Hauteur minimale pour le champ problématique */
+        // .form-group textarea,
+        // .form-group textarea.form-control {
+        //     min-height: 20em;
+        // }
+
+        // // Permet aux enfants de s'étirer horizontalement
+        // & > * {
+        //     flex: 1 1 100%;
+        // }
     }
 
 
