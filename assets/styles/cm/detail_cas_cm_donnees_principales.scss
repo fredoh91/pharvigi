@@ -171,27 +171,19 @@
 
     .area-problematique-anonyme-div {
         display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        align-items: center;
-        justify-content: stretch;
+        flex-direction: column;
+        gap: 0.5rem;
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 10px;
-        // Ajout pour que la zone s'ajuste à son contenu
         align-self: start;
-        
-        // /* Hauteur minimale pour le champ problématique */
-        // .form-group textarea,
-        // .form-group textarea.form-control {
-        //     min-height: 20em;
-        // }
 
-        // // Permet aux enfants de s'étirer horizontalement
-        // & > * {
-        //     flex: 1 1 100%;
-        // }
+        label {
+            // font-weight: bold;
+            margin-bottom: 0;
+        }
     }
+
 
 
     .area-crpv {

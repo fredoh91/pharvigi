@@ -1,0 +1,27 @@
+/* Styles pour le composant d'anonymisation */
+.problematique-content,
+.anonymizer-text {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    min-height: 100px;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+.anonymized-string {
+    background-color: rgba(255, 0, 0, 0.25);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 2px;
+    margin: 0;
+    display: inline;
+    vertical-align: baseline;
+    box-shadow: 0 0 0 1px rgba(255, 0, 0, 0.4);
+}

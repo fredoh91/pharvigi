@@ -4,18 +4,19 @@ export default class extends Controller {
     static values = {
         entite: String,
         champ: String,
-        casPvId: Number
+        casPvId: Number,
+        baseUrl: String
     }
 
     connect() {
         // Récupérer le texte depuis la div
         const targetDiv = this.element;
         const currentText = targetDiv.textContent || targetDiv.innerText;
-        
         // Si le texte est vide, pas besoin de continuer
         if (!currentText.trim()) {
             return;
         }
+
 
         // Appeler l'API pour obtenir les données d'anonymisation
         this.fetchAnonymizedData()
@@ -31,63 +32,65 @@ export default class extends Controller {
     }
 
     async fetchAnonymizedData() {
-        const url = `/api/anonymizer/${this.entiteValue}/${this.champValue}/${this.casPvIdValue}`;
+
+        const baseUrl = this.baseUrlValue || '';
+        const url = `${baseUrl}/api/anonymizer/${this.entiteValue}/${this.champValue}/${this.casPvIdValue}`;
         
+        // const url = `/api/anonymizer/${this.entiteValue}/${this.champValue}/${this.casPvIdValue}`;
+        // console.log('Récupération des données depuis l\'URL:', url);
         try {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+            console.log('Données récupérées:', data);
             return data.data || [];
         } catch (error) {
             console.error('Erreur de requête API:', error);
             return [];
         }
     }
-
     applyHighlightingToDiv(targetDiv, data) {
-        // Créer un conteneur pour afficher le texte avec surlignage
-        const container = document.createElement('div');
-        container.className = 'anonymizer-container';
+        const contentDiv = targetDiv.querySelector('.problematique-content') || targetDiv;
         
-        // Utiliser le texte complet du div
-        const originalText = targetDiv.textContent || targetDiv.innerText;
-        let displayText = originalText;
+        let displayText = contentDiv.textContent || contentDiv.innerText;
         
-        // Si on a des données avec texteComplet, on l'utilise comme base
         if (data.length > 0 && data[0].texteComplet) {
             displayText = data[0].texteComplet;
         }
         
-        // Appliquer le surlignage sur le texte complet
-        const highlightedText = this.highlightText(displayText, data);
-        container.innerHTML = highlightedText;
-        
-        // Remplacer le contenu de la div par le texte surligné
-        targetDiv.parentNode.replaceChild(container, targetDiv);
+        contentDiv.classList.add('anonymizer-text');
+        contentDiv.innerHTML = this.highlightText(displayText, data);
     }
 
     highlightText(text, data) {
-        let result = text;
+        // Échapper le HTML d'origine pour éviter l'injection et les problèmes de rendu
+        let result = text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
         
-        // Tri des données par longueur décroissante pour éviter les conflits
+        // Tri des données par longueur décroissante pour éviter les sous-remplacements
         const sortedData = [...data].sort((a, b) => (b.textAAnonymiser?.length || 0) - (a.textAAnonymiser?.length || 0));
         
         // Appliquer le surlignage pour chaque chaîne à anonymiser
         sortedData.forEach(item => {
             if (item.textAAnonymiser && item.textAAnonymiser.trim()) {
                 // Échapper les caractères spéciaux pour l'expression régulière
-                const escapedString = item.textAAnonymiser.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const escapedString = item.textAAnonymiser
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 
-                // Créer une expression régulière insensible à la casse
                 const regex = new RegExp(`(${escapedString})`, 'gi');
-                
-                // Remplacer par la version surlignée
                 result = result.replace(regex, '<span class="anonymized-string">$1</span>');
             }
         });
         
-        return result;
+        // Convertir les sauts de ligne en <br>
+        return result.replace(/\n/g, '<br>');
     }
+
 }

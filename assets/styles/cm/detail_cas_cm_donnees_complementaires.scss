@@ -12,6 +12,7 @@
         grid-template-areas:
             "prod-ei        prod-ei       prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei"
             "proble         proble        proble         proble         proble         proble         proble         proble         proble         proble         proble         proble"
+            "prob-anonyme   prob-anonyme  prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme"            
             "exp            exp           exp            exp            exp            exp            exp            exp            exp            exp            exp            exp"
             "risk           risk          risk           risk           risk           risk           risk           risk           risk           risk           risk           risk"
             "autres         autres        autres         autres         autres         autres         autres         autres         autres         autres         autres         autres"
@@ -22,6 +23,7 @@
     /* --- Attribution des zones de la grille --- */
     .area-produit-ei       { grid-area: prod-ei; }
     .area-problematique    { grid-area: proble; }
+    .area-problematique-anonyme-div { grid-area: prob-anonyme; }
     .area-expertise        { grid-area: exp; }
     .area-donnees-niv-risk { grid-area: risk; }
     .area-donnees-autres   { grid-area: autres; }
@@ -124,6 +126,25 @@
         }
     }
     
+
+    .area-problematique-anonyme-div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        align-self: start;
+
+        label,
+        .form-label {
+            margin-bottom: 0;
+            text-align: left !important;
+            width: 100%;
+            display: block;
+        }
+    }
+
     // /* Styles spécifiques pour le textarea de problématique qui a des problèmes d'adaptation */
     // .area-problematique .form-group textarea.adaptative-textarea,
     // .area-problematique .form-group textarea.form-control.adaptative-textarea {
