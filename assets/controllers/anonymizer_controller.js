@@ -17,12 +17,13 @@ export default class extends Controller {
             return;
         }
 
-
+        // console.log('Texte actuel dans la div:', currentText);
         // Appeler l'API pour obtenir les données d'anonymisation
         this.fetchAnonymizedData()
             .then(data => {
                 if (data && data.length > 0) {
                     // Appliquer le surlignage
+                    console.log('Données d\'anonymisation reçues:', data);
                     this.applyHighlightingToDiv(targetDiv, data);
                 }
             })
@@ -37,7 +38,7 @@ export default class extends Controller {
         const url = `${baseUrl}/api/anonymizer/${this.entiteValue}/${this.champValue}/${this.casPvIdValue}`;
         
         // const url = `/api/anonymizer/${this.entiteValue}/${this.champValue}/${this.casPvIdValue}`;
-        // console.log('Récupération des données depuis l\'URL:', url);
+        console.log('Récupération des données depuis l\'URL:', url);
         try {
             const response = await fetch(url);
             if (!response.ok) {

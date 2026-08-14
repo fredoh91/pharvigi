@@ -12,7 +12,6 @@
         grid-template-areas:
             "prod-ei        prod-ei       prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei        prod-ei"
             "proble         proble        proble         proble         proble         proble         proble         proble         proble         proble         proble         proble"
-            "prob-anonyme   prob-anonyme  prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme   prob-anonyme"            
             "exp            exp           exp            exp            exp            exp            exp            exp            exp            exp            exp            exp"
             "risk           risk          risk           risk           risk           risk           risk           risk           risk           risk           risk           risk"
             "autres         autres        autres         autres         autres         autres         autres         autres         autres         autres         autres         autres"
@@ -23,7 +22,6 @@
     /* --- Attribution des zones de la grille --- */
     .area-produit-ei       { grid-area: prod-ei; }
     .area-problematique    { grid-area: proble; }
-    .area-problematique-anonyme-div { grid-area: prob-anonyme; }
     .area-expertise        { grid-area: exp; }
     .area-donnees-niv-risk { grid-area: risk; }
     .area-donnees-autres   { grid-area: autres; }
@@ -108,40 +106,62 @@
     }
 
     .area-problematique {
-        
-        /* Hauteur minimale pour le champ problématique, s'étire si le contenu est plus grand */
-        .form-group textarea,
-        .form-group textarea.form-control {
-            min-height: 15em;
-            overflow: auto;                    // Permet le défilement si nécessaire
-            box-sizing: border-box;            // Inclut le padding dans la hauteur
-            // Pour une adaptation dynamique, on peut aussi utiliser :
-            // height: auto;
-            // min-height: 10em;
-        }
-
-        // Permet aux enfants de s'étirer horizontalement
-        & > * {
-            flex: 1 1 100%;
-        }
-    }
-    
-
-    .area-problematique-anonyme-div {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 10px;
-        align-self: start;
+        gap: 1.5rem;
+        width: 100%;
 
-        label,
-        .form-label {
-            margin-bottom: 0;
-            text-align: left !important;
+        .form-group {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 1.5rem;
             width: 100%;
-            display: block;
+            margin-bottom: 0;
+
+            label,
+            .form-label {
+                flex: 0 0 24rem; // Même largeur que .anonymizer-label-field
+                margin-top: 0.25rem;
+                margin-bottom: 0;
+                font-weight: 600;
+            }
+
+            textarea,
+            .form-control {
+                flex: 1 1 auto;
+                min-height: 15em;
+                overflow: auto;
+                box-sizing: border-box;
+                margin-bottom: 0;
+                width: 100%;
+            }
+        }
+
+        .anonymizer-row {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 1.5rem;
+            width: 100%;
+
+            .anonymizer-label-field {
+                flex: 0 0 24rem; // Même largeur de colonne de gauche
+
+                label, .form-label {
+                    // font-weight: 600;
+                    margin: 0;
+                }
+            }
+
+            .anonymizer-content-field {
+                flex: 1 1 auto;
+                width: 100%;
+
+                .problematique-content {
+                    width: 100%;
+                }
+            }
         }
     }
 
@@ -213,6 +233,33 @@
                     flex: 1 1 auto;
                     min-height: 15em;
                     margin-bottom: 0;
+                }
+            }
+        }
+
+        // Alignement des lignes anonymisées (données brutes) avec les cases à cocher / textareas
+        .anonymizer-row {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 1.5rem;
+            width: 100%;
+
+            .anonymizer-label-field {
+                flex: 0 0 24rem; // Aligné exactement sur .checkbox-field (384px)
+
+                label {
+                    // font-weight: 600;
+                    margin: 0;
+                }
+            }
+
+            .anonymizer-content-field {
+                flex: 1 1 auto;
+                width: 100%;
+
+                .problematique-content {
+                    width: 100%;
                 }
             }
         }

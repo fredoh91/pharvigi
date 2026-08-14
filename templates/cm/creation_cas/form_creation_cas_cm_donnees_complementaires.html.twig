@@ -4,7 +4,7 @@
 
 {# Formulaire des données complémentaires #}
 <div class="form-container">
-
+    {# {{ form.DonneesComplementairesCM.Problematique.vars.value }} #}
     <!-- ZONE : num BNPV, Produit, EI,Attendu / Inattendu et lettre -->
     <div class="area-produit-ei">
         <div class="form-group">
@@ -36,18 +36,23 @@
             {{ form_label(form.DonneesComplementairesCM.Problematique, 'Problématique :') }}
             {{ form_widget(form.DonneesComplementairesCM.Problematique) }}
         </div>
-    </div>
-    
-    
-    <!-- Problématique - anonymisation -->
-    <div class="area-problematique-anonyme-div" 
-        data-controller="anonymizer" 
-        data-anonymizer-entite-value="CasPV"
-        data-anonymizer-champ-value="problematique" 
-        data-anonymizer-cas-pv-id-value="{{ cas.id }}"
-        data-anonymizer-base-url-value="{{ app.request.baseUrl }}">
-        {{ form_label(form.problematique, 'Problématique (données brutes) :') }}
-        <div class="problematique-content">{{ form.problematique.vars.value|nl2br }}</div>
+
+        {% if form.DonneesComplementairesCM.Problematique.vars.value is not empty %}
+            <!-- Problématique - anonymisation -->
+            <div class="anonymizer-row" 
+                data-controller="anonymizer" 
+                data-anonymizer-entite-value="DonneesComplementairesCM"
+                data-anonymizer-champ-value="problematique" 
+                data-anonymizer-cas-pv-id-value="{{ cas.id }}"
+                data-anonymizer-base-url-value="{{ app.request.baseUrl }}">
+                <div class="anonymizer-label-field">
+                    <label>Problématique (données brutes) :</label>
+                </div>
+                <div class="anonymizer-content-field">
+                    <div class="problematique-content">{{ form.DonneesComplementairesCM.Problematique.vars.value|nl2br }}</div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
     <!-- Critères d'expertise -->
@@ -191,6 +196,24 @@
                 {{ form_widget(form.DonneesComplementairesCM.CmPourInfo_comment) }}
             </div>
         </div>
+
+        {% if form.DonneesComplementairesCM.CmPourInfo_comment.vars.value is not empty %}
+            <!-- Cas marquant pour information - anonymisation -->
+            <div class="anonymizer-row" 
+                data-controller="anonymizer" 
+                data-anonymizer-entite-value="DonneesComplementairesCM"
+                data-anonymizer-champ-value="CmPourInfo_comment" 
+                data-anonymizer-cas-pv-id-value="{{ cas.id }}"
+                data-anonymizer-base-url-value="{{ app.request.baseUrl }}">
+                <div class="anonymizer-label-field">
+                    <label>Cas marquant pour information (données brutes) :</label>
+                </div>
+                <div class="anonymizer-content-field">
+                    <div class="problematique-content">{{ form.DonneesComplementairesCM.CmPourInfo_comment.vars.value|nl2br }}</div>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="form-row-inline">
             <div class="checkbox-field">
                 {{ form_row(form.DonneesComplementairesCM.SignalPotentiel) }}
@@ -199,6 +222,25 @@
                 {{ form_widget(form.DonneesComplementairesCM.SignalPotentiel_comment) }}
             </div>
         </div>
+
+
+        {% if form.DonneesComplementairesCM.SignalPotentiel_comment.vars.value is not empty %}
+            <!-- Signal potentiel à investiguer - anonymisation -->
+            <div class="anonymizer-row" 
+                data-controller="anonymizer" 
+                data-anonymizer-entite-value="DonneesComplementairesCM"
+                data-anonymizer-champ-value="SignalPotentiel_comment" 
+                data-anonymizer-cas-pv-id-value="{{ cas.id }}"
+                data-anonymizer-base-url-value="{{ app.request.baseUrl }}">
+                <div class="anonymizer-label-field">
+                    <label>Signal potentiel à investiguer (données brutes) :</label>
+                </div>
+                <div class="anonymizer-content-field">
+                    <div class="problematique-content">{{ form.DonneesComplementairesCM.SignalPotentiel_comment.vars.value|nl2br }}</div>
+                </div>
+            </div>
+        {% endif %}
+
     </div>
 
 
