@@ -70,10 +70,11 @@
     </div>
 
 
-    <!-- Zone 4.6 : Phase & Étapes (Workflow) -->
+
+    {# <!-- Zone 4.6 : Phase & Étapes (Workflow) -->
     <div class="area-workflow">
 
-    </div>
+    </div> #}
 
     <!-- Zone 4.7 : On verra plus tard -->
     <div class="area-on-verra-plus-tard">
@@ -234,6 +235,11 @@
             {{ form_label(form.echangeDMM_CRPV, 'Echange DMM/CRPV :') }}
             {{ form_widget(form.echangeDMM_CRPV) }}
         </div>
+    </div>
+
+    <!-- Zone 15 : Statut du cas -->
+    <div class="area-statut-cas-pv">
+        {% include 'cm/creation_cas/tableau_statut_cas_pv.html.twig' %}
     </div>
 
 </div>

@@ -5,6 +5,7 @@ namespace App\Form\CM;
 use App\Entity\EMM;
 use App\Form\CasPVType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -83,6 +84,19 @@ class EMMType extends CasPVType
                 ],
                 'placeholder' => 'Sélectionnez une lettre'
             ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer l\'EMM',
+                // 'attr' => [
+                //     'class' => 'btn btn-success btn-lg me-2'
+                // ]
+            ])
+            ->add('cancel', SubmitType::class, [
+                'label' => 'Annuler',
+                // 'attr' => [
+                //     'class' => 'btn btn-secondary btn-lg',
+                //     'onclick' => "return confirm('Êtes-vous sûr de vouloir annuler ce cas ?')"
+                // ]
+            ])  
         ;
     }
 

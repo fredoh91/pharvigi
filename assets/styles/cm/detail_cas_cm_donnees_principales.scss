@@ -25,7 +25,7 @@
             "typology      typology      typology      typology      typology      typology      .             .             .             .             .             ."
             "chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        chrono        .             .             ."
             "niv-risk      niv-risk      niv-risk      .             .             .             .             .             .             .             .             ."
-            "ovpt          ovpt          ovpt          ovpt          ovpt          .             .             workflow      workflow      workflow      workflow      workflow"
+            "ovpt          ovpt          ovpt          ovpt          ovpt          .             .             statut-cas    statut-cas    statut-cas    statut-cas    statut-cas"
         ;
     }
 
@@ -48,6 +48,7 @@
     .area-workflow           { grid-area: workflow; }
     .area-dmm                { grid-area: dmm; }
     .area-on-verra-plus-tard { grid-area: ovpt; }
+    .area-statut-cas-pv      { grid-area: statut-cas; }
 
 
     /* --- Organisation interne de chaque zone (Flexbox & Alignements) --- */
@@ -233,7 +234,7 @@
         }
     }
 
-    .area-workflow {
+    .area-statut-cas-pv {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;

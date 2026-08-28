@@ -40,4 +40,28 @@ class CasPVRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    
+    // /**
+    //  * Récupère les statuts d'un cas PV triés par createdAt
+    //  * 
+    //  * @param int $casId L'ID du cas PV
+    //  * @param string $sensTri Le sens du tri (ASC ou DESC)
+    //  * @return array Les statuts triés
+    //  */
+    // public function findStatutCasPVsOrderedByCreatedAt(int $casId, string $sensTri = 'DESC'): array
+    // {
+    //     // Vérification du sens de tri
+    //     $sensTri = strtoupper($sensTri);
+    //     if ($sensTri !== 'ASC' && $sensTri !== 'DESC') {
+    //         $sensTri = 'DESC';
+    //     }
+        
+    //     return $this->createQueryBuilder('c')
+    //         ->leftJoin('c.statutCasPVs', 'sc')
+    //         ->where('c.id = :casId')
+    //         ->setParameter('casId', $casId)
+    //         ->orderBy('sc.CreatedAt', $sensTri)
+    //         ->getQuery()
+    //         ->getResult();
+    // }
 }

@@ -273,7 +273,8 @@ final class CreationCasController extends AbstractController
                 $requestData = $request->request->all();
                 
                 // Si le bouton "Enregistrer le cas marquant" a été cliqué
-                if (isset($requestData['save'])) {
+                // if (isset($requestData['save'])) {
+                if ($form->get('save')->isClicked()) {    
                     // Vérifier si le formulaire est valide
                     if ($form->isValid()) {
                         // recupération du statut brouillon
@@ -312,7 +313,8 @@ final class CreationCasController extends AbstractController
                     }
                 }
                 // Si le bouton "Annuler" a été cliqué
-                elseif (isset($requestData['cancel'])) {
+                // elseif (isset($requestData['cancel'])) {
+                if ($form->get('cancel')->isClicked()) {    
                     return $this->redirectToRoute('app_cm_creation_cas_annulation', ['cas' => $cas->getId()]);
                 }
             }

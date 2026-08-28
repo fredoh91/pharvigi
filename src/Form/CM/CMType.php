@@ -7,6 +7,7 @@ use App\Entity\ListeCSP;
 use App\Form\CasPVType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -83,6 +84,19 @@ class CMType extends CasPVType
                 ],
                 'placeholder' => 'Sélectionnez une lettre'
             ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer le cas marquant',
+                // 'attr' => [
+                //     'class' => 'btn btn-success btn-lg me-2'
+                // ]
+            ])
+            ->add('cancel', SubmitType::class, [
+                'label' => 'Annuler',
+                // 'attr' => [
+                //     'class' => 'btn btn-secondary btn-lg',
+                //     'onclick' => "return confirm('Êtes-vous sûr de vouloir annuler ce cas ?')"
+                // ]
+            ])              
             // ->add('dateCSP', EntityType::class, [
             //     'class' => ListeCSP::class,
             //     'choice_label' => function (\App\Entity\ListeCSP $listeCSP): string {

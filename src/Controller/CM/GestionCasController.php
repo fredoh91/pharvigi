@@ -83,12 +83,32 @@ final class GestionCasController extends AbstractController
 
         $lstEI = $cas->getEffetsIndesirables();
 
+        $lstStatutCasPV = $em->getRepository(\App\Entity\StatutCasPV::class)->findByCasPVOrderedByCreatedAt($idCasPV, 'DESC');
+
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+            if ($form->get('save')->isClicked()) {
+                if ($form->isValid()) {
+                    dd('Save clicked');
+                    // gerer l'enregistrement du cas en fonction du type d'entité
+                    // puis rediriger vers la route affichant la liste des cas
+                }
+            }
+
+            if ($form->get('cancel')->isClicked()) {
+                dd('Cancel clicked');
+                // rediriger vers la route affichant la liste des cas
+                // return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
+            }
+        }
+
         return $this->render('cm/gestion_cas/detail.html.twig', [
                 'form' => $form ? $form->createView() : null,
                 'cas' => $cas,
                 'datesCSP' => $datesCSP,
                 'lstProduitsCasPV' => $lstProduitsCasPV,
                 'lstEI' => $lstEI,
+                'lstStatutCasPV' => $lstStatutCasPV,
                 'type_cas_pv' => $cas->getTypeCasPV(),
                 'routeSource' => 'app_cm_detail_cas',
                 'userCreateObject' => $userCreateObject,
