@@ -7,20 +7,22 @@
 {% if lstStatutCasPV is defined and lstStatutCasPV is not empty %}
     <div class="table-responsive mt-4">
         {# <h4>Statuts du cas</h4> #}
-        <table class="table table-striped table-bordered">
+        <table class="table table-bordered">
             <thead class="table-dark">
                 <tr>
                     <th>Statut</th>
                     <th>Date</th>
                     <th>Utilisateur</th>
+                    <th>Actif</th>
                 </tr>
             </thead>
             <tbody>
                 {% for statut in lstStatutCasPV %}
-                    <tr>
+                    <tr class="{{ statut.StatutActif == 1 ? 'statut-actif' : 'statut-inactif' }}">
                         <td>{{ statut.LibStatut }}</td>
                         <td>{{ statut.DateMiseEnPlace ? statut.DateMiseEnPlace|date('d/m/Y') : 'Non définie' }}</td>
                         <td>{{ statut.UserCreate }}</td>
+                        <td>{{ statut.StatutActif }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

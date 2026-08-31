@@ -470,4 +470,13 @@
     .form-container .checkbox {
         align-self: center;
     }
+
+    /* --- Couleurs conditionnelles pour les statuts --- */
+    .statut-actif td {
+        background-color: rgba(144, 238, 144, 0.4); /* Vert pâle */
+    }
+
+    .statut-inactif td {
+        background-color: rgba(255, 182, 193, 0.4); /* Rouge pâle */
+    }
 }
