@@ -221,6 +221,12 @@ abstract class CasPV
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $actionSURV_experts = null;
 
+    /**
+     * @var Collection<int, AnalyseRisque>
+     */
+    #[ORM\OneToMany(targetEntity: AnalyseRisque::class, mappedBy: 'CasPV')]
+    private Collection $analyseRisques;
+
     public function __construct()
     {
         $this->attributionCSPs = new ArrayCollection();
@@ -230,6 +236,7 @@ abstract class CasPV
         $this->identifiantsBnpvs = new ArrayCollection();
         $this->produitsBnpvs = new ArrayCollection();
         $this->produits = new ArrayCollection();
+        $this->analyseRisques = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -1067,6 +1074,36 @@ abstract class CasPV
     public function setActionSURVExperts(?string $actionSURV_experts): static
     {
         $this->actionSURV_experts = $actionSURV_experts;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AnalyseRisque>
+     */
+    public function getAnalyseRisques(): Collection
+    {
+        return $this->analyseRisques;
+    }
+
+    public function addAnalyseRisque(AnalyseRisque $analyseRisque): static
+    {
+        if (!$this->analyseRisques->contains($analyseRisque)) {
+            $this->analyseRisques->add($analyseRisque);
+            $analyseRisque->setCasPV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnalyseRisque(AnalyseRisque $analyseRisque): static
+    {
+        if ($this->analyseRisques->removeElement($analyseRisque)) {
+            // set the owning side to null (unless already changed)
+            if ($analyseRisque->getCasPV() === $this) {
+                $analyseRisque->setCasPV(null);
+            }
+        }
 
         return $this;
     }

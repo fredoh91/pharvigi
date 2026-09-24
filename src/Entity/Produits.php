@@ -149,6 +149,9 @@ class Produits
     #[ORM\ManyToOne(inversedBy: 'produits')]
     private ?CasPV $CasPV = null;
 
+    #[ORM\OneToOne(mappedBy: 'Produits', cascade: ['persist', 'remove'])]
+    private ?AnalyseRisque $analyseRisque = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -690,6 +693,28 @@ class Produits
     public function setCasPV(?CasPV $CasPV): static
     {
         $this->CasPV = $CasPV;
+
+        return $this;
+    }
+
+    public function getAnalyseRisque(): ?AnalyseRisque
+    {
+        return $this->analyseRisque;
+    }
+
+    public function setAnalyseRisque(?AnalyseRisque $analyseRisque): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($analyseRisque === null && $this->analyseRisque !== null) {
+            $this->analyseRisque->setProduits(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($analyseRisque !== null && $analyseRisque->getProduits() !== $this) {
+            $analyseRisque->setProduits($this);
+        }
+
+        $this->analyseRisque = $analyseRisque;
 
         return $this;
     }
