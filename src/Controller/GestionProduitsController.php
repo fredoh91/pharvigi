@@ -728,11 +728,12 @@ final class GestionProduitsController extends AbstractController
             $this->logger->info('GestionProduitsController: ' . $addedCount . ' produits ajoutés.');
         }
         if ($routeSource) {
-            $redirectUrl = $this->generateUrl($routeSource, [
-                'cas' => $casPV->getId(),
-                'idCasPV' => $casPV->getId(),
-                'type_cas_pv' => $type_cas_pv
-            ]);
+            if ($routeSource === 'app_cm_detail_cas') {
+                $redirectUrl = $this->generateUrl($routeSource, ['idCasPV' => $casPV->getId()]);
+            } else {
+                // app_cm_creation_cas_creation (ou toute autre route source par défaut)
+                $redirectUrl = $this->generateUrl($routeSource, ['cas' => $casPV->getId()]);
+            }
         } else {
             $redirectUrl = $this->generateUrl('app_cm_creation_cas_creation', ['cas' => $casPV->getId()]);
         }
@@ -818,13 +819,18 @@ final class GestionProduitsController extends AbstractController
 
     private function redirectAfterProductModificationByRoute(string $type_cas_pv, int $idCasPV, ?string $routeSource = null): Response
     {
+
+
+        // dd($type_cas_pv, $idCasPV, $routeSource);
         // Si routeSource est fourni, on utilise cette route plutôt que la redirection par défaut
+        // NB : on ne passe QUE les paramètres attendus par la route cible, sinon les
+        // paramètres superflus s'ajoutent automatiquement en query string (?cas=2&type_cas_pv=CM)
         if ($routeSource) {
-            return $this->redirectToRoute($routeSource, [
-                'cas' => $idCasPV,
-                'idCasPV' => $idCasPV,
-                'type_cas_pv' => $type_cas_pv
-            ]);
+            if ($routeSource === 'app_cm_detail_cas') {
+                return $this->redirectToRoute($routeSource, ['idCasPV' => $idCasPV]);
+            }
+            // Route app_cm_creation_cas_creation (ou toute autre route source par défaut)
+            return $this->redirectToRoute($routeSource, ['cas' => $idCasPV]);
         }
 
         // Fallback redirection

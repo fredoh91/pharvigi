@@ -1,0 +1,45 @@
+{# Tableau des produits lié au cas #}
+
+        {% if lstProduitsCasPV is not empty %}
+            <table class="produits-analyse-risque-table">
+                <thead>
+                    <tr>
+                        <th>Spécialité</th>
+                        <th>DCI</th>
+                        <th>Dosage</th>
+                        <th>CodeATC</th>
+                        <th>CodeCIS</th>
+                        <th>Type Proc.</th>
+                        <th>Analyse de risque</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produit in lstProduitsCasPV %}
+                        <tr class="{{ produitActifId|default(null) is not null and produit.Id == produitActifId ? 'produit-selectionne' : '' }}">
+                            <td>{{ produit.Denomination }}</td>
+                            <td>{{ produit.DCI }}</td>
+                            <td>{{ produit.Dosage }}</td>
+                            <td>{{ produit.CodeATC }}</td>
+                            <td>{{ produit.CodeCIS }}</td>
+                            <td>{{ produit.TypeProcedure }}</td>
+                            <td>                               
+                                <a
+                                    href="{{ path('app_cm_ana_risque_produit', {
+                                        'idCasPV': cas.id,
+                                        'idProduit': produit.Id
+                                    }) }}"
+                                    class="btn btn-sm btn-outline-primary"
+                                >
+                                    Afficher cette analyse de risque
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info mt-4">
+                Aucun produit associé à ce cas.
+            </div>
+        {% endif %}

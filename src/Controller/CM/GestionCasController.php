@@ -16,6 +16,7 @@ final class GestionCasController extends AbstractController
 {
     #[Route('/detail_cas/{idCasPV}', name: 'app_cm_detail_cas')]
     #[Route('/detail_cas/{idCasPV}/produit/{idProduit?}', name: 'app_cm_detail_produit')]
+    #[Route('/detail_cas/{idCasPV}/produit/{idProduit}/analyse_risque', name: 'app_cm_ana_risque_produit')]
     public function detailCas(
         int $idCasPV,
         ?int $idProduit = null,
@@ -53,7 +54,8 @@ final class GestionCasController extends AbstractController
             $userCreateObject = null;
         }
 
-        if ($request->attributes->get('_route') === 'app_cm_detail_produit') {
+        if ($request->attributes->get('_route') === 'app_cm_detail_produit' ||
+            $request->attributes->get('_route') === 'app_cm_ana_risque_produit') {
             // dd('la route demandée est bien app_cm_detail_produit');
             if ($cas->getProduits()->isEmpty()) {
                 $this->addFlash('error', 'Le cas demandé n\'a pas de produit associé. Merci d\'en ajouter un avant de continuer le traitement de ce cas.');
@@ -91,6 +93,16 @@ final class GestionCasController extends AbstractController
         
 
 
+        // Détermination de l'onglet à ouvrir et du produit actif selon la route demandée
+        // (app_cm_ana_risque_produit => onglet "Analyse de risque" + produit mis en évidence)
+        $routeActuelle = $request->attributes->get('_route');
+        if ($routeActuelle === 'app_cm_ana_risque_produit') {
+            $activeTab = 'analyse_risque';
+            $produitActifId = $idProduit ?: null;
+        } else {
+            $activeTab = 'donnees_principales';
+            $produitActifId = null;
+        }
 
         // Vérification que l'utilisateur est le créateur du cas ou a les droits nécessaires
         /*if ($casEntity->getUserCreate() !== $user->getUserIdentifier() && 
@@ -153,6 +165,8 @@ final class GestionCasController extends AbstractController
                 'type_cas_pv' => $cas->getTypeCasPV(),
                 'routeSource' => 'app_cm_detail_cas',
                 'userCreateObject' => $userCreateObject,
+                'activeTab' => $activeTab,
+                'produitActifId' => $produitActifId,
         ]);
     }
 }

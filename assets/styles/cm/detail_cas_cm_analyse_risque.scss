@@ -1,0 +1,75 @@
+// ==========================================================================
+// Fichier : assets/styles/cm/detail_cas_cm_analyse_risque.scss
+// Rôle : Mise en forme de l'onglet "Analyse de risque" du détail d'un cas CM
+//        (notamment le tableau des produits et la mise en évidence du produit
+//        sélectionné via l'URL, identifié par la classe .produit-selectionne)
+//
+// Note : le tableau utilise une classe custom (.produits-analyse-risque-table)
+//        sans les classes Bootstrap (.table/.table-striped/...) pour garantir
+//        que notre CSS s'applique sans être écrasé par la spécificité de
+//        Bootstrap (les classes Bootstrap peignent les cellules td et
+//        masquaient le fond appliqué à la ligne <tr>).
+// ==========================================================================
+
+// Sélecteur scoped à l'onglet "Analyse de risque" (id du pane) pour ne pas
+// impacter les autres onglets qui utilisent aussi la classe .area-produits
+#analyse_risque .area-produits {
+
+    .produits-analyse-risque-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem; // Police légèrement réduite pour tasser les lignes
+        line-height: 1.2;
+        border: 1px solid #a8dbae; // Fin liseret autour du tableau (vert thème)
+
+        thead {
+            th {
+                // En-têtes : vert foncé cohérent avec le thème green
+                padding: 3px 6px;           // Hauteur de ligne très réduite
+                font-size: 0.72rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.02em;
+                color: #fff;
+                background-color: #2e5a34; // Vert foncé
+                border: 1px solid #1f4526;
+                white-space: nowrap;
+            }
+        }
+
+        tbody {
+            td {
+                padding: 3px 6px;           // Hauteur de ligne très réduite
+                border: 1px solid #d9eadb;
+                vertical-align: middle;
+                white-space: nowrap;
+                // Fond vert très clair sur les produits non sélectionnés,
+                // pour les détacher du fond du conteneur (thème green)
+                background-color: #e4f7e6;
+            }
+
+            tr:nth-child(odd) td {
+                // Léger camaïeu pour distinguer visuellement les lignes
+                background-color: #d9f1dd;
+            }
+
+            // Mise en évidence du produit sélectionné via l'URL (?produitActifId)
+            // On colore les CELLULES (td) et pas seulement le <tr> : Bootstrap
+            // peignait les td via table-striped, masquant le fond du tr.
+            tr.produit-selectionne {
+                background-color: transparent;
+
+                td {
+                    background-color: #b5e3ba; // Vert plus soutenu pour se détacher
+                    font-weight: 600;
+                    border-color: #6fae77;
+                }
+
+                &:hover td {
+                    background-color: #a4dbab; // Légèrement plus foncé au survol
+                }
+            }
+        }
+    }
+}
+
