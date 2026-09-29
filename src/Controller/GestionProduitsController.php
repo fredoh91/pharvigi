@@ -359,6 +359,19 @@ final class GestionProduitsController extends AbstractController
         $produit->setUserCreate($userName);
         $produit->setUserModif($userName);
 
+        // $analyseRisque = $doctrine->getRepository(\App\Entity\AnalyseRisque::class)->findOneBy(['Produits' => $produit]);
+        // if (!$analyseRisque) {
+            // Création d'une nouvelle analyse de risque si elle n'existe pas
+            $analyseRisque = new \App\Entity\AnalyseRisque();
+            $analyseRisque->setProduits($produit);
+            $analyseRisque->setCasPV($casPV);
+            $analyseRisque->setUserCreate($userName);
+            $analyseRisque->setUserModif($userName);
+            $analyseRisque->setCreatedAt(new \DateTimeImmutable());
+            $analyseRisque->setUpdatedAt(new \DateTimeImmutable());
+            // $em->persist($analyseRisque);
+            // $em->flush();
+        // }
 
         $form = $this->createForm(
                         ProduitsMedType::class, 
@@ -378,6 +391,7 @@ final class GestionProduitsController extends AbstractController
                     // dd([$medics, $NbMedics]);
                     $em = $doctrine->getManager();
                     $em->persist($produit);
+                    $em->persist($analyseRisque);
                     $em->flush();
                     return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
                 }
@@ -456,7 +470,6 @@ final class GestionProduitsController extends AbstractController
             $produit->setUpdatedAt(new \DateTimeImmutable());
             $produit->setUserCreate($userName);
             $produit->setUserModif($userName);
-
         } else {
             $produit = new Produits();
             $produit->setCasPV($casPV);
@@ -466,6 +479,20 @@ final class GestionProduitsController extends AbstractController
             $produit->setUserCreate($userName);
             $produit->setUserModif($userName);
         }
+
+        // $analyseRisque = $doctrine->getRepository(\App\Entity\AnalyseRisque::class)->findOneBy(['Produits' => $produit]);
+        // if (!$analyseRisque) {
+            // Création d'une nouvelle analyse de risque si elle n'existe pas
+            $analyseRisque = new \App\Entity\AnalyseRisque();
+            $analyseRisque->setProduits($produit);
+            $analyseRisque->setCasPV($casPV);
+            $analyseRisque->setUserCreate($userName);
+            $analyseRisque->setUserModif($userName);
+            $analyseRisque->setCreatedAt(new \DateTimeImmutable());
+            $analyseRisque->setUpdatedAt(new \DateTimeImmutable());
+            // $em->persist($analyseRisque);
+            // $em->flush();
+        // }
 
         $form = $this->createForm(
                         ProduitsNonMedType::class, 
@@ -482,6 +509,7 @@ final class GestionProduitsController extends AbstractController
                     $data = $form->getData();
                     $em = $doctrine->getManager();
                     $em->persist($produit);
+                    $em->persist($analyseRisque);
                     $em->flush();
                     return $this->redirectAfterProductModificationByRoute($type_cas_pv, $idCasPV, $routeSource);
                 }
@@ -602,6 +630,23 @@ final class GestionProduitsController extends AbstractController
             $produit->setUserCreate($userName);
             $produit->setUserModif($userName);
 
+        // if ($produit) {
+            // $analyseRisque = $em->getRepository(\App\Entity\AnalyseRisque::class)->findOneBy(['Produits' => $produit]);
+            // if (!$analyseRisque) {
+                // Création d'une nouvelle analyse de risque si elle n'existe pas
+                $analyseRisque = new \App\Entity\AnalyseRisque();
+                $analyseRisque->setProduits($produit);
+                $analyseRisque->setCasPV($casPV);
+                $analyseRisque->setUserCreate($userName);
+                $analyseRisque->setUserModif($userName);
+                $analyseRisque->setCreatedAt(new \DateTimeImmutable());
+                $analyseRisque->setUpdatedAt(new \DateTimeImmutable());
+                $em->persist($analyseRisque);
+                $em->flush();
+            // }
+        // }
+
+
             // 4. Persister l'entité
             $em->persist($produit);
             $addedCount++;
@@ -651,6 +696,23 @@ final class GestionProduitsController extends AbstractController
             $produit->setUpdatedAt(new \DateTimeImmutable());
             $produit->setUserCreate($userName);
             $produit->setUserModif($userName);
+
+
+            // $analyseRisque = $em->getRepository(\App\Entity\AnalyseRisque::class)->findOneBy(['Produits' => $produit]);
+            // if (!$analyseRisque) {
+                // Création d'une nouvelle analyse de risque si elle n'existe pas
+                $analyseRisque = new \App\Entity\AnalyseRisque();
+                $analyseRisque->setProduits($produit);
+                $analyseRisque->setCasPV($casPV);
+                $analyseRisque->setUserCreate($userName);
+                $analyseRisque->setUserModif($userName);
+                $analyseRisque->setCreatedAt(new \DateTimeImmutable());
+                $analyseRisque->setUpdatedAt(new \DateTimeImmutable());
+                $em->persist($analyseRisque);
+                $em->flush();
+            // }
+
+
             // 4. Persister l'entité
             $em->persist($produit);
             // $newProduit = new Produits();

@@ -15,9 +15,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class GestionCasController extends AbstractController
 {
     #[Route('/detail_cas/{idCasPV}', name: 'app_cm_detail_cas')]
+    #[Route('/detail_cas/{idCasPV}/produit/{idProduit?}', name: 'app_cm_detail_produit')]
     public function detailCas(
         int $idCasPV,
-        Request $request, 
+        ?int $idProduit = null,
+        Request $request,
         EntityManagerInterface $em
         ): Response
     {
@@ -50,6 +52,45 @@ final class GestionCasController extends AbstractController
         } else {
             $userCreateObject = null;
         }
+
+        if ($request->attributes->get('_route') === 'app_cm_detail_produit') {
+            // dd('la route demandée est bien app_cm_detail_produit');
+            if ($cas->getProduits()->isEmpty()) {
+                $this->addFlash('error', 'Le cas demandé n\'a pas de produit associé. Merci d\'en ajouter un avant de continuer le traitement de ce cas.');
+                return $this->redirectToRoute('app_cm_detail_cas', ['idCasPV' => $idCasPV]);
+            }
+        }
+
+
+        // En cas d'idProduit fourni, vérification que le produit est associé au cas
+        if ($idProduit){
+            $produit = $em->find(\App\Entity\Produits::class, $idProduit);
+            if (!$produit || !$cas->getProduits()->contains($produit)) {
+                // throw new NotFoundHttpException('Le produit demandé, avec l\'id ' . $idProduit . ' n\'est pas associé à ce cas.');
+                // dump('Le produit demandé, avec l\'id ' . $idProduit . ' n\'est pas associé à ce cas.');
+                $this->addFlash('error', 'Le produit demandé, avec l\'id ' . $idProduit . ' n\'est pas associé à ce cas.');
+                return $this->redirectToRoute('app_cm_detail_cas', ['idCasPV' => $idCasPV]);
+            } else {
+                $analyseRisque = $em->getRepository(\App\Entity\AnalyseRisque::class)->findOneBy(['Produits' => $produit]);
+                if (!$analyseRisque) {
+                    // Création d'une nouvelle analyse de risque si elle n'existe pas
+                    $analyseRisque = new \App\Entity\AnalyseRisque();
+                    $analyseRisque->setProduits($produit);
+                    $analyseRisque->setCasPV($cas);
+                    $analyseRisque->setUserCreate($userName);
+                    $analyseRisque->setUserModif($userName);
+                    $analyseRisque->setCreatedAt(new \DateTimeImmutable());
+                    $analyseRisque->setUpdatedAt(new \DateTimeImmutable());
+                    $em->persist($analyseRisque);
+                    $em->flush();
+                }
+            }
+        } else { 
+            // dump('idProduit non fourni');
+        }
+        
+
+
 
         // Vérification que l'utilisateur est le créateur du cas ou a les droits nécessaires
         /*if ($casEntity->getUserCreate() !== $user->getUserIdentifier() && 

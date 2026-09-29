@@ -191,6 +191,12 @@ class AnalyseRisque
     #[ORM\ManyToOne(inversedBy: 'analyseRisques')]
     private ?CasPV $CasPV = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $LibOccurrenceEM = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $CommentOccurrenceEM = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -900,6 +906,30 @@ class AnalyseRisque
     public function setCasPV(?CasPV $CasPV): static
     {
         $this->CasPV = $CasPV;
+
+        return $this;
+    }
+
+    public function getLibOccurrenceEM(): ?string
+    {
+        return $this->LibOccurrenceEM;
+    }
+
+    public function setLibOccurrenceEM(?string $LibOccurrenceEM): static
+    {
+        $this->LibOccurrenceEM = $LibOccurrenceEM;
+
+        return $this;
+    }
+
+    public function getCommentOccurrenceEM(): ?string
+    {
+        return $this->CommentOccurrenceEM;
+    }
+
+    public function setCommentOccurrenceEM(?string $CommentOccurrenceEM): static
+    {
+        $this->CommentOccurrenceEM = $CommentOccurrenceEM;
 
         return $this;
     }
